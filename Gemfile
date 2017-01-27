@@ -10,9 +10,16 @@ gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
+gem 'bourbon'
+gem 'bitters'
+gem 'slim-rails'
+gem 'simple_form'
+gem 'kramdown'
+gem 'devise'
 
 group :development, :test do
   gem 'byebug', platform: :mri
+  gem 'brakeman', :require => false
 end
 
 group :development do
