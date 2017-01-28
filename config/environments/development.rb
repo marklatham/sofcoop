@@ -64,3 +64,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end
+
+# Indent html for pretty debugging and do not sort attributes
+Slim::Engine.set_default_options pretty: true, sort_attrs: false

@@ -1,0 +1,22 @@
+// Place all the styles related to the Pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.pages-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 40em;
+}
+
+.date-stamp {
+  font-style: italic;
+  font-size: smaller;
+  color: $gray-medium;
+  text-align: right;
+}
+
+#about-contact table {
+  thead {
+    visibility: hidden;
+  }
+}

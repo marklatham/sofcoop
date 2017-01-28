@@ -1,0 +1,153 @@
+// FROM css-tricks.com/snippets/css/sticky-footer > comment 2016-03-16:
+
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+footer{
+  position: absolute;
+  bottom: 0;
+  width: 95%;         // Not sure why this was needed or why it worked!
+  height: $footer-height;
+}
+
+/////////////////////
+
+header {
+  padding: 0 3% 0 5%;
+  background-color: $theme-color;
+  border-bottom-width: 3px;
+  border-bottom: solid $gray-medium;
+}
+
+header table {
+  border-width: 0;
+  margin: 0;
+  table-layout: auto;
+  td {
+    border-width: 0;
+    padding: 0;
+  }
+}
+
+header, footer {
+  td, ul {
+    color: white;
+    background-color: transparent;
+  }
+}
+
+footer {
+  box-sizing: content-box;
+  margin: 1.5em 0 0 0;
+  padding: 0.5em 0 0.5em 5%;
+  background-color: $theme-color;
+  border-top-width: 3px;
+  border-top: solid $gray-medium;
+}
+
+footer ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+footer ul li {
+  margin: 0 1.5em 0 0;
+  white-space: nowrap;
+  font-size: $dropdown-font-size;
+  a:link, a:visited {
+    color: white;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+#navbar-brand {
+  font-size: 1.7em;
+  margin: 0;
+  padding: 0.1em 0 0.1em 0;
+  a:hover {
+    color: white;
+  }
+  .brand1 {
+    color: white;
+    a:hover {
+      color: white;
+    }
+  }
+  .brand2 {
+    color: $gray-light;
+  }
+}
+
+.dropdown {
+  padding: 0;
+  display: table;
+  margin: 0 auto;
+}
+
+.dropdown ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.dropdown ul li {
+  margin: 0 0 0 1.5em;
+  float: left;
+  white-space: nowrap;
+  font-size: $dropdown-font-size;
+  a:link, a:visited {
+    color: white;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.dropdown li ul {
+  position: absolute;
+  background: white;
+  width: 1em;
+  left: -999em;
+  list-style: none;
+}
+.dropdown li:hover ul {
+  left: auto;
+}
+.dropdown ul li ul li{
+  margin-left: 0;
+  padding: 3px 0 3px 8px;
+  width: 12em;
+  border-left:   1px solid $theme-color;
+  border-right:  1px solid $theme-color;
+  border-bottom: 1px solid $theme-color;
+  background: $gray-lightest;
+  color: black;
+  float: left;
+  font-size: 0.9*$dropdown-font-size;
+}
+.dropdown ul li ul li {
+  a:link, a:visited {
+    color: $link-color;
+    text-decoration: none;
+  }
+}
+.droplink {
+    a:link, a:visited {
+      color: $link-color;
+    }
+}
+.dropdown ul li ul li a:hover {
+  text-decoration: underline;
+}
+.down-arrow {
+//  @include triangle(0.6*$dropdown-font-size 0.3*$dropdown-font-size, white, down);
+  display: inline-block;
+  margin: 0 0 2px 2px;
+}

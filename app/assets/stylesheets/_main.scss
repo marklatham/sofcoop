@@ -1,0 +1,49 @@
+body {
+  margin: 0 0 $footer-height 0;
+  padding: 0;
+}
+
+body, p, ol, ul, td {
+  color: #000;
+  font-family: $base-font-family;
+  // line-height: 1.7em;
+}
+
+h1 { font-size: 200% }
+h2 { font-size: 150% }
+h3 { font-size: 125% }
+h4 { font-size: 100% }
+
+h1, h2, h3, h4 { color: $theme-color-darker }
+
+main {
+  margin: 0 5% 0 5%;
+}
+
+a:link, a:visited {
+  color: $link-color;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  list-style-type: disc;
+  margin-left: 2em;
+}
+ol {
+  list-style-type: decimal;
+  margin-left: 2em;
+}
+li {
+  margin-top: $small-spacing / 2;
+  margin-bottom: $small-spacing / 2;
+  line-height: 0.9*$base-line-height;
+}
+ul ul {
+  list-style-type: circle;
+}
+ol ol {
+  list-style-type: lower-alpha;
+}
