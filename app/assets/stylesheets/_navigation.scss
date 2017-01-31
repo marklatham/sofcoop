@@ -16,9 +16,9 @@ footer{
 
 header {
   padding: 0 3% 0 5%;
-  background-color: $theme-color;
-  border-bottom-width: 3px;
-  border-bottom: solid $gray-medium;
+  background-color: $gray-lightest;
+  border-bottom: solid black;
+  border-bottom-width: 1px;
 }
 
 header table {
@@ -31,9 +31,8 @@ header table {
   }
 }
 
-header, footer {
+footer {
   td, ul {
-    color: white;
     background-color: transparent;
   }
 }
@@ -42,9 +41,9 @@ footer {
   box-sizing: content-box;
   margin: 1.5em 0 0 0;
   padding: 0.5em 0 0.5em 5%;
-  background-color: $theme-color;
-  border-top-width: 3px;
-  border-top: solid $gray-medium;
+  background-color: $gray-lightest;
+  border-top: solid black;
+  border-top-width: 1px;
 }
 
 footer ul {
@@ -58,7 +57,7 @@ footer ul li {
   white-space: nowrap;
   font-size: $dropdown-font-size;
   a:link, a:visited {
-    color: white;
+    color: black;
     text-decoration: none;
   }
   a:hover {
@@ -66,21 +65,19 @@ footer ul li {
   }
 }
 
-#navbar-brand {
+@import url("http://fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
+.navbar-brand {
+  font-family: 'Lobster', cursive;
   font-size: 1.7em;
   margin: 0;
   padding: 0.1em 0 0.1em 0;
+  color: black;
+  a:link, a:visited {
+    color: black;
+    text-decoration: none;
+  }
   a:hover {
-    color: white;
-  }
-  .brand1 {
-    color: white;
-    a:hover {
-      color: white;
-    }
-  }
-  .brand2 {
-    color: $gray-light;
+    text-decoration: underline;
   }
 }
 
@@ -102,7 +99,6 @@ footer ul li {
   white-space: nowrap;
   font-size: $dropdown-font-size;
   a:link, a:visited {
-    color: white;
     text-decoration: none;
   }
   a:hover {

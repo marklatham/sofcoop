@@ -1,14 +1,16 @@
 doctype html
 html
   head
-    title
-      | Sofcoop
+    title = (content_for?(:title) ? yield(:title)+' | ' : '') + 'Sofcoop'
     = csrf_meta_tags
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    
   body
-    p.notice
-      = notice
-    p.alert
-      = alert
-    = yield
+    div.page-wrap
+      header = render 'layouts/header'
+      main
+        = render 'layouts/messages'
+        = yield
+  
+    footer = render 'layouts/footer'
