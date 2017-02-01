@@ -39,7 +39,11 @@ nav
                 li = link_to 'Corporations', '/corporations'
                 li = link_to 'Software Markets', '/software'
             li
-              | Admin
+              | Login
               b.down-arrow
               ul.droplink
-                /li = link_to 'New Page', new_page_path
+                li = link_to 'Log in', new_user_session_path
+                li = link_to 'Create a free login', new_user_registration_path
+                li = link_to 'Forgot your password?', new_user_password_path
+                li = link_to "Didn't receive confirmation instructions?", new_user_confirmation_path
+                li = link_to "Didn't receive unlock instructions?", new_user_unlock_path

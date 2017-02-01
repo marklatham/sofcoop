@@ -41,9 +41,7 @@ footer {
   box-sizing: content-box;
   margin: 1.5em 0 0 0;
   padding: 0.5em 0 0.5em 5%;
-  background-color: $gray-lightest;
-  border-top: solid black;
-  border-top-width: 1px;
+  background-color: $gray-dark;
 }
 
 footer ul {
@@ -57,7 +55,7 @@ footer ul li {
   white-space: nowrap;
   font-size: $dropdown-font-size;
   a:link, a:visited {
-    color: black;
+    color: white;
     text-decoration: none;
   }
   a:hover {
@@ -143,7 +141,7 @@ footer ul li {
   text-decoration: underline;
 }
 .down-arrow {
-//  @include triangle(0.6*$dropdown-font-size 0.3*$dropdown-font-size, white, down);
+  @include triangle(down, black, 0.6*$dropdown-font-size);
   display: inline-block;
   margin: 0 0 2px 2px;
 }

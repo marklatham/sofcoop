@@ -3,7 +3,13 @@
 // @import "base/grid-settings";  // Get neat & uncomment when want to use.
 // @import "neat";     // Get neat & uncomment when want to use.
 @import "base/base";   // Bitters gem; builds on bourbon.
-@import "variables";   // Will override any same-named base/variables
+// Override settings in /base/_samename.scss :
+@import "variables";    // Must come first in this group!
+@import "buttons";
+@import "forms";
+@import "layout";
+@import "typography";
+/////////////////////////////////////////////
 @import "main";
 @import "pages";
 @import "navigation";
