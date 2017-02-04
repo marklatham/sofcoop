@@ -4,6 +4,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
+    @body_class = 'grayback'
     super
   end
 

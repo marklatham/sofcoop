@@ -1,0 +1,6 @@
+// Here I'm experimenting with violating a basic best practice of CSS,
+// by naming some classes by their style properties.
+
+.grayback {
+  background-color: $gray-lightest;
+}
