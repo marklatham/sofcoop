@@ -8,28 +8,11 @@ html {
 footer{
   position: absolute;
   bottom: 0;
-  width: 95%;         // Not sure why this was needed or why it worked!
+  width: 95%;         // Not sure why this was needed or why it works!
   height: $footer-height;
 }
 
-/////////////////////
-
-header {
-  padding: 0 3% 0 5%;
-  background-color: $gray-lightest;
-  border-bottom: solid black;
-  border-bottom-width: 1px;
-}
-
-header table {
-  border-width: 0;
-  margin: 0;
-  table-layout: auto;
-  td {
-    border-width: 0;
-    padding: 0;
-  }
-}
+///////////////////// FOOTER:
 
 footer {
   td, ul {
@@ -60,6 +43,25 @@ footer ul li {
   }
   a:hover {
     text-decoration: underline;
+  }
+}
+
+///////////////////// HEADER & DROPDOWN NAV:
+
+header {
+  padding: 0 3% 0 5%;
+  background-color: $gray-lightest;
+  border-bottom: solid black;
+  border-bottom-width: 1px;
+}
+
+header table {
+  border-width: 0;
+  margin: 0;
+  table-layout: auto;
+  td {
+    border-width: 0;
+    padding: 0;
   }
 }
 
@@ -106,7 +108,7 @@ footer ul li {
 
 .dropdown li ul {
   position: absolute;
-  background: white;
+  background-color: white;
   width: 1em;
   left: -999em;
   list-style: none;
@@ -114,17 +116,24 @@ footer ul li {
 .dropdown li:hover ul {
   left: auto;
 }
+.login li:hover ul {
+  right: 10em;
+}
 .dropdown ul li ul li{
+  white-space: normal;
   margin-left: 0;
   padding: 3px 0 3px 8px;
   width: 12em;
   border-left:   1px solid $theme-color;
   border-right:  1px solid $theme-color;
   border-bottom: 1px solid $theme-color;
-  background: $gray-lightest;
+  background-color: $gray-lightest;
   color: black;
   float: left;
   font-size: 0.9*$dropdown-font-size;
+}
+.dropdown ul li ul li:first-child{
+  border-top:   1px solid $theme-color;
 }
 .dropdown ul li ul li {
   a:link, a:visited {

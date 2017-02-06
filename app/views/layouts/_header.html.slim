@@ -2,7 +2,7 @@ nav
   table
     tr
       td.navbar-brand = link_to 'Sofcoop', root_path
-      td.left
+      td
         div.dropdown
           ul
             li
@@ -38,6 +38,9 @@ nav
                 li = link_to 'Governments', '/governments'
                 li = link_to 'Corporations', '/corporations'
                 li = link_to 'Software Markets', '/software'
+      td
+        div.dropdown.login
+          ul
             li
               | Login
               b.down-arrow
@@ -45,5 +48,5 @@ nav
                 li = link_to 'Log in', new_user_session_path
                 li = link_to 'Create a free login', new_user_registration_path
                 li = link_to 'Forgot your password?', new_user_password_path
-                li = link_to "Didn't receive confirmation instructions?", new_user_confirmation_path
+                li = link_to "Didn't receive confirm instructions?", new_user_confirmation_path
                 li = link_to "Didn't receive unlock instructions?", new_user_unlock_path
