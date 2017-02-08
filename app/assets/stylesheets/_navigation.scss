@@ -22,7 +22,6 @@ footer {
 
 footer {
   box-sizing: content-box;
-  margin: 1.5em 0 0 0;
   padding: 0.5em 0 0.5em 5%;
   background-color: $gray-dark;
 }
@@ -133,7 +132,7 @@ header table {
   font-size: 0.9*$dropdown-font-size;
 }
 .dropdown ul li ul li:first-child{
-  border-top:   1px solid $theme-color;
+  border-top: 1px solid $theme-color;
 }
 .dropdown ul li ul li {
   a:link, a:visited {

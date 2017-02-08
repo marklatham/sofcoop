@@ -2,16 +2,16 @@
 
 div.form
 
-  = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :role => 'form'}) do |f|
+  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { role: 'form'}) do |f|
   
     h2 Register a free login
     = devise_error_messages!
     div
       = f.label :email
       | :
-      = f.email_field :email, :autofocus => true
+      = f.email_field :email, autofocus: true
     div
       = f.label :password
       | : (6 characters or more)
       = f.password_field :password
-    = f.submit 'Register', :class => 'button right'
+    = f.submit 'Register'

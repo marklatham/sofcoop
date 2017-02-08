@@ -1,0 +1,13 @@
+- provide :title, 'Resend unlock instructions'
+
+div.form
+
+  = form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post, role: 'form' }) do |f|
+  
+    h2 Resend unlock instructions
+    = devise_error_messages!
+    div
+      = f.label :email
+      | :
+      = f.email_field :email, autofocus: true
+    = f.submit 'Resend unlock instructions'
