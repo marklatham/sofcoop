@@ -1,4 +1,9 @@
 @import "normalize";   // CSS reset from necolas.github.io/normalize.css
+/////////////////////////////////////////////
+@import "bootstrap/variables";
+@import "bootstrap/mixins/alerts";
+@import "bootstrap/mixins/opacity";
+/////////////////////////////////////////////
 @import "bourbon";     // All additional stylesheets must be imported below Bourbon.
 // @import "base/grid-settings";  // Get neat & uncomment when want to use.
 // @import "neat";     // Get neat & uncomment when want to use.
@@ -15,3 +20,7 @@
 @import "navigation";
 @import "scaffolds";
 @import "style-classes";
+/////////////////////////////////////////////
+@import "bootstrap/alerts";
+@import "bootstrap/close";
+
