@@ -1,0 +1,16 @@
+//
+// Close icons
+// -----------------------------
+
+.close {
+  font-size: 1.5em;
+  &:hover,
+  &:focus {
+    background-color: inherit;
+  }
+}
+
+button.close {
+  margin: 0;
+  transition: initial;
+}
