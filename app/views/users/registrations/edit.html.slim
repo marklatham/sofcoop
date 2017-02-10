@@ -11,13 +11,12 @@ div.form
       | :
       = f.email_field :email, autofocus: true
     div
-      p We need your current password to confirm your changes:
       = f.label 'Current password'
-      | :
+      | : (needed to confirm your changes)
       = f.password_field :password
     = f.submit 'Save changes'
 
-div.horizontal-line
+hr
 
 h2 Cancel Account
 p Unhappy? We'd be sad to see you go...

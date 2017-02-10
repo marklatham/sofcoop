@@ -32,8 +32,9 @@ nav
             - if user_signed_in?
               li
                 - if gravatar?(current_user)
-                  = gravatar_for current_user, size: 32
-                  b.down-arrow.gravatar-arrow
+                  div
+                    = gravatar_for current_user, size: 32
+                    b.down-arrow.gravatar-arrow
                 - else
                   = handle(current_user)
                   b.down-arrow

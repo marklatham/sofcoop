@@ -4,9 +4,13 @@
 
 .close {
   font-size: 1.5em;
+  color: #999;
+  @include opacity(1);  // Otherwise it shows through dropdowns.
   &:hover,
   &:focus {
     background-color: inherit;
+    color: #444;
+    @include opacity(1);
   }
 }
 

@@ -80,10 +80,6 @@ header table {
   }
 }
 
-div.login {
-  min-width: 60px;   // Prevents gravatar from shrinking in small window.
-}
-
 .dropdown {
   padding: 0;
   display: table;
@@ -119,9 +115,6 @@ div.login {
 .dropdown li:hover ul {
   left: auto;
 }
-.login li:hover ul {
-  right: 10em;
-}
 .dropdown ul li ul li{
   white-space: normal;
   margin-left: 0;
@@ -144,6 +137,7 @@ div.login {
     text-decoration: none;
   }
 }
+
 .droplink {
     a:link, a:visited {
       color: $link-color;
@@ -157,6 +151,25 @@ div.login {
   display: inline-block;
   margin: 0 0 2px 2px;
 }
+
+////// CSS CHANGES FOR LOGIN DROPDOWN:
+
+div.login {
+  min-width: 75px;       // Prevents gravatar from shrinking in small window.
+}
+.login ul li{
+  padding-left: 15px;   // Tweak together with min-width above!
+}.login ul li div{
+  padding-top: 6px;
+}
+.login li:hover ul {
+  right: 9.3em;          // Tweak together with width below!
+}
+.login ul li ul li{
+  width: 11em;           // Tweak together with right above!
+  padding: 3px 0 3px 3px;
+  text-align: center;
+}
 .gravatar-arrow {
-  margin: 0 0 10px 2px;
+  padding: 0 0 10px 0;
 }
