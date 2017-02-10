@@ -19,14 +19,6 @@ nav
               ul.droplink
                 li = link_to 'Voter Info Systems', '/voter-info'
                 li = link_to 'VM Reform Strategies', '/reform-strategies'
-                li = link_to 'Networking', '/networking'
-                li = link_to 'Proxy Voting', '/proxy-voting'
-                li = link_to 'Other Reforms', '/other-reforms'
-                li = link_to 'Campaign Finance', '/campaign-finance'
-                li = link_to 'Participative Democracy', '/participative-democracy'
-                li = link_to 'Transparency', '/transparency'
-                li = link_to 'Ballot Access', '/ballot-access'
-                li = link_to 'Electoral Reform', '/electoral-reform'
             li
               | Organizations
               b.down-arrow
@@ -34,18 +26,29 @@ nav
                 li = link_to 'Student Unions', '/student-unions'
                 li = link_to 'Condo HOAs', '/condos'
                 li = link_to 'Co-ops, Credit Unions', '/co-ops'
-                li = link_to 'Non-Profits', '/nonprofits'
-                li = link_to 'Governments', '/governments'
-                li = link_to 'Corporations', '/corporations'
-                li = link_to 'Software Markets', '/software'
       td
         div.dropdown.login
           ul
-            li
-              = link_to 'Log in', new_user_session_path
-              b.down-arrow
-              ul.droplink
-                li = link_to 'Create a free login', new_user_registration_path
-                li = link_to 'Forgot your password?', new_user_password_path
-                li = link_to "Didn't receive confirm instructions?", new_user_confirmation_path
-                li = link_to "Didn't receive unlock instructions?", new_user_unlock_path
+            - if user_signed_in?
+              li
+                - if gravatar?(current_user)
+                  = gravatar_for current_user, size: 32
+                  b.down-arrow.gravatar-arrow
+                - else
+                  = handle(current_user)
+                  b.down-arrow
+                ul.droplink
+                  /li = link_to 'Create new post', new_post_path
+                  /li = link_to 'See my posts', current_user
+                  li = link_to 'Edit account', edit_user_registration_path
+                  /li = link_to 'Change password', change_password_path
+                  li = link_to 'Log out', destroy_user_session_path, :method=>'delete'
+            - else
+              li
+                = link_to 'Log in', new_user_session_path
+                b.down-arrow
+                ul.droplink
+                  li = link_to 'Create a free login', new_user_registration_path
+                  li = link_to 'Forgot your password?', new_user_password_path
+                  li = link_to "Didn't receive confirm instructions?", new_user_confirmation_path
+                  li = link_to "Didn't receive unlock instructions?", new_user_unlock_path

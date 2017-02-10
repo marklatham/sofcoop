@@ -80,6 +80,10 @@ header table {
   }
 }
 
+div.login {
+  min-width: 60px;   // Prevents gravatar from shrinking in small window.
+}
+
 .dropdown {
   padding: 0;
   display: table;
@@ -152,4 +156,7 @@ header table {
   @include triangle(down, black, 0.6*$dropdown-font-size);
   display: inline-block;
   margin: 0 0 2px 2px;
+}
+.gravatar-arrow {
+  margin: 0 0 10px 2px;
 }
