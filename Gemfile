@@ -16,6 +16,7 @@ gem 'slim-rails'
 gem 'html2slim'
 gem 'kramdown'
 gem 'devise'
+gem 'pundit'
 
 group :development, :test do
   gem 'byebug', platform: :mri
