@@ -19,6 +19,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super
   end
 
+  def change_password
+    @body_class = 'grayback'
+  end
+
   # PUT /resource
   def update
     super

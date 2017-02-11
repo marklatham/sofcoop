@@ -8,6 +8,10 @@ Rails.application.routes.draw do
                                 sessions: 'users/sessions',
                                  unlocks: 'users/unlocks'}
 
+  devise_scope :user do
+    get "/change_password" => "users/registrations#change_password"
+  end
+
   root 'visitors#index'
   
 end
