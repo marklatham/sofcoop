@@ -17,6 +17,7 @@ gem 'html2slim'
 gem 'kramdown'
 gem 'devise'
 gem 'pundit'
+gem 'rolify'
 
 group :development, :test do
   gem 'byebug', platform: :mri
