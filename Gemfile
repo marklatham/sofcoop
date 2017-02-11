@@ -14,7 +14,6 @@ gem 'bourbon'
 gem 'bitters'
 gem 'slim-rails'
 gem 'html2slim'
-gem 'simple_form'
 gem 'kramdown'
 gem 'devise'
 
