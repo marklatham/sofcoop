@@ -39,6 +39,8 @@ nav
                   = handle(current_user)
                   b.down-arrow
                 ul.droplink
+                  - if current_user.is_admin?
+                    li = link_to 'List users', users_path
                   /li = link_to 'Create new post', new_post_path
                   /li = link_to 'See my posts', current_user
                   li = link_to 'Edit account', edit_user_registration_path
