@@ -6,14 +6,20 @@ div.form
   
     h2 Edit Account
     = devise_error_messages!
+    - unless @user.username
+      div
+        = f.label :username
+        | : (needed if you post comments or pages. Like Twitter username: letters, numbers, underscore ok; max 15 characters.)
+        div
+        = f.text_field :username, autofocus: true
     div
       = f.label :email
       | :
-      = f.email_field :email, autofocus: true
+      = f.text_field :email
     div
       = f.label 'Current password'
       | : (needed to confirm your changes)
-      = f.password_field :password
+      = f.password_field :current_password
     = f.submit 'Save changes'
 
 hr
