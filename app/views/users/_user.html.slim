@@ -1,4 +1,6 @@
 td
   = gravatar_for(user)
-  /= user.name
-td = link_to user.email, user
+td
+  = link_to user.username, username_path(user)
+  br
+  = user.email

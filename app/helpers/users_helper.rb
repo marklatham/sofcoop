@@ -1,5 +1,9 @@
 module UsersHelper
 
+  def username_path(user)
+    "/@" + user.username
+  end
+
   def handle(user)
     truncate(user.email, length: 8, omission: "...")
   end

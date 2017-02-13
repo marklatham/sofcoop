@@ -1,0 +1,7 @@
+- provide :title, 'User Pofile: ' + @user.username
+
+h3 User Profile
+div.column
+  table.table
+    tbody
+      tr = render @user

@@ -9,12 +9,15 @@ Rails.application.routes.draw do
                                  unlocks: 'users/unlocks'}
 
   devise_scope :user do
-    get '/change_password' => 'users/registrations#change_password'
-    get '/create_username' => 'users/registrations#create_username'
+    get '/change_password', to: 'users/registrations#change_password'
+    get '/create_username', to: 'users/registrations#create_username'
   end
 
   root 'visitors#index'
   
   resources :users
+
+  # http://guides.rubyonrails.org/routing.html#generating-paths-and-urls-from-code
+  get '/@:username', to: 'users#show' # Naming this path didn't work, so made helper.
   
 end
