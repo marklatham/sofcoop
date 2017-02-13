@@ -23,6 +23,10 @@ before_action :configure_account_update_params, only: [:update]
     @body_class = 'grayback'
   end
 
+  def create_username
+    @body_class = 'grayback'
+  end
+
   # PUT /resource
   def update
     super

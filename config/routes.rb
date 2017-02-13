@@ -9,7 +9,8 @@ Rails.application.routes.draw do
                                  unlocks: 'users/unlocks'}
 
   devise_scope :user do
-    get "/change_password" => "users/registrations#change_password"
+    get '/change_password' => 'users/registrations#change_password'
+    get '/create_username' => 'users/registrations#create_username'
   end
 
   root 'visitors#index'
