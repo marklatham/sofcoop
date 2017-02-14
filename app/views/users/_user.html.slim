@@ -1,5 +1,5 @@
 td
-  = gravatar_for(user)
+  = link_to gravatar_for(user), username_path(user)
 td
   = link_to user.username, username_path(user)
   br

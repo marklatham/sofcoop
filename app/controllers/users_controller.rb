@@ -9,7 +9,9 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find_by_username(params[:username])
+    if @user = User.find_by_username(params[:username])
+    else @user = User.find(params[:id])
+    end
     authorize @user
   end
 
