@@ -3,13 +3,12 @@
 div.form
 
   = form_for(current_user, url: registration_path(current_user), html: { method: :put, role: 'form'}) do |f|
-  
-  
+
     h2 Create Your Username
     - if current_user.username.present?
-      p You already have a username. It's difficult to change a username, because it's embedded in links to your pages, so those existing links would break. But if you really want to change it anyway, please email sofcoop@votermedia.org.
+      p You already have a username. It's difficult to change, because it's embedded in links to your pages, so those existing links would break. But if you really want to change it anyway, please email sofcoop@votermedia.org.
     - else
-      p You need a username to post comments or pages, since they show it. It's also in the link addresses of your pages. Like a Twitter username: letters, numbers, underscore ok; max 15 characters.
+      p You need a username to post comments or pages, since they show it. It's also in the link address (URL) of pages you create. Like a Twitter username: letters, numbers, underscore ok; max 15 characters.
       div
         = f.label 'Username:'
         div
