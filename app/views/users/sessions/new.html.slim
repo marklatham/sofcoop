@@ -7,12 +7,10 @@ div.form
     h2 Log in
     = devise_error_messages!
     div
-      = f.label :email
-      | :
+      = f.label 'Email:'
       = f.email_field :email, autofocus: true
     div
-      = f.label :password
-      | :
+      = f.label 'Password:'
       = f.password_field :password
     div.check_box
       = f.check_box :remember_me, checked: true

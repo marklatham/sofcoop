@@ -7,7 +7,6 @@ div.form
     h2 Resend confirmation instructions
     = devise_error_messages!
     div
-      = f.label :email
-      | :
+      = f.label 'Email:'
       = f.email_field :email, autofocus: true
     = f.submit 'Resend confirmation instructions'

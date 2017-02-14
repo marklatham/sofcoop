@@ -7,11 +7,10 @@ div.form
     h2 Register a free login
     = devise_error_messages!
     div
-      = f.label :email
-      | :
+      = f.label 'Email:'
       = f.email_field :email, autofocus: true
     div
-      = f.label :password
-      | : (6 characters or more)
+      = f.label 'Password: '
+      | (6 characters or more)
       = f.password_field :password
     = f.submit 'Register'
