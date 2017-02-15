@@ -1,6 +1,7 @@
 class User < ApplicationRecord
+  has_many :pages
+  
   rolify
-
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :lockable, :timeoutable # , :omniauthable
