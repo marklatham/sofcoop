@@ -43,8 +43,8 @@ nav
                     li = link_to 'List users', users_path
                   - unless current_user.username.present?
                     li = link_to 'Create username', create_username_path
-                  /li = link_to 'Create new post', new_post_path
-                  /li = link_to 'See my posts', current_user
+                  li = link_to 'Create new page', new_page_path
+                  li = link_to 'My profile', username_path(current_user)
                   li = link_to 'Edit account', edit_user_registration_path
                   li = link_to 'Change password', change_password_path
                   li = link_to 'Log out', destroy_user_session_path, :method=>'delete'

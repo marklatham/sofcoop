@@ -14,21 +14,23 @@ class PagesController < ApplicationController
 
   # GET /pages/new
   def new
+    @body_class = 'grayback'
     @page = Page.new
   end
 
   # GET /pages/1/edit
   def edit
+    @body_class = 'grayback'
   end
 
   # POST /pages
   # POST /pages.json
   def create
-    @page = Page.new(page_params)
+    @page = current_user.pages.build(page_params)
 
     respond_to do |format|
       if @page.save
-        format.html { redirect_to @page, notice: 'Page was successfully created.' }
+        format.html { redirect_to userpage_path(@page), notice: 'Page was successfully created.' }
         format.json { render :show, status: :created, location: @page }
       else
         format.html { render :new }
@@ -42,7 +44,7 @@ class PagesController < ApplicationController
   def update
     respond_to do |format|
       if @page.update(page_params)
-        format.html { redirect_to @page, notice: 'Page was successfully updated.' }
+        format.html { redirect_to userpage_path(@page), notice: 'Page was successfully updated.' }
         format.json { render :show, status: :ok, location: @page }
       else
         format.html { render :edit }
@@ -62,9 +64,20 @@ class PagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    
+    def userpage_path(page)
+      '/@' + page.user.username + '/' + page.slug
+    end
+    
     def set_page
-      @page = Page.find(params[:id])
+      if user = User.find_by_username(params[:username])
+        @page = Page.where(user_id: user.id).friendly.find(params[:slug])
+      else
+        @page = Page.find(params[:id])
+      end
+      if request.path != userpage_path(@page)
+        return redirect_to userpage_path(@page), notice: 'That page has moved to this new URL (probably because title changed).'
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

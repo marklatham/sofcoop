@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
+
+  root 'visitors#index'
   
-  resources :pages
+  # http://guides.rubyonrails.org/routing.html#generating-paths-and-urls-from-code
+  get '/@:username', to: 'users#show' # Naming this path didn't work, so created a helper.
+  get '/@:username/:slug', to: 'pages#show'
+
   devise_for :users, path: '',
              path_names: {sign_up: 'register', sign_in: 'login', sign_out: 'logout'},
              controllers: {confirmations: 'users/confirmations',
@@ -14,11 +19,7 @@ Rails.application.routes.draw do
     get '/create_username', to: 'users/registrations#create_username'
   end
 
-  root 'visitors#index'
-  
   resources :users
-
-  # http://guides.rubyonrails.org/routing.html#generating-paths-and-urls-from-code
-  get '/@:username', to: 'users#show' # Naming this path didn't work, so made helper.
+  resources :pages
   
 end
