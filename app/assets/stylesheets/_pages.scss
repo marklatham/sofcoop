@@ -22,3 +22,30 @@
     visibility: hidden;
   }
 }
+
+
+.pages {
+  list-style: none;
+  margin: 10px 0 0 0;
+
+  li {
+    padding: 15px 0 10px 0;
+    border-top: 1px solid black;
+  }
+}
+.user {
+}
+.title {
+  font-weight: bold;
+  font-size: $font-size-large;
+}
+.content {
+}
+.timestamp {
+  color: $gray-medium;
+  font-style: italic;
+}
+.gravatar {
+  float: left;
+  margin-right: 10px;
+}

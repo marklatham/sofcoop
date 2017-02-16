@@ -62,12 +62,8 @@ class PagesController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  
   private
-    
-    def userpage_path(page)
-      '/@' + page.user.username + '/' + page.slug
-    end
     
     def set_page
       if user = User.find_by_username(params[:username])

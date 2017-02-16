@@ -1,29 +1,6 @@
-h1 Listing pages
+- provide :title, "Pages - All Sources"
 
-table
-  thead
-    tr
-      th User
-      th Visible
-      th Title
-      th Slug
-      th Body
-      th
-      th
-      th
-
-  tbody
-    - @pages.each do |page|
-      tr
-        td = page.user
-        td = page.visible
-        td = page.title
-        td = page.slug
-        td = page.body
-        td = link_to 'Show', page
-        td = link_to 'Edit', edit_page_path(page)
-        td = link_to 'Destroy', page, data: { confirm: 'Are you sure?' }, method: :delete
-
-br
-
-= link_to 'New Page', new_page_path
+h2 Pages posted by any users:
+p This listing is not (yet) designed to be well organized. We will incentivize providers to organize content, by rewarding them with our votes.
+ul.pages
+  = render partial: 'pages/page', collection: @pages

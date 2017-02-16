@@ -12,6 +12,7 @@ class UsersController < ApplicationController
     if @user = User.find_by_username(params[:username])
     else @user = User.find(params[:id])
     end
+    @pages = Page.where(user_id: @user.id)
     authorize @user
   end
 

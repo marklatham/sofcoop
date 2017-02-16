@@ -1,13 +1,5 @@
 module UsersHelper
 
-  def username_path(user)
-    if user.username.present?
-      '/@' + user.username
-    else
-      user_path(user)
-    end
-  end
-
   def handle(user)
     truncate(user.email, length: 8, omission: "...")
   end
