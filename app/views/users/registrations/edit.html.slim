@@ -10,8 +10,8 @@ div.form
       = f.label 'Email:'
       = f.text_field :email, autofocus: true
     div
-      = f.label 'Current password: '
-      | (needed to confirm your changes)
+      = f.label 'Current password:'
+      |  (needed to confirm your changes)
       = f.password_field :current_password
     = f.submit 'Save changes'
 

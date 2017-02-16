@@ -1,6 +1,13 @@
 / Rails flash messages styled for Bootstrap 3.0 - copied from infocoop
 - flash.each do |name, message|
-  - if message.is_a?(String)
-    div class="alert alert-#{name.to_s == 'notice' ? 'success' : 'danger'}"
+  / From stackoverflow.com/questions/6661481/how-to-display-devise-error-messages-when-im-putting-the-login-in-and-sign-up-f :
+  - if message.class == Array
+    - message.each do |message|
+      div class="alert alert-#{name.to_s}"
+        button.close[type="button" data-dismiss="alert" aria-hidden="true"] ×
+        = content_tag :div, message, :id => "flash_#{name.to_s}"
+  / As in infocoop:
+  - elsif message.is_a?(String)
+    div class="alert alert-#{name.to_s}"
       button.close[type="button" data-dismiss="alert" aria-hidden="true"] ×
       = content_tag :div, message, :id => "flash_#{name.to_s}"
