@@ -33,7 +33,7 @@ nav
               li
                 - if gravatar?(current_user)
                   div
-                    = gravatar_for current_user, size: 32
+                    = gravatar_for current_user, size: 32, class: "gravatar-header"
                     b.down-arrow.gravatar-arrow
                 - else
                   = handle(current_user)
