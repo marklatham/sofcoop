@@ -30,6 +30,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       if @page.save
+        AdminMailer.new_page(@page).deliver  # notify admin
         format.html { redirect_to userpage_path(@page), notice: 'Page was successfully created.' }
         format.json { render :show, status: :created, location: @page }
       else

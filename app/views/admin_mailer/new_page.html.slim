@@ -1,0 +1,7 @@
+p Hello Sofcoop Admin --
+
+p We just got a new page from user #{@page.user.email}:
+
+p = link_to @page.title, root_url + '/@' + @page.user.username + '/' + @page.slug
+
+p Sincerely, Sofcoop Website

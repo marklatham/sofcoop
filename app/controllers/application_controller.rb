@@ -5,7 +5,9 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   helper_method :username_path
+  helper_method :username_url
   helper_method :userpage_path
+  helper_method :userpage_url
   
   def username_path(user)
     if user.username.present?
@@ -15,8 +17,16 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def username_url(user)
+    root_url + username_path(user)
+  end
+  
   def userpage_path(page)
     '/@' + page.user.username + '/' + page.slug
+  end
+  
+  def userpage_url(page)
+    root_url + userpage_path(page)
   end
   
   protected
