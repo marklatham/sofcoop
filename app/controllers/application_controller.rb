@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   helper_method :username_url
   helper_method :userpage_path
   helper_method :userpage_url
+  helper_method :userpage_edit
   
   def username_path(user)
     if user.username.present?
@@ -27,6 +28,10 @@ class ApplicationController < ActionController::Base
   
   def userpage_url(page)
     root_url + userpage_path(page)
+  end
+  
+  def userpage_edit(page)
+    '/@' + page.user.username + '/' + page.slug + '/edit'
   end
   
   protected
