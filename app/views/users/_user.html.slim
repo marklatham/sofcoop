@@ -1,6 +1,6 @@
 td
-  = link_to gravatar_for(user), username_path(user)
+  = link_to gravatar_for(user), username_path(user.username)
 td
-  = link_to user.username, username_path(user)
+  = link_to user.username, username_path(user.username)
   br
   = user.email

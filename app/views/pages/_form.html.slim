@@ -1,4 +1,4 @@
-= form_for @page do |f|
+= form_for @page, url: '/pages/'+@page.id.to_s do |f|
   - if @page.errors.any?
     #error_explanation
       h2 = "#{pluralize(@page.errors.count, "error")} prohibited this page from being saved:"
@@ -14,5 +14,9 @@
     = f.text_field :title
   .field
     = f.label 'Body:'
-    = f.text_area :body
+    = f.text_area :body, rows: '15'
+  - if @page.user
+    / in case we later allow multiple editors
+    - username = @page.user.username
+  - else username = current_user.username
   .actions = f.submit

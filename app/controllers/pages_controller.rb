@@ -10,6 +10,9 @@ class PagesController < ApplicationController
   # GET /pages/1
   # GET /pages/1.json
   def show
+    if request.path != userpage_path(@page)
+      return redirect_to userpage_path(@page), notice: 'That page has moved to this new URL (probably because title changed).'
+    end
   end
 
   # GET /pages/new
@@ -71,9 +74,6 @@ class PagesController < ApplicationController
         @page = Page.where(user_id: user.id).friendly.find(params[:slug])
       else
         @page = Page.find(params[:id])
-      end
-      if request.path != userpage_path(@page)
-        return redirect_to userpage_path(@page), notice: 'That page has moved to this new URL (probably because title changed).'
       end
     end
 

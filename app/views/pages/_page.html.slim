@@ -1,9 +1,0 @@
-li id="page-#{page.id}"
-  = link_to gravatar_for(page.user), username_path(page.user)
-  span.user
-    = link_to page.user.username, username_path(page.user)
-    |  - 
-  span.timestamp Created #{time_ago_in_words(page.created_at)} ago. 
-  - if page.updated_at > page.created_at
-    span.timestamp Updated #{time_ago_in_words(page.updated_at)} ago.
-  .title = link_to page.title, userpage_path(page)
