@@ -4,7 +4,7 @@ class PagesController < ApplicationController
   # GET /pages
   # GET /pages.json
   def index
-    @pages = Page.all
+    @pages = Page.all.order('updated_at DESC')
   end
 
   # GET /pages/1
@@ -62,7 +62,7 @@ class PagesController < ApplicationController
   def destroy
     @page.destroy
     respond_to do |format|
-      format.html { redirect_to pages_url, notice: 'Page was successfully destroyed.' }
+      format.html { redirect_to username_path(@page.user.username), notice: 'Page was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

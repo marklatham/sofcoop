@@ -2,7 +2,7 @@
 
 h2 = @page.title
 
-.body = to_html @page.body
+.body = sanitize @page.body.markdown2html
 
 = gravatar_for @page.user
 
@@ -22,7 +22,7 @@ p.timestamp
 
 - if current_user == @page.user
   p
-  p
+  p.controls
     = link_to 'Edit', edit_page_path(@page.user.username, @page)
     |  | 
     = link_to 'Delete', delete_page_path(@page.user.username, @page), method: :delete, data: {confirm: "You sure?"}

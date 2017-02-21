@@ -4,15 +4,17 @@ class Page < ApplicationRecord
   friendly_id :slug_candidates, use: [:slugged, :scoped, :history], scope: :user
   
   def slug_candidates
-    [
-      :title,
+    if self.title.present?
+      [:title,
       [:title, '2'],
       [:title, '3'],
       [:title, '4'],
       [:title, '5'],
       [:title, :id],
-      :id
-    ]
+      :id]
+    else
+      "#{self.body.markdown2html.strip_tags.truncate(30)}"
+    end
   end
   
   def should_generate_new_friendly_id?
