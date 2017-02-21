@@ -2,12 +2,15 @@ Rails.application.routes.draw do
 
   root 'visitors#index'
   
-  # http://guides.rubyonrails.org/routing.html#generating-paths-and-urls-from-code
+  ### PAGES: #######################
+  
   get    '/@:username/:slug',        to: 'pages#show',         as: :page
   get    '/@:username/:slug/edit',   to: 'pages#edit',         as: :edit_page
   delete '/@:username/:slug/delete', to: 'pages#destroy',      as: :delete_page
   
   resources :pages, except: [:show, :edit, :destroy]
+  
+  ### USERS: #######################
   
   get    '/@:username',              to: 'users#show',         as: :username
   

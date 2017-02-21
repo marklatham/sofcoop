@@ -4,22 +4,6 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
-  helper_method :userpage_path
-  helper_method :userpage_url
-  helper_method :userpage_edit
-  
-  def userpage_path(page)
-    '/@' + page.user.username + '/' + page.slug
-  end
-  
-  def userpage_url(page)
-    root_url + userpage_path(page)
-  end
-  
-  def userpage_edit(page)
-    '/@' + page.user.username + '/' + page.slug + '/edit'
-  end
-  
   protected
 
   def user_not_authorized

@@ -10,8 +10,8 @@ class PagesController < ApplicationController
   # GET /pages/1
   # GET /pages/1.json
   def show
-    if request.path != userpage_path(@page)
-      return redirect_to userpage_path(@page), notice: 'That page has moved to this new URL (probably because title changed).'
+    if request.path != page_path(@page.user.username, @page)
+      return redirect_to page_path(@page.user.username, @page), notice: 'That page has moved to this new URL (probably because title changed).'
     end
   end
 
@@ -34,7 +34,7 @@ class PagesController < ApplicationController
     respond_to do |format|
       if @page.save
         AdminMailer.new_page(@page).deliver  # notify admin
-        format.html { redirect_to userpage_path(@page), notice: 'Page was successfully created.' }
+        format.html { redirect_to page_path(@page.user.username, @page), notice: 'Page was successfully created.' }
         format.json { render :show, status: :created, location: @page }
       else
         format.html { render :new }
@@ -48,7 +48,7 @@ class PagesController < ApplicationController
   def update
     respond_to do |format|
       if @page.update(page_params)
-        format.html { redirect_to userpage_path(@page), notice: 'Page was successfully updated.' }
+        format.html { redirect_to page_path(@page.user.username, @page), notice: 'Page was successfully updated.' }
         format.json { render :show, status: :ok, location: @page }
       else
         format.html { render :edit }
