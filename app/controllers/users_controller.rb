@@ -9,9 +9,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    if @user = User.find_by_username(params[:username])
-    else @user = User.find(params[:id])
-    end
+    @user = User.find_by_username(params[:username])
     @pages = Page.where(user_id: @user.id).order('updated_at DESC')
     authorize @user
   end

@@ -1,4 +1,4 @@
-- provide :title, 'User Profile: ' + @user.username
+- provide :title, '@'+@user.username
 
 h2 User Profile
 div.column
@@ -6,6 +6,6 @@ div.column
     tbody
       tr = render @user
       tr
-  h3 Pages created by #{link_to @user.username, username_path(@user.username)}:
+  h3 Pages created by #{link_to '@'+@user.username, user_path(@user)}:
   ul.pages
     = render partial: 'pages/overview', collection: @pages, as: :page

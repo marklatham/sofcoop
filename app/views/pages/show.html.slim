@@ -7,7 +7,7 @@ h2 = @page.title
 = gravatar_for @page.user
 
 span.timestamp
-  |  Created by #{link_to @page.user.username, username_path(@page.user.username)} #{time_ago_in_words(@page.created_at)} ago.
+  |  Created by #{link_to @page.user.username, user_path(@page.user)} #{time_ago_in_words(@page.created_at)} ago.
   - if @page.updated_at > @page.created_at
     |  Updated #{time_ago_in_words(@page.updated_at)} ago.
 p.timestamp

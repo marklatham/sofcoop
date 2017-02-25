@@ -12,12 +12,14 @@ Rails.application.routes.draw do
   
   ### USERS: #######################
   
-  get    '/@:username',              to: 'users#show',         as: :username
-  
-  resources :users, only:   [:show, :index]
+  get    '/@:username',              to: 'users#show',         as: :user
+  get    '/users',                   to: 'users#index',        as: :users
 
   devise_for :users, path: '',
-             path_names: {sign_up: 'register', sign_in: 'login', sign_out: 'logout'},
+             path_names:  {      sign_up: 'register',
+                                 sign_in: 'login',
+                                sign_out: 'logout',
+                                    edit: 'edit_account'},
              controllers: {confirmations: 'users/confirmations',
                                passwords: 'users/passwords',
                            registrations: 'users/registrations',
@@ -25,6 +27,7 @@ Rails.application.routes.draw do
                                  unlocks: 'users/unlocks'}
 
   devise_scope :user do
+    get '/cancel_account',  to: 'users/registrations#cancel_account',  as: :cancel_account
     get '/change_password', to: 'users/registrations#change_password', as: :change_password
     get '/create_username', to: 'users/registrations#create_username', as: :create_username
   end

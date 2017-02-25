@@ -10,7 +10,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    super
+    super do |resource|
+      resource.username = 'user' + resource.id.to_s
+      resource.save
+    end
   end
 
   # GET /resource/edit
@@ -28,7 +31,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # PUT /resource
-  def update
+  def update # TO DO: disallow username = "user*" unless = "user" + id.to_s
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
 
@@ -51,9 +54,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # DELETE /resource
+  
+  def cancel_account
+    self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
+    @pages = Page.where(user_id: resource.id)
+    @body_class = 'grayback'
+  end
+
   def destroy
-    AdminMailer.account_cancelled(resource).deliver  # notify admin
     super
+    AdminMailer.account_cancelled(resource).deliver  # notify admin
   end
 
   # GET /resource/cancel
@@ -64,7 +74,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def cancel
     super
   end
-
+  
   # protected
 
   # If you have extra params to permit, append them to the sanitizer.

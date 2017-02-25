@@ -62,7 +62,7 @@ class PagesController < ApplicationController
   def destroy
     @page.destroy
     respond_to do |format|
-      format.html { redirect_to username_path(@page.user.username), notice: 'Page was successfully destroyed.' }
+      format.html { redirect_to user_path(@page.user), notice: 'Page was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
