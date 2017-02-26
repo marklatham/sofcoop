@@ -9,9 +9,16 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find_by_username(params[:username])
+    @user = User.friendly.find(params[:username])
     @pages = Page.where(user_id: @user.id).order('updated_at DESC')
     authorize @user
+    if request.path != user_path(@user.username)
+      if params[:username].downcase != @user.username.downcase
+        flash[:notice] = 'Username @' + params[:username] +
+                         ' has changed to @' + @user.username
+      end
+      return redirect_to user_path(@user.username)
+    end
   end
 
 end

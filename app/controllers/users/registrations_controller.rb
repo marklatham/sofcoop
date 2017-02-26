@@ -26,10 +26,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @body_class = 'grayback'
   end
 
-  def create_username
-    @body_class = 'grayback'
-  end
-
   # PUT /resource
   def update # TO DO: disallow username = "user*" unless = "user" + id.to_s
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)

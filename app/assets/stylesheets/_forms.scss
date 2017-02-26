@@ -10,3 +10,17 @@ div.form div {
   line-height: 1.15;
   padding-bottom: 0.5em;
 }
+
+table.minimal {
+  table-layout: fixed;
+  margin: 0;
+  tr td {
+    border-style: none;
+  }
+  .right1em {
+    text-align: right;
+    vertical-align: middle;
+    padding: 0 0 0.8em 0;
+    width: 1em;
+  }
+}

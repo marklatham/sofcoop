@@ -11,7 +11,13 @@ class PagesController < ApplicationController
   # GET /pages/1.json
   def show
     if request.path != page_path(@page.user.username, @page)
-      return redirect_to page_path(@page.user.username, @page), notice: 'That page has moved to this new URL (probably because title changed).'
+      if params[:username].downcase != @page.user.username.downcase
+        flash[:notice] = 'Username @' + params[:username] +
+                         ' has changed to @' + @page.user.username
+      elsif request.path.downcase != page_path(@page.user.username, @page).downcase
+        flash[:notice] = 'That page has moved to this new URL (probably because title changed).'
+      end
+      return redirect_to page_path(@page.user.username, @page)
     end
   end
 
@@ -34,7 +40,8 @@ class PagesController < ApplicationController
     respond_to do |format|
       if @page.save
         AdminMailer.new_page(@page).deliver  # notify admin
-        format.html { redirect_to page_path(@page.user.username, @page), notice: 'Page was successfully created.' }
+        format.html { redirect_to page_path(@page.user.username, @page),
+                               notice: 'Page was successfully created.' }
         format.json { render :show, status: :created, location: @page }
       else
         format.html { render :new }
@@ -48,7 +55,8 @@ class PagesController < ApplicationController
   def update
     respond_to do |format|
       if @page.update(page_params)
-        format.html { redirect_to page_path(@page.user.username, @page), notice: 'Page was successfully updated.' }
+        format.html { redirect_to page_path(@page.user.username, @page),
+                               notice: 'Page was successfully updated.' }
         format.json { render :show, status: :ok, location: @page }
       else
         format.html { render :edit }
@@ -62,7 +70,8 @@ class PagesController < ApplicationController
   def destroy
     @page.destroy
     respond_to do |format|
-      format.html { redirect_to user_path(@page.user), notice: 'Page was successfully destroyed.' }
+      format.html { redirect_to user_path(@page.user.username),
+                    notice: 'Page was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -70,7 +79,7 @@ class PagesController < ApplicationController
   private
     
     def set_page
-      if user = User.find_by_username(params[:username])
+      if user = User.friendly.find(params[:username])
         @page = Page.where(user_id: user.id).friendly.find(params[:slug])
       else
         @page = Page.find(params[:id])
