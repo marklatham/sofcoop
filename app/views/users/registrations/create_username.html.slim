@@ -2,7 +2,7 @@
 
 div.form
 
-  = form_for(current_user, url: registration_path(current_user), html: { method: :put, role: 'form'}) do |f|
+  = form_for(current_user, url: user_registration_path(current_user), html: { method: :put, role: 'form'}) do |f|
 
     h2 Create Your Username
     - if current_user.username.present?

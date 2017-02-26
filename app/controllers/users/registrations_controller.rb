@@ -31,15 +31,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
 
-    if account_update_params[:username].first(4).downcase == 'user'
-      flash[:error] = "Sorry, edited username can't start with 'user'."
-      redirect_back(fallback_location: user_path(resource.username)) and return
-    elsif account_update_params[:username].first(1) == '_' || account_update_params[:username].last(1) == '_'
-      flash[:error] = "Sorry, username can't start or end with underscore _"
-      redirect_back(fallback_location: user_path(resource.username)) and return
-    elsif account_update_params[:username].include? '__'
-      flash[:error] = "Sorry, username can't include a double underscore __"
-      redirect_back(fallback_location: user_path(resource.username)) and return
+    if account_update_params[:username]
+      if account_update_params[:username].first(4).downcase == 'user'
+        unless account_update_params[:username].downcase == 'user' + resource.id.to_s
+          flash[:error] = "Sorry, edited username can't start with 'user'."
+          redirect_back(fallback_location: user_path(resource.username)) and return
+        end
+      elsif account_update_params[:username].first(1) == '_' || account_update_params[:username].last(1) == '_'
+        flash[:error] = "Sorry, username can't start or end with underscore _"
+        redirect_back(fallback_location: user_path(resource.username)) and return
+      elsif account_update_params[:username].include? '__'
+        flash[:error] = "Sorry, username can't include a double underscore __"
+        redirect_back(fallback_location: user_path(resource.username)) and return
+      end
     end
     
     resource_updated = update_resource(resource, account_update_params)
