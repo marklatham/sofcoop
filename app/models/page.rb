@@ -13,7 +13,7 @@ class Page < ApplicationRecord
       [:title, :id],
       :id]
     else
-      "#{self.body.markdown2html.strip_tags.truncate(40)}"
+      "#{self.body.markdown2html.strip_tags.truncate(40, separator: ' ', omission: '')}"
     end
   end
   

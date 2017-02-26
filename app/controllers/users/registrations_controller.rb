@@ -31,8 +31,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
 
+    if account_update_params[:username].first(4).downcase == 'user'
+      flash[:error] = "Sorry, edited username can't start with 'user'."
+      redirect_back(fallback_location: user_path(resource.username)) and return
+    elsif account_update_params[:username].first(1) == '_' || account_update_params[:username].last(1) == '_'
+      flash[:error] = "Sorry, username can't start or end with underscore _"
+      redirect_back(fallback_location: user_path(resource.username)) and return
+    elsif account_update_params[:username].include? '__'
+      flash[:error] = "Sorry, username can't include a double underscore __"
+      redirect_back(fallback_location: user_path(resource.username)) and return
+    end
+    
     resource_updated = update_resource(resource, account_update_params)
-    yield resource if block_given?
     if resource_updated
       AdminMailer.new_registration(resource).deliver  # notify admin
       if is_flashing_format?
@@ -41,11 +51,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
         set_flash_message :notice, flash_key
       end
       bypass_sign_in resource, scope: resource_name
-      respond_with resource, location: after_update_path_for(resource)
+      respond_with resource, location: user_path(resource.username)
     else
       clean_up_passwords resource
       flash[:notice] = flash[:notice].to_a.concat resource.errors.full_messages
-      redirect_back(fallback_location: root_path)
+      redirect_back(fallback_location: user_path(resource.username))
     end
   end
 
@@ -92,4 +102,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def after_inactive_sign_up_path_for(resource)
     super(resource)
   end
+
+  # The default url to be used after updating a resource.
+  def after_update_path_for(resource)
+    super(resource)
+  end
+  
 end

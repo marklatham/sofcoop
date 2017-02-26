@@ -16,4 +16,4 @@ li id="page-#{page.id}"
     - if page.title.present?
       = link_to page.title, page_path(page.user.username, page)
     - else
-      = link_to page.body.markdown2html.strip_tags.truncate(50), page_path(page.user.username, page)
+      = link_to page.body.markdown2html.strip_tags.truncate(50, separator: ' '), page_path(page.user.username, page)
