@@ -24,3 +24,14 @@ table.minimal {
     width: 1em;
   }
 }
+
+.radio-buttons {
+  margin-left: 2em;
+  label {
+    display: inline;
+    font-weight: normal;
+  }
+  [type="radio"] {
+    vertical-align: 8%;
+  }
+}

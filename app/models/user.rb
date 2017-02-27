@@ -2,6 +2,8 @@ class User < ApplicationRecord
   
   has_many :pages
   
+  attr_accessor :delete_content
+  
   extend FriendlyId
   friendly_id :username, :use => [:slugged, :history]
 

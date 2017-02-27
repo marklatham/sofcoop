@@ -1,0 +1,38 @@
+- provide :title, 'Cancel Account'
+
+div.form
+
+  = form_for(resource, as: resource_name, url: user_registration_path(resource), html: { method: :delete, role: 'form'}) do |f|
+  
+    h2 Cancel your account
+    = devise_error_messages!
+    
+    - if @pages.any?
+      p style='margin-bottom: 1.5em'
+        | Thank you for creating the #{pluralize(@pages.count, 'page')} below on the Sofcoop website! Even if you're going to cancel your account, we hope you will leave your page(s) here for the benefit of other users. Your choice:
+      
+      div
+        = f.label nil, 'When I cancel my account:'
+        .radio-buttons
+          div style='margin-top: 0.5em'
+            = f.radio_button :delete_content, false
+            = f.label :delete_content, 'Leave all my pages here on Sofcoop.', value: false
+          div
+            = f.radio_button :delete_content, true
+            = f.label :delete_content, 'Delete all my pages.', value: true
+        = f.label 'Password:'
+        = f.password_field :current_password
+      = f.submit 'Cancel my account'
+      
+      h2 Your pages on Sofcoop:
+      p
+        | (If you want to delete some but not all pages, please use the Delete links below.)
+      ul.pages
+        = render partial: 'pages/overview', collection: @pages, as: :page
+      
+    - else
+      p Thank you for using this Sofcoop website. To cancel your login, please enter your password and click the button below. Feel free to browse the website without logging in. We hope you'll rejoin us and create a new login some day.  :-)
+      div
+        = f.label 'Password:'
+        = f.password_field :current_password
+      = f.submit 'Cancel my account'

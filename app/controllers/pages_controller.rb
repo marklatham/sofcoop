@@ -1,4 +1,9 @@
 class PagesController < ApplicationController
+  
+  # Crude fix for problems with def destroy > redirect_to :back :
+  rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_default
+  rescue_from ActionController::RedirectBackError, with: :redirect_to_default
+  
   before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   # GET /pages
@@ -70,24 +75,28 @@ class PagesController < ApplicationController
   def destroy
     @page.destroy
     respond_to do |format|
-      format.html { redirect_to user_path(@page.user.username),
-                    notice: 'Page was successfully destroyed.' }
+      format.html { redirect_to :back, notice: 'Page was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
   
   private
     
-    def set_page
-      if user = User.friendly.find(params[:username])
-        @page = Page.where(user_id: user.id).friendly.find(params[:slug])
-      else
-        @page = Page.find(params[:id])
-      end
+  def set_page
+    if user = User.friendly.find(params[:username])
+      @page = Page.where(user_id: user.id).friendly.find(params[:slug])
+    else
+      @page = Page.find(params[:id])
     end
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def page_params
-      params.require(:page).permit(:user_id, :visible, :title, :slug, :body)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def page_params
+    params.require(:page).permit(:user_id, :visible, :title, :slug, :body)
+  end
+
+  def redirect_to_default
+    redirect_to root_path
+  end
+  
 end

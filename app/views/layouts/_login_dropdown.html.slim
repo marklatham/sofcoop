@@ -8,7 +8,7 @@ div.login.dropdown
                       user_path(current_user.username)
             b.down-arrow.gravatar-arrow
         - else
-          = '@'+current_user.username
+          = link_to '@'+current_user.username, user_path(current_user.username)
           b.down-arrow
         ul.droplink
           - if current_user.is_admin?
