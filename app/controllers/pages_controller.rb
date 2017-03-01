@@ -1,10 +1,6 @@
 class PagesController < ApplicationController
-  
-  # Crude fix for problems with def destroy > redirect_to :back :
-  rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_default
   rescue_from ActionController::RedirectBackError, with: :redirect_to_default
-  
-  before_action :set_page, only: [:show, :edit, :update, :destroy]
+  before_action :set_page, only: [:show, :edit, :destroy]
 
   # GET /pages
   # GET /pages.json
@@ -58,6 +54,7 @@ class PagesController < ApplicationController
   # PATCH/PUT /pages/1
   # PATCH/PUT /pages/1.json
   def update
+    @page = Page.find(params[:id])
     respond_to do |format|
       if @page.update(page_params)
         format.html { redirect_to page_path(@page.user.username, @page),
@@ -75,7 +72,15 @@ class PagesController < ApplicationController
   def destroy
     @page.destroy
     respond_to do |format|
-      format.html { redirect_to :back, notice: 'Page was successfully destroyed.' }
+      format.html do
+        flash[:notice] = 'Page was successfully destroyed.'
+        from_path = Rails.application.routes.recognize_path(request.referrer)
+        if from_path[:controller] == 'pages' && from_path[:action] == 'show'
+          redirect_to user_path(from_path[:username])
+        else
+          redirect_back(fallback_location: root_path)
+        end
+      end
       format.json { head :no_content }
     end
   end

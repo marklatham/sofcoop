@@ -15,8 +15,4 @@
   .field
     = f.label 'Body:'
     = f.text_area :body, rows: '15'
-  - if @page.user
-    / in case we later allow multiple editors
-    - username = @page.user.username
-  - else username = current_user.username
   .actions = f.submit

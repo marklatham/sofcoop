@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.friendly.find(params[:username])
-    @pages = Page.where(user_id: @user.id).order('updated_at DESC')
+    @pages = @user.pages.order('updated_at DESC')
     authorize @user
     if request.path != user_path(@user.username)
       if params[:username].downcase != @user.username.downcase
