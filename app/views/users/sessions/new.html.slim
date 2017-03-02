@@ -16,3 +16,10 @@ div.form
       = f.check_box :remember_me, checked: true
       | Remember me (uncheck if using a shared computer)
     = f.submit 'Log in'
+
+hr
+
+p style='margin-top: 1em'
+  = link_to 'Forgot your password?', new_user_password_path
+
+p = link_to "Didn't receive unlock instructions?", new_user_unlock_path

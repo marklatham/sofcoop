@@ -15,14 +15,11 @@ div.login.dropdown
             li = link_to 'List users', users_path
           li = link_to 'Create new page', new_page_path
           li = link_to 'Edit account', edit_user_registration_path
-          li = link_to 'Change password', change_password_path
           li = link_to 'Log out', destroy_user_session_path, :method=>'delete'
-    - else
+          
+    - else  # User not signed in:
       li
         = link_to 'Log in', new_user_session_path
         b.down-arrow
         ul.droplink
           li = link_to 'Create a free login', new_user_registration_path
-          li = link_to 'Forgot your password?', new_user_password_path
-          li = link_to "Didn't receive confirm instructions?", new_user_confirmation_path
-          li = link_to "Didn't receive unlock instructions?", new_user_unlock_path

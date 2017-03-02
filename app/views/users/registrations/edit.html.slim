@@ -23,5 +23,7 @@ div.form
 
 hr
 
-h2 Cancel Account
-= button_to "Cancel my account", cancel_account_path, method: :get, class: 'button right'
+p style='margin-top: 1em'
+  = link_to 'Change password', change_password_path
+
+p = link_to 'Cancel account', cancel_account_path

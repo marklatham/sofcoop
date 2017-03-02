@@ -139,10 +139,10 @@ header table {
   }
 }
 
-.droplink {
-    a:link, a:visited {
-      color: $link-color;
-    }
+ul.droplink {
+  a:link, a:visited {
+    color: $link-color;
+  }
 }
 .dropdown ul li ul li a:hover {
   text-decoration: underline;
