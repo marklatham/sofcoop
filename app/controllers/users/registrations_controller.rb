@@ -21,6 +21,7 @@ class Users::RegistrationsController < DeviseController
     # Then correct the guess in case previous user deleted:
     resource.username = 'user' + resource.id.to_s
     resource.save
+    AdminMailer.new_registration(resource).deliver  # notify admin
     if resource.persisted?
       if resource.active_for_authentication?
         set_flash_message! :notice, :signed_up
@@ -56,9 +57,11 @@ class Users::RegistrationsController < DeviseController
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
 
     if account_update_params[:username]
-      if account_update_params[:username].first(4).downcase == 'user'
+      if /\Auser[0-9]+\z/.match(account_update_params[:username].downcase)
         unless account_update_params[:username].downcase == 'user' + resource.id.to_s
-          flash[:error] = "Sorry, edited username can't start with 'user'."
+          flash[:error] = 
+          "Sorry, edited username can't be 'user' followed by a number unless it's your user id number (" +
+            resource.id.to_s + ")."
           redirect_back(fallback_location: user_path(resource.username)) and return
         end
       elsif account_update_params[:username].first(1) == '_' || account_update_params[:username].last(1) == '_'
@@ -72,7 +75,6 @@ class Users::RegistrationsController < DeviseController
     
     resource_updated = update_resource(resource, account_update_params)
     if resource_updated
-      AdminMailer.new_registration(resource).deliver  # notify admin
       if is_flashing_format?
         flash_key = update_needs_confirmation?(resource, prev_unconfirmed_email) ?
           :update_needs_confirmation : :updated
@@ -87,7 +89,7 @@ class Users::RegistrationsController < DeviseController
     end
   end
 
-  # GET /cancel_account
+  # GET /cancel_account (form)
   def cancel_account
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     @pages = Page.where(user_id: resource.id)
@@ -96,11 +98,27 @@ class Users::RegistrationsController < DeviseController
 
   # DELETE /resource
   def destroy
+    pages = Page.where(user_id: resource.id)
+    pages_count = pages.count
+    if pages.any?
+      # I thought :delete_content would be a boolean, but it's a string!:
+      if params[:user][:delete_content] == 'true'
+        for page in pages
+          page.destroy
+        end
+      else
+        flash[:notice] = 'Thank you for leaving us your pages!
+                          Admin will delete your account manually soon.
+                          You will receive confirmation by email.'
+        AdminMailer.cancel_account_manually(resource, pages_count).deliver
+        redirect_to root_path and return
+      end
+    end
     resource.destroy
     Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
     set_flash_message! :notice, :destroyed
     respond_with_navigational(resource){ redirect_to after_sign_out_path_for(resource_name) }
-    AdminMailer.account_cancelled(resource).deliver  # notify admin
+    AdminMailer.account_cancelled(resource, pages_count).deliver
   end
 
   # GET /resource/cancel

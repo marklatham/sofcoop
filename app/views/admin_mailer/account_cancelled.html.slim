@@ -1,5 +1,7 @@
 p Hello Sofcoop Admin --
 
-p This user just cancelled their account: email = #{@user.email}
+p
+ | User #{'@'+@user.username} (email = #{@user.email}) just cancelled their account. 
+ | They chose to delete all #{@pages_count} pages just before cancelling.
 
 p Sincerely, Sofcoop Website
