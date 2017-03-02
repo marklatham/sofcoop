@@ -102,7 +102,7 @@ class Users::RegistrationsController < DeviseController
     pages_count = pages.count
     if pages.any?
       # I thought :delete_content would be a boolean, but it's a string!:
-      if params[:user][:delete_content] == 'true'
+      if params[:user][:delete_content] == '1'
         for page in pages
           page.destroy
         end

@@ -11,15 +11,10 @@ div.form
       p style='margin-bottom: 1.5em'
         | Thank you for creating the #{pluralize(@pages.count, 'page')} below on the Sofcoop website! Even if you're going to cancel your account, we hope you will leave your page(s) here for the benefit of other users. Your choice:
       
+      div.check_box
+        = f.check_box :delete_content
+        = f.label nil, 'Delete all my pages when I cancel my account.'
       div
-        = f.label nil, 'When I cancel my account:'
-        .radio-buttons
-          div style='margin-top: 0.5em'
-            = f.radio_button :delete_content, false
-            = f.label :delete_content, 'Leave all my pages here on Sofcoop.', value: false
-          div
-            = f.radio_button :delete_content, true
-            = f.label :delete_content, 'Delete all my pages.', value: true
         = f.label 'Password:'
         = f.password_field :current_password
       = f.submit 'Cancel my account'
