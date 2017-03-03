@@ -5,9 +5,12 @@ li id="page-#{page.id}"
     |  - 
   span.timestamp Created #{time_ago_in_words(page.created_at)} ago. 
   - if page.updated_at > page.created_at
-    span.timestamp Updated #{time_ago_in_words(page.updated_at)} ago.
+    span.timestamp Updated #{time_ago_in_words(page.updated_at)} ago. 
+  span.timestamp
+    | Visible to: 
+    = visible_options.detect{ |who, code| code == page.visible.to_s }.first
   span.controls
-    - if current_user == page.user
+    - if is_author_or_admin?(current_user, page)
       |  | 
       = link_to 'Edit', edit_page_path(page.user.username, page)
       |  | 

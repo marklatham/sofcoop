@@ -5,12 +5,15 @@ class PagesController < ApplicationController
   # GET /pages
   # GET /pages.json
   def index
-    @pages = Page.all.order('updated_at DESC')
+    authorize Page
+    @pages = Page.all.select{|page| page.visible > 1 || is_author_or_admin?(current_user, page)}.
+             sort_by{|page| page.updated_at}.reverse!
   end
 
   # GET /pages/1
   # GET /pages/1.json
   def show
+    authorize @page
     if request.path != page_path(@page.user.username, @page)
       if params[:username].downcase != @page.user.username.downcase
         flash[:notice] = 'Username @' + params[:username] +
@@ -24,12 +27,14 @@ class PagesController < ApplicationController
 
   # GET /pages/new
   def new
-    @body_class = 'grayback'
     @page = Page.new
+    authorize @page
+    @body_class = 'grayback'
   end
 
   # GET /pages/1/edit
   def edit
+    authorize @page
     @body_class = 'grayback'
   end
 
@@ -37,6 +42,7 @@ class PagesController < ApplicationController
   # POST /pages.json
   def create
     @page = current_user.pages.build(page_params)
+    authorize @page
 
     respond_to do |format|
       if @page.save
@@ -55,6 +61,7 @@ class PagesController < ApplicationController
   # PATCH/PUT /pages/1.json
   def update
     @page = Page.find(params[:id])
+    authorize @page
     respond_to do |format|
       if @page.update(page_params)
         format.html { redirect_to page_path(@page.user.username, @page),
@@ -70,6 +77,7 @@ class PagesController < ApplicationController
   # DELETE /pages/1
   # DELETE /pages/1.json
   def destroy
+    authorize @page
     @page.destroy
     respond_to do |format|
       format.html do

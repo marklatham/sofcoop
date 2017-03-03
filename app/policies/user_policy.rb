@@ -1,7 +1,7 @@
 class UserPolicy < ApplicationPolicy
 
   def index?
-    @user.is_admin?
+    @user
   end
 
   def show?

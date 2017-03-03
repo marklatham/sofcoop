@@ -2,7 +2,19 @@
 
 h2 = @page.title
 
-.body = sanitize @page.body.markdown2html
+- if  is_author_or_admin?(current_user, @page) || @page.visible == 4
+  .body = sanitize @page.body.markdown2html
+  
+- elsif @page.visible == 3 && !current_user
+  .flashy
+    | Only logged-in users can see this page's content. Please 
+    = link_to 'log in', new_user_session_path
+    |  or 
+    = link_to 'create a free login', new_user_registration_path
+    | .
+
+- else
+  .body = sanitize @page.body.markdown2html
 
 = gravatar_for @page.user
 
@@ -11,16 +23,10 @@ span.timestamp
   - if @page.updated_at > @page.created_at
     |  Updated #{time_ago_in_words(@page.updated_at)} ago.
 p.timestamp
-  | Visible to
-  - case @page.visible
-    - when 0
-      span  author (& admin) only.
-    - when 2
-      span  logged-in users only.
-    - when 4
-      span  the world.
+  | Visible to: 
+  = visible_options.detect{ |who, code| code == @page.visible.to_s }.first
 
-- if current_user == @page.user
+- if  is_author_or_admin?(current_user, @page)
   p
   p.controls
     = link_to 'Edit', edit_page_path(@page.user.username, @page)

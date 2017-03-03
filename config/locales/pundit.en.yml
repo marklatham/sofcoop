@@ -1,0 +1,13 @@
+en:
+ pundit:
+   default: You can't perform that action.
+   page_policy:
+     create?: You can't create pages.
+     edit?: You can't edit that page.
+     new?: You can't create pages.
+     show?: You can't view that page.
+     update?: You can't edit that page.
+   user_policy:
+     index?: You can't view the user list.
+     show?: You can't view that user's profile.
+     
