@@ -7,7 +7,7 @@ li id="page-#{page.id}"
   - if page.updated_at > page.created_at
     span.timestamp Updated #{time_ago_in_words(page.updated_at)} ago. 
   span.timestamp
-    | Visible to: 
+    | Content visible to: 
     = visible_options.detect{ |who, code| code == page.visible.to_s }.first
   span.controls
     - if is_author_or_admin?(current_user, page)

@@ -21,7 +21,7 @@ class PagesController < ApplicationController
       elsif request.path.downcase != page_path(@page.user.username, @page).downcase
         flash[:notice] = 'That page has moved to this new URL (probably because title changed).'
       end
-      return redirect_to page_path(@page.user.username, @page)
+      return redirect_back(fallback_location: root_path)
     end
   end
 

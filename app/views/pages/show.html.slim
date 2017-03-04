@@ -23,7 +23,7 @@ span.timestamp
   - if @page.updated_at > @page.created_at
     |  Updated #{time_ago_in_words(@page.updated_at)} ago.
 p.timestamp
-  | Visible to: 
+  | Content visible to: 
   = visible_options.detect{ |who, code| code == @page.visible.to_s }.first
 
 - if  is_author_or_admin?(current_user, @page)
@@ -31,4 +31,5 @@ p.timestamp
   p.controls
     = link_to 'Edit', edit_page_path(@page.user.username, @page)
     |  | 
-    = link_to 'Delete', delete_page_path(@page.user.username, @page), method: :delete, data: {confirm: "You sure?"}
+    = link_to 'Delete', delete_page_path(@page.user.username, @page),
+              method: :delete, data: {confirm: "You sure?"}
