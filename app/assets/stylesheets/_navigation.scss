@@ -36,7 +36,7 @@ footer td {
   padding: 0;
   margin: 0 1.5em 0 0;
   white-space: nowrap;
-  font-size: $dropdown-font-size;
+  font-size: 100%;
   a:link, a:visited {
     color: white;
     text-decoration: none;
@@ -66,12 +66,12 @@ header table {
 }
 
 @import url("http://fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
-.navbar-brand {
+li.navbar-brand {
   font-family: 'Lobster', cursive;
-  font-size: 1.7em;
   margin: 0;
   padding: 0.1em 0 0.1em 0;
   color: black;
+  text-align: left;
   a:link, a:visited {
     color: black;
     text-decoration: none;
@@ -97,7 +97,7 @@ header table {
   margin: 0 0 0 1.5em;
   float: left;
   white-space: nowrap;
-  font-size: $dropdown-font-size;
+  font-size: 100%;
   a:link, a:visited {
     text-decoration: none;
   }
@@ -127,7 +127,7 @@ header table {
   background-color: $gray-lightest;
   color: black;
   float: left;
-  font-size: 0.9*$dropdown-font-size;
+  font-size: 16px;
 }
 .dropdown ul li ul li:first-child{
   border-top: 1px solid $theme-color;
@@ -148,7 +148,7 @@ ul.droplink {
   text-decoration: underline;
 }
 .down-arrow {
-  @include triangle(down, black, 0.6*$dropdown-font-size);
+  @include triangle(down, black, 10px);
   display: inline-block;
   margin: 0 0 2px 2px;
 }
