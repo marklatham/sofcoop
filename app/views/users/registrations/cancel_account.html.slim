@@ -19,15 +19,15 @@ div.form
         = f.password_field :current_password
       = f.submit 'Cancel my account'
       
-      h2 Your pages on Sofcoop:
-      p
-        | (If you want to delete some but not all pages, please use the Delete links below.)
-      ul.pages
-        = render partial: 'pages/overview', collection: @pages, as: :page
-      
     - else
       p Thank you for using this Sofcoop website. To cancel your login, please enter your password and click the button below. We hope you'll rejoin us and create a new login some day.  :-)
       div
         = f.label 'Password:'
         = f.password_field :current_password
       = f.submit 'Cancel my account'
+
+- if @pages.any?
+  h2 Your pages on Sofcoop:
+  p
+    | (If you want to delete some but not all pages, please use the Delete links below.)
+  = render 'pages_table', author: resource

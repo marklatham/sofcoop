@@ -1,7 +1,7 @@
 class PagePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      if user.admin
+      if user.is_admin?
         scope.all.order(updated_at: :desc)
       else
         user.pages
@@ -24,7 +24,7 @@ class PagePolicy < ApplicationPolicy
   end
 
   def create?
-    @current_user
+    user
   end
   
   def update?

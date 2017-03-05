@@ -1,0 +1,46 @@
+- manage = false
+- if local_assigns[:author] && current_user
+  - if current_user == local_assigns[:author] || current_user.is_admin?
+    - manage = true
+
+table.data.pages
+  thead
+    tr
+      - unless local_assigns[:author]
+        th Author
+      th.left style='width: 25em;'
+        | Title & Link
+      th Words
+      th Visible
+      th Created
+      th Updated
+      - if manage
+        th Edit
+        th Delete
+
+  tbody
+    - @pages.each do |page|
+      tr
+        - unless local_assigns[:author]
+          td.author
+            = link_to gravatar_for(page.user, size: 48), user_path(page.user.username)
+            .username = link_to '@'+page.user.username, user_path(page.user.username)
+        td.left.title
+          - if page.title.present?
+            = link_to page.title, page_path(page.user.username, page), method: :get
+          - else
+            = link_to page.body.markdown2html.strip_tags.truncate(50, separator: ' '),
+                      page_path(page.user.username, page), method: :get
+        td = page.body.split.size
+        td = visible_options.detect{ |who, code| code == page.visible.to_s }.first
+        td style='width: 7em' title=conditional_strftime(page.created_at, 1)
+          = time_ago_in_words(page.created_at) + ' ago'
+        td style='width: 7em' title=conditional_strftime(page.updated_at, 1)
+          - if page.updated_at == page.created_at
+            | －
+          - else
+            = time_ago_in_words(page.updated_at) + ' ago'
+        - if manage
+          td = link_to 'Edit', edit_page_path(page.user.username, page)
+          td = link_to 'Delete', delete_page_path(page.user.username, page),
+               method: :delete, data: {confirm: "You sure?"}

@@ -1,0 +1,81 @@
+// DATA TABLES:
+
+table.data {
+  border: 2px solid $theme-color2;
+  border-bottom: 5px solid $theme-color2;
+  border-collapse: collapse;
+
+  th {
+    background-color: $theme-color2;
+    color: white;
+  }
+
+  th, td {
+    border: 1px solid $gray-medium;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    line-height: 1.2em;
+    text-align: center;
+    &.author {
+      padding: 0.4em 0.2em 0.1em 0.2em;
+    }
+    &.left {
+      text-align: left;
+      padding: 0.5em 1em 0.5em 1em;
+    }
+  }
+
+  tr:nth-child(odd) {
+    background-color: white;
+  }
+
+  tr:nth-child(even) {
+    background-color: $gray-lightest;
+  }
+  
+  p {
+    margin: $small-spacing/2 0 0 0;
+    padding: 0 0 $small-spacing/2 0;
+    // To fulfill goals: centred in td &
+    // not collapsing too tight between paragraphs; also p to list.
+  }
+}
+
+// PAGES TABLE:
+
+table.pages {
+  margin: auto;
+  table-layout: auto;
+  width: auto;
+  .username {
+    font-size: 75%;
+  }
+}
+
+// PUBLICATIONS TABLE: might use some above?
+
+table.pubs {
+  table-layout: auto;
+  min-width: 32em;
+  max-width: 80em;
+  tr:nth-child(even) {
+    background-color: $gray-lightest;
+  }
+}
+
+// MINIMAL TABLE: not needed?
+
+table.minimal {
+  table-layout: auto;
+  width: 30em;
+  h1 {
+    line-height: 1.2;
+    margin: 0;
+  }
+  td {
+    border: 0;
+    margin: 0;
+  }
+  td.button {
+    margin: 1em 0 0 0;
+  }
+}

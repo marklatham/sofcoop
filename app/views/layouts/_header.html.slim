@@ -12,5 +12,5 @@ nav
                 - if current_user
                   li = link_to 'List users', users_path
                   
-      td = render partial: 'layouts/header_channels'
-      td = render partial: 'layouts/header_login'
+      td = render 'layouts/header_channels'
+      td = render 'layouts/header_login'

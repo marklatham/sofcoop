@@ -5,7 +5,6 @@ div.column
   table.table
     tbody
       tr = render @user
-      tr
-  h3 Pages created:
-  ul.pages
-    = render partial: 'pages/overview', collection: @pages, as: :page
+  - if @pages.any?
+    h3 Pages created:
+    = render 'pages_table', author: @user
