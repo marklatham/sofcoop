@@ -1,4 +1,4 @@
-class Page < ApplicationRecord
+class Post < ApplicationRecord
   extend FriendlyId
   belongs_to :user
   friendly_id :slug_candidates, use: [:slugged, :scoped, :history], scope: :user

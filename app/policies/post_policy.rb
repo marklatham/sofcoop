@@ -1,10 +1,10 @@
-class PagePolicy < ApplicationPolicy
+class PostPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       if user.is_admin?
         scope.all.order(updated_at: :desc)
       else
-        user.pages
+        user.posts
       end
     end
   end
@@ -15,7 +15,7 @@ class PagePolicy < ApplicationPolicy
   
   def show?
     record.visible > 1 || user_is_author_or_admin?
-    # More granular restrictions (hiding page.body) are coded in the view
+    # More granular restrictions (hiding post.body) are coded in the view
     # to give more granular "unauthorized" messages.
   end
 

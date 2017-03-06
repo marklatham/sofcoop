@@ -11,9 +11,9 @@ class UsersController < ApplicationController
   def show
     @user = User.friendly.find(params[:username])
     authorize @user
-    @pages = @user.pages.order('updated_at DESC')
+    @posts = @user.posts.order('updated_at DESC')
     unless current_user == @user || current_user.is_admin?
-      @pages = @pages.select{|page| page.visible > 1}.sort_by{|page| page.updated_at}.reverse!
+      @posts = @posts.select{|post| post.visible > 1}.sort_by{|post| post.updated_at}.reverse!
     end
     if request.path != user_path(@user.username)
       if params[:username].downcase != @user.username.downcase

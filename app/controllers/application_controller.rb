@@ -5,10 +5,10 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   helper_method :is_author_or_admin?
   
-  # A more specific version is in page_policy, since it's handy there.
-  def is_author_or_admin?(user, page)
+  # A more specific version is in post_policy, since it's handy there.
+  def is_author_or_admin?(user, post)
     if user
-      user == page.user || user.is_admin?
+      user == post.user || user.is_admin?
     end
   end
   

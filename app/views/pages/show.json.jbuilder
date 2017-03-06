@@ -1,1 +1,1 @@
-json.partial! "pages/page", page: @page
+json.partial! "posts/post", post: @post

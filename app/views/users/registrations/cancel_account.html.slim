@@ -7,13 +7,13 @@ div.form
     h2 Cancel your account
     = devise_error_messages!
     
-    - if @pages.any?
+    - if @posts.any?
       p style='margin-bottom: 1.5em'
-        | Thank you for creating the #{pluralize(@pages.count, 'page')} below on the Sofcoop website! Even if you're going to cancel your account, we hope you will leave your page(s) here for the benefit of other users. Your choice:
+        | Thank you for creating the #{pluralize(@posts.count, 'post')} below on the Sofcoop website! Even if you're going to cancel your account, we hope you will leave your post(s) here for the benefit of other users. Your choice:
       
       div.check_box
         = f.check_box :delete_content
-        = f.label nil, 'Delete all my pages when I cancel my account.'
+        = f.label nil, 'Delete all my posts when I cancel my account.'
       div
         = f.label 'Password:'
         = f.password_field :current_password
@@ -26,8 +26,8 @@ div.form
         = f.password_field :current_password
       = f.submit 'Cancel my account'
 
-- if @pages.any?
-  h2 Your pages on Sofcoop:
+- if @posts.any?
+  h2 Your posts on Sofcoop:
   p
-    | (If you want to delete some but not all pages, please use the Delete links below.)
-  = render 'pages_table', author: resource
+    | (If you want to delete some but not all posts, please use the Delete links below.)
+  = render 'posts_table', author: resource

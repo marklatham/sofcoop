@@ -1,12 +1,12 @@
 en:
  pundit:
    default: You can't perform that action.
-   page_policy:
-     create?: You can't create pages.
-     edit?: You can't edit that page.
-     new?: You can't create pages.
-     show?: You can't view that page.
-     update?: You can't edit that page.
+   post_policy:
+     create?: You can't create posts.
+     edit?: You can't edit that post.
+     new?: You can't create posts.
+     show?: You can't view that post.
+     update?: You can't edit that post.
    user_policy:
      index?: You can't view the user list.
      show?: You can't view that user's profile.

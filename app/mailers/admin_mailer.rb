@@ -6,24 +6,24 @@ class AdminMailer < ApplicationMailer
       subject: "New registration"
   end
 
-  def account_cancelled(user, pages_count)
+  def account_cancelled(user, posts_count)
     @user = user
-    @pages_count = pages_count
+    @posts_count = posts_count
     mail   to: Rails.application.secrets.admin_email,
       subject: "Account cancelled"
   end
 
-  def cancel_account_manually(user, pages_count)
+  def cancel_account_manually(user, posts_count)
     @user = user
-    @pages_count = pages_count
+    @posts_count = posts_count
     mail   to: Rails.application.secrets.admin_email,
            cc: @user.email,
       subject: "Cancel account manually"
   end
 
-  def new_page(page)
-    @page = page
+  def new_post(post)
+    @post = post
     mail   to: Rails.application.secrets.admin_email,
-      subject: "New page"
+      subject: "New post"
   end
 end

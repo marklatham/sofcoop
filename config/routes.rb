@@ -2,13 +2,13 @@ Rails.application.routes.draw do
 
   root 'visitors#index'
   
-  ### PAGES: #######################
+  ### POSTS: #######################
   
-  get    '/@:username/:slug',        to: 'pages#show',         as: :page
-  get    '/@:username/:slug/edit',   to: 'pages#edit',         as: :edit_page
-  delete '/@:username/:slug/delete', to: 'pages#destroy',      as: :delete_page
+  get    '/@:username/:slug',        to: 'posts#show',         as: :post
+  get    '/@:username/:slug/edit',   to: 'posts#edit',         as: :edit_post
+  delete '/@:username/:slug/delete', to: 'posts#destroy',      as: :delete_post
   
-  resources :pages, except: [:show, :edit, :destroy]
+  resources :posts, except: [:show, :edit, :destroy]
   
   ### USERS: #######################
   

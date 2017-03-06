@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170225222906) do
+ActiveRecord::Schema.define(version: 20170306163137) do
 
   create_table "friendly_id_slugs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "slug",                      null: false
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20170225222906) do
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
   end
 
-  create_table "pages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "posts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
     t.integer  "visible",                  default: 0
     t.string   "title"
@@ -32,8 +32,8 @@ ActiveRecord::Schema.define(version: 20170225222906) do
     t.text     "body",       limit: 65535
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
-    t.index ["user_id", "slug"], name: "index_pages_on_user_id_and_slug", unique: true, using: :btree
-    t.index ["user_id"], name: "index_pages_on_user_id", using: :btree
+    t.index ["user_id", "slug"], name: "index_posts_on_user_id_and_slug", unique: true, using: :btree
+    t.index ["user_id"], name: "index_posts_on_user_id", using: :btree
   end
 
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -83,5 +83,5 @@ ActiveRecord::Schema.define(version: 20170225222906) do
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
   end
 
-  add_foreign_key "pages", "users"
+  add_foreign_key "posts", "users"
 end

@@ -5,6 +5,6 @@ div.column
   table.table
     tbody
       tr = render @user
-  - if @pages.any?
-    h3 Pages created:
-    = render 'pages_table', author: @user
+  - if @posts.any?
+    h3 Posts created:
+    = render 'posts_table', author: @user

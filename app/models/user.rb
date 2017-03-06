@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   
-  has_many :pages
+  has_many :posts
   
   attr_accessor :delete_content
   

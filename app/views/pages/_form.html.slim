@@ -1,13 +1,13 @@
-= form_for @page, url: '/pages/'+@page.id.to_s do |f|
-  - if @page.errors.any?
+= form_for @post, url: '/posts/'+@post.id.to_s do |f|
+  - if @post.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@page.errors.count, "error")} prohibited this page from being saved:"
+      h2 = "#{pluralize(@post.errors.count, "error")} prohibited this post from being saved:"
       ul
-        - @page.errors.full_messages.each do |message|
+        - @post.errors.full_messages.each do |message|
           li = message
 
   .field
-    = f.label 'Who can see this page:'
+    = f.label 'Who can see this post:'
     = f.select :visible, options_for_select(visible_options)
   .field
     = f.label 'Title:'

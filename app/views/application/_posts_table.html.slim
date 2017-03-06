@@ -1,0 +1,46 @@
+- manage = false
+- if local_assigns[:author] && current_user
+  - if current_user == local_assigns[:author] || current_user.is_admin?
+    - manage = true
+
+table.data.posts
+  thead
+    tr
+      - unless local_assigns[:author]
+        th Author
+      th.left style='width: 25em;'
+        | Title & Link
+      th Words
+      th Visible
+      th Created
+      th Updated
+      - if manage
+        th Edit
+        th Delete
+
+  tbody
+    - @posts.each do |post|
+      tr
+        - unless local_assigns[:author]
+          td.author
+            = link_to gravatar_for(post.user, size: 48), user_path(post.user.username)
+            .username = link_to '@'+post.user.username, user_path(post.user.username)
+        td.left.title
+          - if post.title.present?
+            = link_to post.title, post_path(post.user.username, post), method: :get
+          - else
+            = link_to post.body.markdown2html.strip_tags.truncate(50, separator: ' '),
+                      post_path(post.user.username, post), method: :get
+        td = post.body.split.size
+        td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
+        td style='width: 7em' title=conditional_strftime(post.created_at, 1)
+          = time_ago_in_words(post.created_at) + ' ago'
+        td style='width: 7em' title=conditional_strftime(post.updated_at, 1)
+          - if post.updated_at == post.created_at
+            | －
+          - else
+            = time_ago_in_words(post.updated_at) + ' ago'
+        - if manage
+          td = link_to 'Edit', edit_post_path(post.user.username, post)
+          td = link_to 'Delete', delete_post_path(post.user.username, post),
+               method: :delete, data: {confirm: "You sure?"}

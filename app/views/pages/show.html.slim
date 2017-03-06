@@ -1,35 +1,35 @@
-- provide :title, @page.title
+- provide :title, @post.title
 
-h2 = @page.title
+h2 = @post.title
 
-- if  is_author_or_admin?(current_user, @page) || @page.visible == 4
-  .body = sanitize @page.body.markdown2html
+- if  is_author_or_admin?(current_user, @post) || @post.visible == 4
+  .body = sanitize @post.body.markdown2html
   
-- elsif @page.visible == 3 && !current_user
+- elsif @post.visible == 3 && !current_user
   .flashy
-    | Only logged-in users can see this page's content. Please 
+    | Only logged-in users can see this post's content. Please 
     = link_to 'log in', new_user_session_path
     |  or 
     = link_to 'create a free login', new_user_registration_path
     | .
 
 - else
-  .body = sanitize @page.body.markdown2html
+  .body = sanitize @post.body.markdown2html
 
-= gravatar_for @page.user
+= gravatar_for @post.user
 
 span.timestamp
-  |  Created by #{link_to '@'+@page.user.username, user_path(@page.user.username)} #{time_ago_in_words(@page.created_at)} ago.
-  - if @page.updated_at > @page.created_at
-    |  Updated #{time_ago_in_words(@page.updated_at)} ago.
+  |  Created by #{link_to '@'+@post.user.username, user_path(@post.user.username)} #{time_ago_in_words(@post.created_at)} ago.
+  - if @post.updated_at > @post.created_at
+    |  Updated #{time_ago_in_words(@post.updated_at)} ago.
 p.timestamp
   | Content visible to: 
-  = visible_options.detect{ |who, code| code == @page.visible.to_s }.first
+  = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
 
-- if  is_author_or_admin?(current_user, @page)
+- if  is_author_or_admin?(current_user, @post)
   p
   p.controls
-    = link_to 'Edit', edit_page_path(@page.user.username, @page)
+    = link_to 'Edit', edit_post_path(@post.user.username, @post)
     |  | 
-    = link_to 'Delete', delete_page_path(@page.user.username, @page),
+    = link_to 'Delete', delete_post_path(@post.user.username, @post),
               method: :delete, data: {confirm: "You sure?"}

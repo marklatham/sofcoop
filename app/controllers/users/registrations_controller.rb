@@ -92,25 +92,25 @@ class Users::RegistrationsController < DeviseController
   # GET /cancel_account (form)
   def cancel_account
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
-    @pages = Page.where(user_id: resource.id)
+    @posts = Post.where(user_id: resource.id)
     @body_class = 'grayback'
   end
 
   # DELETE /resource
   def destroy
-    pages = Page.where(user_id: resource.id)
-    pages_count = pages.count
-    if pages.any?
+    posts = Post.where(user_id: resource.id)
+    posts_count = posts.count
+    if posts.any?
       # I thought :delete_content would be a boolean, but it's a string!:
       if params[:user][:delete_content] == '1'
-        for page in pages
-          page.destroy
+        for post in posts
+          post.destroy
         end
       else
-        flash[:notice] = 'Thank you for leaving us your pages!
+        flash[:notice] = 'Thank you for leaving us your posts!
                           Admin will delete your account manually soon.
                           You will receive confirmation by email.'
-        AdminMailer.cancel_account_manually(resource, pages_count).deliver
+        AdminMailer.cancel_account_manually(resource, posts_count).deliver
         redirect_to root_path and return
       end
     end
@@ -118,7 +118,7 @@ class Users::RegistrationsController < DeviseController
     Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
     set_flash_message! :notice, :destroyed
     respond_with_navigational(resource){ redirect_to after_sign_out_path_for(resource_name) }
-    AdminMailer.account_cancelled(resource, pages_count).deliver
+    AdminMailer.account_cancelled(resource, posts_count).deliver
   end
 
   # GET /resource/cancel
