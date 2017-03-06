@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   after_action :verify_authorized
 
   def index
-    @users = User.all
+    @users = User.all.page(params[:page])
     authorize User
   end
 
@@ -15,6 +15,7 @@ class UsersController < ApplicationController
     unless current_user == @user || current_user.is_admin?
       @posts = @posts.select{|post| post.visible > 1}.sort_by{|post| post.updated_at}.reverse!
     end
+    @posts = Kaminari.paginate_array(@posts).page(params[:page])
     if request.path != user_path(@user.username)
       if params[:username].downcase != @user.username.downcase
         flash[:notice] = 'Username @' + params[:username] +

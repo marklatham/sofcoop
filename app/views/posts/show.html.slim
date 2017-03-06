@@ -16,7 +16,7 @@ h2 = @post.title
 - else
   .body = sanitize @post.body.markdown2html
 
-= gravatar_for @post.user
+= link_to gravatar_for(@post.user), user_path(@post.user.username)
 
 span.timestamp
   |  Created by #{link_to '@'+@post.user.username, user_path(@post.user.username)} #{time_ago_in_words(@post.created_at)} ago.

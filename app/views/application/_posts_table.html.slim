@@ -8,12 +8,11 @@ table.data.posts
     tr
       - unless local_assigns[:author]
         th Author
-      th.left style='width: 25em;'
-        | Title & Link
+      th.left style='width: 25em;' Title & Link
       th Words
-      th Visible
-      th Created
-      th Updated
+      th style='width: 5em' Visible
+      th style='width: 6em' Created
+      th style='width: 6em' Updated
       - if manage
         th Edit
         th Delete
@@ -33,9 +32,9 @@ table.data.posts
                       post_path(post.user.username, post), method: :get
         td = post.body.split.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
-        td style='width: 7em' title=conditional_strftime(post.created_at, 1)
+        td title=conditional_strftime(post.created_at, 1)
           = time_ago_in_words(post.created_at) + ' ago'
-        td style='width: 7em' title=conditional_strftime(post.updated_at, 1)
+        td title=conditional_strftime(post.updated_at, 1)
           - if post.updated_at == post.created_at
             | －
           - else
@@ -44,3 +43,5 @@ table.data.posts
           td = link_to 'Edit', edit_post_path(post.user.username, post)
           td = link_to 'Delete', delete_post_path(post.user.username, post),
                method: :delete, data: {confirm: "You sure?"}
+
+= paginate @posts
