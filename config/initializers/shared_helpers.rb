@@ -6,7 +6,7 @@ class String
   end
 
   def markdown2html
-    Kramdown::Document.new(self).to_html.html_safe
+    Kramdown::Document.new(self).to_html
   end
   
 end

@@ -1,11 +1,14 @@
 - provide :title, @post.title
 
-h2 = @post.title
+h1 = @post.title
 
-- if  is_author_or_admin?(current_user, @post) || @post.visible == 4
-  .body = sanitize @post.body.markdown2html
+/ The logic below works together with other logic in post_policy > show.
+/ Both should be reviewed/revised when sofcoop has paying members.
+
+/- if  is_author_or_admin?(current_user, @post) || @post.visible == 4
+/  .body = sanitize @post.body.markdown2html
   
-- elsif @post.visible == 3 && !current_user
+- if @post.visible == 3 && !current_user
   .flashy
     | Only logged-in users can see this post's content. Please 
     = link_to 'log in', new_user_session_path
@@ -14,7 +17,9 @@ h2 = @post.title
     | .
 
 - else
-  .body = sanitize @post.body.markdown2html
+  .body = @post.body.markdown2html.html_safe
+  
+hr style='margin-bottom: 2em'
 
 = link_to gravatar_for(@post.user), user_path(@post.user.username)
 

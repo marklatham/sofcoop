@@ -6,7 +6,7 @@ module ApplicationHelper
   
   def conditional_strftime(datetime, cutoff)
     if datetime > cutoff.months.ago
-      datetime.strftime("%A, %B %e at %l:%M %P")
+      datetime.strftime("%A, %B %e at %l:%M %P Pacific")
     else
       datetime.strftime("%B %e, %Y")
     end
