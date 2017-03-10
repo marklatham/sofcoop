@@ -20,6 +20,7 @@ gem 'pundit'
 gem 'rolify'
 gem 'friendly_id', '~> 5.1.0'
 gem 'kaminari'
+gem 'loofah'
 
 group :development, :test do
   gem 'byebug', platform: :mri

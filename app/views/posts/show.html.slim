@@ -6,7 +6,7 @@ h1 = @post.title
 / Both should be reviewed/revised when sofcoop has paying members.
 
 /- if  is_author_or_admin?(current_user, @post) || @post.visible == 4
-/  .body = sanitize @post.body.markdown2html
+/  .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
   
 - if @post.visible == 3 && !current_user
   .flashy
@@ -17,7 +17,7 @@ h1 = @post.title
     | .
 
 - else
-  .body = @post.body.markdown2html.html_safe
+  .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
   
 hr style='margin-bottom: 2em'
 
