@@ -3,7 +3,6 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :destroy]
 
   # GET /posts
-  # GET /posts.json
   def index
     authorize Post
     @posts = Post.all.select{|post| post.visible > 1 || is_author_or_admin?(current_user, post)}.
@@ -13,7 +12,6 @@ class PostsController < ApplicationController
   end
 
   # GET /posts/1
-  # GET /posts/1.json
   def show
     authorize @post
     if request.path != post_path(@post.user.username, @post)
@@ -41,57 +39,40 @@ class PostsController < ApplicationController
   end
 
   # POST /posts
-  # POST /posts.json
   def create
     @post = current_user.posts.build(post_params)
     authorize @post
-
-    respond_to do |format|
-      if @post.save
-        AdminMailer.new_post(@post).deliver  # notify admin
-        format.html { redirect_to post_path(@post.user.username, @post),
-                               notice: 'Post was successfully created.' }
-        format.json { render :show, status: :created, location: @post }
-      else
-        format.html { render :new }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    if @post.save
+      AdminMailer.new_post(@post).deliver  # notify admin
+      redirect_to post_path(@post.user.username, @post),
+                  notice: 'Post was successfully created.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /posts/1
-  # PATCH/PUT /posts/1.json
   def update
     @post = Post.find(params[:id])
     authorize @post
-    respond_to do |format|
-      if @post.update(post_params)
-        format.html { redirect_to post_path(@post.user.username, @post),
-                               notice: 'Post was successfully updated.' }
-        format.json { render :show, status: :ok, location: @post }
-      else
-        format.html { render :edit }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    if @post.update(post_params)
+      redirect_to post_path(@post.user.username, @post),
+                  notice: 'Post was successfully updated.'
+    else
+      render :edit 
     end
   end
 
   # DELETE /posts/1
-  # DELETE /posts/1.json
   def destroy
     authorize @post
     @post.destroy
-    respond_to do |format|
-      format.html do
-        flash[:notice] = 'Post was successfully destroyed.'
-        from_path = Rails.application.routes.recognize_path(request.referrer)
-        if from_path[:controller] == 'posts' && from_path[:action] == 'show'
-          redirect_to user_path(from_path[:username])
-        else
-          redirect_back(fallback_location: root_path)
-        end
-      end
-      format.json { head :no_content }
+    flash[:notice] = 'Post was successfully destroyed.'
+    from_path = Rails.application.routes.recognize_path(request.referrer)
+    if from_path[:controller] == 'posts' && from_path[:action] == 'show'
+      redirect_to user_path(from_path[:username])
+    else
+      redirect_back(fallback_location: root_path)
     end
   end
   
