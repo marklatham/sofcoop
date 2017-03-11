@@ -56,8 +56,12 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     authorize @post
     if @post.update(post_params)
-      redirect_to post_path(@post.user.username, @post),
-                  notice: 'Post was successfully updated.'
+      flash[:notice] = 'Post saved.'
+      if params[:commit] == 'Save & edit more'
+        redirect_to edit_post_path(@post.user.username, @post) and return
+      else # Should be the only other case: params[:commit] == 'Save & see post'
+        redirect_to post_path(@post.user.username, @post) and return
+      end
     else
       render :edit 
     end
@@ -75,9 +79,9 @@ class PostsController < ApplicationController
       redirect_back(fallback_location: root_path)
     end
   end
-  
+
   private
-    
+
   def set_post
     if user = User.friendly.find(params[:username])
       @post = Post.where(user_id: user.id).friendly.find(params[:slug])
@@ -94,5 +98,5 @@ class PostsController < ApplicationController
   def redirect_to_default
     redirect_to root_path
   end
-  
+
 end
