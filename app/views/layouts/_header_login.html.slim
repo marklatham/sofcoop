@@ -2,11 +2,11 @@ div.login.dropdown
   ul
     - if user_signed_in?
       li
-        - if gravatar?(current_user)
+        - if avatar?(current_user)
           div
-            = link_to gravatar_for(current_user, size: 32, class: "gravatar-header"),
+            = link_to avatar_for(current_user, size: 32, class: "avatar-header"),
                       user_path(current_user.username)
-            b.down-arrow.gravatar-arrow
+            b.down-arrow.avatar-arrow
         - else
           = link_to '@'+current_user.username, user_path(current_user.username)
           b.down-arrow

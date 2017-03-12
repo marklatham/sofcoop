@@ -4,6 +4,8 @@ class User < ApplicationRecord
   
   attr_accessor :delete_content
   
+  mount_uploader :avatar, AvatarUploader
+  
   extend FriendlyId
   friendly_id :username, :use => [:slugged, :history]
 

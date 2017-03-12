@@ -156,7 +156,7 @@ ul.droplink {
 ////// CSS CHANGES FOR LOGIN DROPDOWN:
 
 div.login {
-  min-width: 75px;       // Prevents gravatar from shrinking in small window.
+  min-width: 75px;       // Prevents avatar from shrinking in small window.
 }
 .login ul li{
   padding-left: 15px;   // Tweak together with min-width above!
@@ -171,6 +171,6 @@ div.login {
   padding: 3px 0 3px 3px;
   text-align: center;
 }
-.gravatar-arrow {
+.avatar-arrow {
   padding: 0 0 10px 0;
 }

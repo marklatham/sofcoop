@@ -7,6 +7,8 @@ div.form
     h2 Edit Account
     = devise_error_messages!
     div
+      = f.label 'Avatar:'
+      = f.file_field :avatar
       = f.label 'Username:'
       table
         tr

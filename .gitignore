@@ -19,4 +19,5 @@
 # Ignore other unneeded files.
 config/database.yml
 config/secrets.yml
+config/cloudinary.yml
 .capistrano/*
