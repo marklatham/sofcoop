@@ -8,6 +8,7 @@ div.form
     = devise_error_messages!
     div
       = f.label 'Avatar:'
+      = f.hidden_field(:avatar_cache)
       = f.file_field :avatar
       = f.label 'Username:'
       table

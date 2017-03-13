@@ -164,6 +164,7 @@ div.login {
   padding-top: 6px;
 }
 .login li:hover ul {
+  top: 45px;
   right: 9.3em;          // Tweak together with width below!
 }
 .login ul li ul li{
@@ -171,6 +172,15 @@ div.login {
   padding: 3px 0 3px 3px;
   text-align: center;
 }
+.login .textlink a {
+  float: left;
+  display: block;
+  padding-bottom: 10px;  // Extends hover area down to dropdown.
+  margin-top: 3px;
+}
 .avatar-arrow {
-  padding: 0 0 10px 0;
+  margin: 0px 0 0px 3px;
+}
+.text-arrow {
+  margin: 0px 0 0px 1px;
 }

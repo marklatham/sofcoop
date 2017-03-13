@@ -22,7 +22,7 @@ table.data.posts
       tr
         - unless local_assigns[:author]
           td.author
-            = link_to avatar_for(post.user, size: 48), user_path(post.user.username)
+            .avatar = link_to avatar_for(post.user), user_path(post.user.username)
             .username = link_to '@'+post.user.username, user_path(post.user.username)
         td.left.title
           - if post.title.present?
