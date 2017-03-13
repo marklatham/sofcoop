@@ -1,6 +1,5 @@
 module UsersHelper
 
-  # Returns an avatar for the given user:
   def avatar_for(user)
     if user.avatar_url.present?
       avatar_url = user.avatar_url(:standard)

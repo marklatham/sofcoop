@@ -7,14 +7,20 @@ div.form
     h2 Edit Account
     = devise_error_messages!
     div
-      = f.label 'Avatar:'
-      = f.hidden_field(:avatar_cache)
-      = f.file_field :avatar
       = f.label 'Username:'
       table
         tr
-          td.right1em @
+          td.formtext style='width: 1em;' @
           td = f.text_field :username
+    div
+      = f.label 'Avatar:'
+      .avatar = link_to avatar_for(resource), user_path(resource.username)
+      = f.hidden_field(:avatar_cache)
+      table
+        tr
+          td.formtext style='width: 12em;' To upload a new avatar: &nbsp;
+          td = f.file_field :avatar,
+               accept: 'image/png,image/gif,image/jpeg,image/jpg'
     div
       = f.label 'Email:'
       = f.text_field :email

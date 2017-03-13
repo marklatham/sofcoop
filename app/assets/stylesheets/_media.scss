@@ -1,10 +1,18 @@
-table.posts .avatar img {
-  width: 48px;
+.avatar img {
   border-radius: 25%;
 }
+
+table.posts .avatar img {
+  width: 48px;
+}
+
 .login.dropdown .avatar img {
   float: left;
   margin-bottom: 10px;
   width: 32px;
-  border-radius: 25%;
+}
+
+.post.avatar img {
+  float: left;
+  margin-right: 1em;
 }

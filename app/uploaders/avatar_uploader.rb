@@ -33,21 +33,18 @@ class AvatarUploader < CarrierWave::Uploader::Base
 
   cloudinary_transformation :transformation =>
     [{:width => 200, :height => 200, :crop => :thumb, :gravity => :face}]
-  process :convert => 'jpg'
   process :tags => ['avatar']
 
   # Create different versions of your uploaded files:
   
   version :standard do
     process resize_to_fit: [60, 60]
-    cloudinary_transformation :radius => 15
   end
 
   # Add a white list of extensions which are allowed to be uploaded.
-  # For images you might use something like this:
-  # def extension_whitelist
-  #   %w(jpg jpeg gif png)
-  # end
+  def extension_whitelist
+    %w(jpg jpeg gif png tif tiff bmp)
+  end
 
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
@@ -55,8 +52,10 @@ class AvatarUploader < CarrierWave::Uploader::Base
   #   "something.jpg" if original_filename
   # end
 
-  def public_id
-    user.slug
-  end
+  # Bug in Cloudinary?: Can't upload a replacement avatar when public_id is defined.
+  # Try fixing it later by complaining to them and/or deleting previous avatar first.
+#  def public_id
+#    model.slug
+#  end
 
 end

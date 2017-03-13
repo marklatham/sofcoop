@@ -21,7 +21,7 @@ h1 = @post.title
   
 hr style='margin-bottom: 2em'
 
-= link_to avatar_for(@post.user), user_path(@post.user.username)
+.post.avatar = link_to avatar_for(@post.user), user_path(@post.user.username)
 
 span.timestamp
   |  Created by #{link_to '@'+@post.user.username, user_path(@post.user.username)} #{time_ago_in_words(@post.created_at)} ago.
@@ -32,7 +32,6 @@ p.timestamp
   = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
 
 - if  is_author_or_admin?(current_user, @post)
-  p
   p.controls
     = link_to 'Edit', edit_post_path(@post.user.username, @post)
     |  | 
