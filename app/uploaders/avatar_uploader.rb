@@ -31,15 +31,15 @@ class AvatarUploader < CarrierWave::Uploader::Base
   #   # do something
   # end
 
-  cloudinary_transformation :transformation =>
-    [{:width => 200, :height => 200, :crop => :thumb, :gravity => :face}]
+  # cloudinary_transformation :transformation =>
+  #   [{:width => 200, :height => 200, :crop => :thumb, :gravity => :face}]
+  process resize_to_fill: [200, 200]
   process :tags => ['avatar']
 
   # Create different versions of your uploaded files:
-  
-  version :standard do
-    process resize_to_fit: [60, 60]
-  end
+  # version :standard do
+  #   process resize_to_fit: [60, 60]
+  # end
 
   # Add a white list of extensions which are allowed to be uploaded.
   def extension_whitelist
