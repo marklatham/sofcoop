@@ -11,7 +11,7 @@ div.form
       .avatar = avatar_for(current_user)
       
       - if gravatar?(current_user)
-        = f.label 'Your avatar uploaded to Gravatar.com:'
+        = f.label nil, 'Your avatar uploaded to Gravatar.com:'
         .avatar = gravatar_for(current_user)
         p
           | We currently show your Sofcoop avatar. If you delete it, we will show your 

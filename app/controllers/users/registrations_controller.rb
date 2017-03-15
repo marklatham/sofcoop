@@ -59,6 +59,12 @@ class Users::RegistrationsController < DeviseController
   def update
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
+    
+    # Bug in Cloudinary?: Can't upload a replacement avatar when using public_id, so:
+    if account_update_params[:avatar] && resource.avatar_url.present?
+      resource.remove_avatar!
+      resource.save
+    end
 
     if account_update_params[:username]
       if /\Auser[0-9]+\z/.match(account_update_params[:username].downcase)

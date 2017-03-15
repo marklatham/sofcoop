@@ -52,10 +52,9 @@ class AvatarUploader < CarrierWave::Uploader::Base
   #   "something.jpg" if original_filename
   # end
 
-  # Bug in Cloudinary?: Can't upload a replacement avatar when public_id is defined.
-  # Try fixing it later by complaining to them and/or deleting previous avatar first.
-#  def public_id
-#    model.slug
-#  end
+  # http://cloudinary.com/documentation/upload_images#public_id_the_image_identifier
+  def public_id
+    model.slug
+  end
 
 end
