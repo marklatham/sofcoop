@@ -10,15 +10,15 @@ div.form
       = f.label 'Username:'
       table
         tr
-          td.formtext style='width: 1em;' @
+          td.atsign @
           td = f.text_field :username
     div
       = f.label 'Avatar:'
       .avatar = link_to avatar_for(resource), user_path(resource.username)
       = f.hidden_field(:avatar_cache)
-      table
+      table style='width: auto'
         tr
-          td.formtext style='width: 12em;' To upload a new avatar: &nbsp;
+          td.formtext Replace with new avatar:
           td = f.file_field :avatar,
                accept: 'image/png,image/gif,image/jpeg,image/jpg'
     div
@@ -30,9 +30,11 @@ div.form
       = f.password_field :current_password
     = f.submit 'Save changes'
 
-hr
+hr style='margin-bottom: 1em'
 
-p style='margin-top: 1em'
-  = link_to 'Change password', change_password_path
+- if resource.avatar_url.present?
+  p = link_to 'Delete avatar', delete_avatar_path
+
+p = link_to 'Change password', change_password_path
 
 p = link_to 'Cancel account', cancel_account_path

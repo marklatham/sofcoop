@@ -49,6 +49,10 @@ class Users::RegistrationsController < DeviseController
     @body_class = 'grayback'
   end
 
+  def delete_avatar
+    @body_class = 'grayback'
+  end
+
   # PUT /resource
   # We need to use a copy of the resource because we don't want to change
   # the current user in place.
@@ -195,9 +199,8 @@ class Users::RegistrationsController < DeviseController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [:username])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:avatar])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:avatar_cache])
+    devise_parameter_sanitizer.permit(:account_update, keys:
+         [:username, :avatar, :avatar_cache, :remove_avatar])
   end
 
   def account_update_params

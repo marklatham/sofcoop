@@ -1,0 +1,52 @@
+- provide :title, 'Delete Avatar'
+
+div.form
+
+  = form_for(current_user, url: user_registration_path(resource), html: { multipart: true, role: 'form' }) do |f|
+  
+    h2 Delete your avatar
+
+    - if avatar?(current_user)
+      = f.label nil, 'Your avatar uploaded to Sofcoop:'
+      .avatar = avatar_for(current_user)
+      
+      - if gravatar?(current_user)
+        = f.label 'Your avatar uploaded to Gravatar.com:'
+        .avatar = gravatar_for(current_user)
+        p
+          | We currently show your Sofcoop avatar. If you delete it, we will show your 
+          | Gravatar instead.
+      
+      - else
+        = f.label nil, "Gravatar.com's default avatar:"
+        .avatar = gravatar_for(current_user)
+        p
+          | We currently show your Sofcoop avatar. For users with no Sofcoop avatar, we show 
+          | their Gravatar instead, if they have one. If they don't, Gravatar sends the above 
+          | default avatar, so we show that as a placeholder.
+        
+      p
+        | You can upload a new avatar any time at the 
+        = link_to 'Sofcoop Edit Account page', edit_user_registration_path
+        |  or at 
+        = link_to 'Gravatar', 'http://en.gravatar.com/'
+        | .
+      
+      div.check_box style='margin-top: 2em'
+        = f.check_box :remove_avatar
+        = f.label nil, 'Check to delete your Sofcoop avatar'
+      div
+        = f.label 'Current password:'
+        = f.password_field :current_password
+      = f.submit 'Delete my avatar'
+    
+    - else
+      p
+        | This form is for deleting an avatar that you previously uploaded via the 
+        = link_to 'Sofcoop Edit Account page', edit_user_registration_path
+        | . But you don't currently have an uploaded avatar at Sofcoop, so there's nothing 
+        | to delete. You can upload a new avatar any time at our 
+        = link_to 'Edit Account page', edit_user_registration_path
+        |  or at 
+        = link_to 'Gravatar', 'http://en.gravatar.com/'
+        | .

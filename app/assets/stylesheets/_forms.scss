@@ -12,15 +12,18 @@ div.form div {
 }
 
 .form table {
-  table-layout: fixed;
   margin: 0;
   tr td {
     border-style: none;
   }
+  .atsign {
+    width: 1em;
+    text-align: right;
+    padding: 0 0 0.8em 0;
+  }
   .formtext {
     text-align: right;
-    vertical-align: middle;
-    padding: 0 0 0.8em 0;
+    padding: 0 0.5em 0.8em 0;
   }
 }
 

@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     get '/cancel_account',  to: 'users/registrations#cancel_account',  as: :cancel_account
     get '/change_password', to: 'users/registrations#change_password', as: :change_password
+    get '/delete_avatar',   to: 'users/registrations#delete_avatar',   as: :delete_avatar
   end
   
 end
