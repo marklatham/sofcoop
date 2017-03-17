@@ -19,8 +19,7 @@ div.form
       table style='width: auto'
         tr
           td.formtext Replace with new avatar:
-          td = f.file_field :avatar,
-               accept: 'image/png,image/gif,image/jpeg,image/jpg'
+          td = f.file_field :avatar, accept: 'image/png,image/gif,image/jpeg,image/jpg,image/tif,image/tiff,image/bmp'
     div
       = f.label 'Email:'
       = f.text_field :email

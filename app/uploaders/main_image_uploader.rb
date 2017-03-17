@@ -1,4 +1,4 @@
-class AvatarUploader < CarrierWave::Uploader::Base
+class MainImageUploader < CarrierWave::Uploader::Base
 
   include Cloudinary::CarrierWave
   
@@ -31,19 +31,18 @@ class AvatarUploader < CarrierWave::Uploader::Base
   #   # do something
   # end
 
-  # cloudinary_transformation :transformation =>
-  #   [{:width => 200, :height => 200, :crop => :thumb, :gravity => :face}]
-  process resize_to_fill: [200, 200]
-  process :tags => ['avatar']
+  process resize_to_limit: [1000, 1000]
+  process :tags => ['main_image']
 
   # Create different versions of your uploaded files:
-  version :standard do
-    process resize_to_fit: [60, 60]
+  version :thumb do
+    process :resize_to_limit => [200, 200]
   end
 
   # Add a white list of extensions which are allowed to be uploaded.
+  # For images you might use something like this:
   def extension_whitelist
-    %w(jpg jpeg gif png tif tiff bmp)
+    %w(jpg jpeg gif png)
   end
 
   # Override the filename of the uploaded files:
@@ -53,8 +52,8 @@ class AvatarUploader < CarrierWave::Uploader::Base
   # end
 
   # http://cloudinary.com/documentation/upload_images#public_id_the_image_identifier
-  def public_id
-    model.slug
-  end
+  # def public_id
+  #   model.slug
+  # end
 
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170311231814) do
+ActiveRecord::Schema.define(version: 20170316002450) do
 
   create_table "friendly_id_slugs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "slug",                      null: false
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20170311231814) do
     t.text     "body",       limit: 65535
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
+    t.string   "main_image"
     t.index ["user_id", "slug"], name: "index_posts_on_user_id_and_slug", unique: true, using: :btree
     t.index ["user_id"], name: "index_posts_on_user_id", using: :btree
   end

@@ -15,7 +15,7 @@ module UsersHelper
       gravatar_id = Digest::MD5::hexdigest(user.email.downcase)
       avatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=60"
     end
-    image_tag(avatar_url, alt: '@'+user.username)
+    image_tag(avatar_url.to_s, alt: '@'+user.username)
   end
 
   # Returns false if gravatar_for is just the default image:
