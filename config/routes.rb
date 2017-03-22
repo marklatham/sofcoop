@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :images
   root 'visitors#index'
   
   ### POSTS: #######################

@@ -1,0 +1,36 @@
+p#notice = notice
+
+p
+  strong User:
+  = @image.user
+p
+  strong Title:
+  = @image.title
+p
+  strong Slug:
+  = @image.slug
+p
+  strong Original filename:
+  = @image.original_filename
+p
+  strong Original url:
+  = @image.original_url
+p
+  strong Format:
+  = @image.format
+p
+  strong Width:
+  = @image.width
+p
+  strong Height:
+  = @image.height
+p
+  strong Size:
+  = @image.size
+p
+  strong Description:
+  = @image.description
+
+= link_to 'Edit', edit_image_path(@image)
+'|
+= link_to 'Back', images_path
