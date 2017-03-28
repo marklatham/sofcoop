@@ -1,0 +1,21 @@
+table.data.images
+
+  tbody
+    - @images.each do |image|
+      tr
+        td style='width: 330px' = link_to image_tag(image.file_url(:thumb)), image_path(image.user.username, image)
+        td.text
+          .title = image.title
+          p
+            | Uploaded by @
+            = image.user.username
+            |  on 
+            = image.created_at.strftime("%B %e, %Y")
+          
+          - if is_uploader_or_admin?(current_user, image)
+            = link_to 'Edit', edit_image_path(image.user.username, image)
+            |  | 
+            = link_to 'Delete', delete_image_path(image.user.username, image),
+                 method: :delete, data: {confirm: "You sure?"}
+
+= paginate @images

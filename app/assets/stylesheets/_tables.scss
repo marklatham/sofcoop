@@ -40,6 +40,22 @@ table.data {
   }
 }
 
+// IMAGES TABLE:
+
+table.images {
+  margin: auto;
+  table-layout: auto;
+  width: auto;
+  .text {
+    text-align: left;
+  }
+  .title {
+    font-weight: bold;
+    font-size: 125%;
+    margin-bottom: 1em;
+  }
+}
+
 // POSTS TABLE:
 
 table.posts {

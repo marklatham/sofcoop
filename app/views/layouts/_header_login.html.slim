@@ -11,6 +11,7 @@ div.login.dropdown
           b.down-arrow.text-arrow
         ul.droplink
           li = link_to 'Create new post', new_post_path
+          li = link_to 'Upload new image', new_image_path
           li = link_to 'Edit account', edit_user_registration_path
           li = link_to 'Log out', destroy_user_session_path, :method=>'delete'
           

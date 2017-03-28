@@ -20,8 +20,10 @@ gem 'rolify'
 gem 'friendly_id', '~> 5.1.0'
 gem 'kaminari'
 gem 'loofah'
-gem 'carrierwave', '~> 1.0'   # Load before cloudinary.
-gem 'cloudinary'
+gem 'carrierwave', '~> 1.0'
+gem 'mini_magick'
+gem 'fog-aws'
+gem 'cloudinary'                 # Load later than carrierwave.
 
 group :development, :test do
   gem 'byebug', platform: :mri

@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
 
-  resources :images
   root 'visitors#index'
+  
+  ### IMAGES: ######################
+  
+  get    '/images/@:username/:slug',        to: 'images#show',         as: :image
+  get    '/images/@:username/:slug/edit',   to: 'images#edit',         as: :edit_image
+  delete '/images/@:username/:slug/delete', to: 'images#destroy',      as: :delete_image
+  
+  resources :images, except: [:show, :edit, :destroy]
   
   ### POSTS: #######################
   

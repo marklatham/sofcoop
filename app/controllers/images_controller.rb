@@ -1,9 +1,12 @@
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :edit, :update, :destroy]
+  rescue_from ActionController::RedirectBackError, with: :redirect_to_default
+  before_action :set_image, only: [:show, :edit, :destroy]
 
   # GET /images
   def index
-    @images = Image.all
+    authorize Image
+    @images = Image.all.sort_by{|image| image.created_at}.reverse!
+    @images = Kaminari.paginate_array(@images).page(params[:page])
   end
 
   # GET /images/1
@@ -13,18 +16,24 @@ class ImagesController < ApplicationController
   # GET /images/new
   def new
     @image = Image.new
+    authorize @image
+    @body_class = 'grayback'
   end
 
   # GET /images/1/edit
   def edit
+    authorize @image
+    @body_class = 'grayback'
   end
 
   # POST /images
   def create
     @image = Image.new(image_params)
-
+    authorize @image
+    @image.user = current_user
     if @image.save
-      redirect_to @image, notice: 'Image was successfully created.'
+      redirect_to image_path(@image.user.username, @image),
+                  notice: 'Image was successfully created.'
     else
       render :new
     end
@@ -32,8 +41,11 @@ class ImagesController < ApplicationController
 
   # PATCH/PUT /images/1
   def update
+    @image = Image.find(params[:id])
+    authorize @image
     if @image.update(image_params)
-      redirect_to @image, notice: 'Image was successfully updated.'
+      redirect_to image_path(@image.user.username, @image),
+                  notice: 'Image was successfully updated.'
     else
       render :edit
     end
@@ -41,6 +53,7 @@ class ImagesController < ApplicationController
 
   # DELETE /images/1
   def destroy
+    authorize @image
     @image.destroy
     redirect_to images_url, notice: 'Image was successfully destroyed.'
   end
@@ -48,11 +61,20 @@ class ImagesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_image
-      @image = Image.find(params[:id])
+      if user = User.friendly.find(params[:username])
+        @image = Image.where(user_id: user.id).friendly.find(params[:slug])
+      else
+        @image = Image.find(params[:id])
+      end
     end
 
     # Only allow a trusted parameter "white list" through.
     def image_params
-      params.require(:image).permit(:user_id, :title, :slug, :original_filename, :original_url, :format, :width, :height, :size, :description)
+      params.require(:image).permit(:title, :slug, :original_filename, :original_url, :format, :width, :height, :size, :description, :file, :file_cache, :remote_file_url)
     end
+
+    def redirect_to_default
+      redirect_to root_path
+    end
+    
 end

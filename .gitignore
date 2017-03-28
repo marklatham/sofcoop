@@ -19,5 +19,8 @@
 # Ignore other unneeded files.
 config/database.yml
 config/secrets.yml
+config/application.yml
 config/cloudinary.yml
 .capistrano/*
+/public/images/*
+/public/uploads/*

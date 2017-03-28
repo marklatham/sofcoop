@@ -1,39 +1,5 @@
-h1 Listing images
+- provide :title, "Images - All Sources"
 
-table
-  thead
-    tr
-      th User
-      th Title
-      th Slug
-      th Original filename
-      th Original url
-      th Format
-      th Width
-      th Height
-      th Size
-      th Description
-      th
-      th
-      th
+h2 Images uploaded by any users:
 
-  tbody
-    - @images.each do |image|
-      tr
-        td = image.user
-        td = image.title
-        td = image.slug
-        td = image.original_filename
-        td = image.original_url
-        td = image.format
-        td = image.width
-        td = image.height
-        td = image.size
-        td = image.description
-        td = link_to 'Show', image
-        td = link_to 'Edit', edit_image_path(image)
-        td = link_to 'Destroy', image, data: { confirm: 'Are you sure?' }, method: :delete
-
-br
-
-= link_to 'New Image', new_image_path
+= render 'table'

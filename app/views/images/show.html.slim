@@ -1,36 +1,42 @@
-p#notice = notice
+- provide :title, 'Image: ' + @image.title
 
-p
-  strong User:
-  = @image.user
-p
-  strong Title:
+h2
+  | Image Title: 
   = @image.title
-p
-  strong Slug:
-  = @image.slug
-p
-  strong Original filename:
-  = @image.original_filename
-p
-  strong Original url:
-  = @image.original_url
-p
-  strong Format:
-  = @image.format
-p
-  strong Width:
-  = @image.width
-p
-  strong Height:
-  = @image.height
-p
-  strong Size:
-  = @image.size
-p
-  strong Description:
+  
+= link_to image_tag(@image.file_url), @image.file_url
+
+p style='margin-top: 1em'
+  strong Description: 
   = @image.description
 
-= link_to 'Edit', edit_image_path(@image)
-'|
-= link_to 'Back', images_path
+p
+  strong Uploaded: 
+  | by @
+  = @image.user.username
+  |  on 
+  = @image.created_at.strftime("%B %e, %Y")
+
+- if @image.original_url.present?
+  p
+    strong Source URL: 
+    = @image.original_url
+
+p
+  strong File URL: 
+  = link_to (root_url.chomp('/') + @image.file_url), @image.file_url
+p
+  strong Size: 
+  = @image.width
+  |  x 
+  = @image.height
+  |  pixels; 
+  = number_with_precision(@image.size/1000, precision: 0, delimiter: ',')
+  |  kb
+
+- if  is_uploader_or_admin?(current_user, @image)
+  p.controls
+    = link_to 'Edit', edit_image_path(@image.user.username, @image)
+    |  | 
+    = link_to 'Delete', delete_image_path(@image.user.username, @image),
+              method: :delete, data: {confirm: "You sure?"}
