@@ -34,7 +34,6 @@ class ImageUploader < CarrierWave::Uploader::Base
     model.size   = image[:size]
     model.format = image[:format].downcase
     model.original_filename = original_filename if original_filename.present?
-    model.original_url = model.remote_file_url if model.remote_file_url.present?
   end
 
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170322190353) do
+ActiveRecord::Schema.define(version: 20170328172431) do
 
   create_table "friendly_id_slugs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "slug",                      null: false
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20170322190353) do
     t.string   "title"
     t.string   "slug"
     t.string   "original_filename"
-    t.string   "original_url"
+    t.string   "remote_file_url"
     t.string   "format"
     t.integer  "width"
     t.integer  "height"
