@@ -15,11 +15,16 @@
     table style='width: auto'
       tr
         td.formtext
-          span style='font-weight: bold' You can upload:
+          span style='font-weight: bold'
+            | You can upload:
           = f.hidden_field(:file_cache)
-        td = f.file_field :file, accept: 'image/png,image/gif,image/jpeg,image/jpg'
-    = f.label nil, 'OR paste an image URL:'
-    = f.text_field :remote_file_url
+        td
+          = f.file_field :file, accept: 'image/png,image/gif,image/jpeg,image/jpg'
+    = f.label :remote_file_url, 'OR paste an image URL:'
+    - if @image.original_url.present?
+      = f.text_field :remote_file_url, value: @image.original_url
+    - else
+      = f.text_field :remote_file_url
   .field
     = f.label nil, 'Image title:'
     = f.text_field :title

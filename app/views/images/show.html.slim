@@ -17,10 +17,10 @@ p
   |  on 
   = @image.created_at.strftime("%B %e, %Y")
 
-- if @image.remote_file_url.present?
+- if @image.original_url.present?
   p
     strong Source URL: 
-    = @image.remote_file_url
+    = @image.original_url
 
 p
   strong File URL: 

@@ -5,7 +5,7 @@ one:
   title: MyString
   slug: MyString
   original_filename: MyString
-  remote_file_url: MyString
+  original_url: MyString
   format: MyString
   width: 1
   height: 1
@@ -17,7 +17,7 @@ two:
   title: MyString
   slug: MyString
   original_filename: MyString
-  remote_file_url: MyString
+  original_url: MyString
   format: MyString
   width: 1
   height: 1

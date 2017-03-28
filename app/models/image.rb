@@ -15,8 +15,8 @@ class Image < ApplicationRecord
       [:title, :id] ]
     elsif self.description.present?
       "#{self.description.truncate(40, separator: ' ', omission: '')}"
-    elsif self.remote_file_url.present?
-      "#{self.remote_file_url}"
+    elsif self.original_url.present?
+      "#{self.original_url}"
     else
       :id
     end
