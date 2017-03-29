@@ -2,28 +2,23 @@ class Image < ApplicationRecord
   extend FriendlyId
   belongs_to :user
   mount_uploader :file, ImageUploader
-  friendly_id :slug_candidates, use: [:slugged, :scoped, :history], scope: :user
+  friendly_id :slug_candidates, use: [:slugged, :scoped], scope: :user
   
   # But :id not available when creating record, so FriendlyId will default to random string:
   def slug_candidates
     if self.title.present?
-      [:title,
-      [:title, '2'],
-      [:title, '3'],
-      [:title, '4'],
-      [:title, '5'],
-      [:title, :id] ]
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}",
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '2'],
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '3'],
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '4'],
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '5']]
     elsif self.description.present?
-      "#{self.description.truncate(40, separator: ' ', omission: '')}"
-    elsif self.original_url.present?
-      "#{self.original_url}"
+      "#{self.description.truncate(60, separator: ' ', omission: '')}"
+    elsif self.original_filename.present?
+      "#{self.original_filename.split('.')[0...-1].join('.')}"
     else
-      :id
+      "" # No candidate given here, so friendly_id will create a random string.
     end
-  end
-  
-  def should_generate_new_friendly_id?
-    title_changed? || super
   end
   
   validates_presence_of :slug

@@ -6,15 +6,13 @@ class Post < ApplicationRecord
   
   def slug_candidates
     if self.title.present?
-      [:title,
-      [:title, '2'],
-      [:title, '3'],
-      [:title, '4'],
-      [:title, '5'],
-      [:title, :id],
-      :id]
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}",
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '2'],
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '3'],
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '4'],
+      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '5']]
     else
-      "#{self.body.markdown2html.strip_tags.truncate(40, separator: ' ', omission: '')}"
+      "#{self.body.markdown2html.strip_tags.truncate(60, separator: ' ', omission: '')}"
     end
   end
   

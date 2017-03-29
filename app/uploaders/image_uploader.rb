@@ -13,7 +13,7 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   # Thumbnail version of image uploaded:
   version :thumb do
-    process :resize_to_limit => [300, 3000]
+    process :resize_to_limit => [300, 300]
   end   
 
   # Allow images only in these formats:
@@ -33,6 +33,7 @@ class ImageUploader < CarrierWave::Uploader::Base
     model.height = image[:height]
     model.size   = image[:size]
     model.format = image[:format].downcase
+    model.format = 'jpg' if model.format == 'jpeg'
     model.original_filename = original_filename if original_filename.present?
     model.original_url = model.remote_file_url if model.remote_file_url.present?
   end
