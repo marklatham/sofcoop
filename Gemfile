@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-ruby '2.4.0'
 gem 'rails', '~> 5.0.0'
 gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'puma', '~> 3.0'
@@ -23,7 +22,9 @@ gem 'loofah'
 gem 'carrierwave', '~> 1.0'
 gem 'mini_magick'
 gem 'fog-aws'
-gem 'cloudinary'                 # Load later than carrierwave.
+gem 'cloudinary'  # Load later than carrierwave.
+gem 'figaro'
+gem 'xmlrpc'      # Added when trying to get fog working. Maybe not needed?
 
 group :development, :test do
   gem 'byebug', platform: :mri

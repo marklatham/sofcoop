@@ -2,8 +2,8 @@ class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
   include Sprockets::Rails::Helper   # do I need this?
 
-  storage :file
-  #storage :fog
+  #storage :file
+  storage :fog
 
   process :store_parameters
 

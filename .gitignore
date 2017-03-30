@@ -16,11 +16,11 @@
 # Ignore Byebug command history file.
 .byebug_history
 
-# Ignore other unneeded files.
-config/database.yml
-config/secrets.yml
-config/application.yml
-config/cloudinary.yml
-.capistrano/*
+# Ignore other non-public & non-code files.
+/config/database.yml
+/config/secrets.yml
+/config/application.yml
+/config/cloudinary.yml
+/.capistrano/*
 /public/images/*
 /public/uploads/*
