@@ -2,7 +2,6 @@ class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
   include Sprockets::Rails::Helper   # do I need this?
 
-  #storage :file
   storage :fog
 
   process :store_parameters
@@ -11,18 +10,20 @@ class ImageUploader < CarrierWave::Uploader::Base
     "images/#{model.user.username}/"
   end
 
-  # Thumbnail version of image uploaded:
-  version :thumb do
-    process :resize_to_limit => [300, 300]
-  end   
+  def filename
+    "#{model.slug}.#{model.format}"
+  end
 
-  # Allow images only in these formats:
   def extension_white_list
     %w(jpg jpeg gif png)
   end
 
-  def filename
-    "#{model.slug}.#{model.format}"
+  version :standard do
+    process :resize_to_limit => [1000, 1000]
+  end
+
+  version :thumb, from_version: :standard do
+    process :resize_to_limit => [300, 300]
   end
 
   private

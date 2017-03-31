@@ -9,7 +9,7 @@
 
   .field.form
     - if @image.file_url.present?
-      = image_tag @image.file_url(:thumb)
+      = link_to image_tag(short_url(@image, version: 'thumb')), image_path(@image.user.username, @image)
       br If you want to replace it --
     - else
     table style='width: auto'

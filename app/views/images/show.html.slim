@@ -4,7 +4,7 @@ h2
   | Image Title: 
   = @image.title
   
-= link_to image_tag(@image.file_url), @image.file_url
+= link_to image_tag(short_url(@image)), short_url(@image)
 
 p style='margin-top: 1em'
   strong Description: 
@@ -24,7 +24,7 @@ p
 
 p
   strong File URL: 
-  = link_to (root_url.chomp('/') + @image.file_url), @image.file_url
+  = link_to short_url(@image), short_url(@image)
 p
   strong Size: 
   = @image.width
