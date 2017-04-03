@@ -4,14 +4,14 @@ class Image < ApplicationRecord
   mount_uploader :file, ImageUploader
   friendly_id :slug_candidates, use: [:slugged, :scoped], scope: :user
   
-  # But :id not available when creating record, so FriendlyId will default to random string:
   def slug_candidates
     if self.title.present?
-      ["#{self.title.truncate(60, separator: ' ', omission: '')}",
-      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '2'],
-      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '3'],
-      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '4'],
-      ["#{self.title.truncate(60, separator: ' ', omission: '')}", '5']]
+      title = self.title.truncate(60, separator: ' ', omission: '')
+      ["#{title}",
+      ["#{title}", '2'],
+      ["#{title}", '3'],
+      ["#{title}", '4'],
+      ["#{title}", '5']]
     elsif self.description.present?
       "#{self.description.truncate(60, separator: ' ', omission: '')}"
     elsif self.original_filename.present?
