@@ -1,6 +1,7 @@
 - provide :title, 'Image: ' + @image.title
 
-- image_url = @image.file_url.partition('?').first
+/ Extract short relative url from long AWS-S3 url:
+- image_url = @image.file_url.partition('?').first[/\/images\/.+/mi]
 
 h2
   | Image Title: 

@@ -10,7 +10,7 @@ module UsersHelper
   
   def avatar_for(user)
     if user.avatar_url.present?
-      avatar_url = user.avatar_url.partition('?').first
+      avatar_url = user.avatar_url.partition('?').first[/\/avatars\/.+/mi]
     else
       gravatar_id = Digest::MD5::hexdigest(user.email.downcase)
       avatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=60"

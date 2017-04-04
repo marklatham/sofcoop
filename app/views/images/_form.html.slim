@@ -9,7 +9,7 @@
 
   .field.form
     - if @image.file_url.present?
-      = link_to image_tag(@image.file_url(:v3).partition('?').first),
+      = link_to image_tag(@image.file_url(:v3).partition('?').first[/\/images\/.+/mi]),
         image_path(@image.user.username, @image)
       br If you want to replace it --
     - else
@@ -27,9 +27,9 @@
     - else
       = f.text_field :remote_file_url
   .field
-    = f.label nil, 'Image title:'
+    = f.label nil, 'Please give the image a title:'
     = f.text_field :title
   .field
-    = f.label nil, 'Description:'
+    = f.label nil, 'Description (optional):'
     = f.text_area :description
   .actions = f.submit 'Save image'
