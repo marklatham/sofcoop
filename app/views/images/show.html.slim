@@ -1,10 +1,12 @@
 - provide :title, 'Image: ' + @image.title
 
+- image_url = @image.file_url.partition('?').first
+
 h2
   | Image Title: 
   = @image.title
   
-= link_to image_tag(short_url(@image)), short_url(@image)
+= link_to image_tag(image_url), image_url
 
 p style='margin-top: 1em'
   strong Description: 
@@ -24,7 +26,7 @@ p
 
 p
   strong File URL: 
-  = link_to short_url(@image), short_url(@image)
+  = link_to image_url, image_url
 p
   strong Size: 
   = @image.width
