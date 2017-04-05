@@ -6,14 +6,14 @@ class Post < ApplicationRecord
   
   def slug_candidates
     if self.title.present?
-      title = self.title.truncate(60, separator: ' ', omission: '')
+      title = self.title.truncate(60, separator: ' ', omission: '').gsub('_', '-')
       ["#{title}",
       ["#{title}", '2'],
       ["#{title}", '3'],
       ["#{title}", '4'],
       ["#{title}", '5']]
     else
-      "#{self.body.markdown2html.strip_tags.truncate(60, separator: ' ', omission: '')}"
+      "#{self.body.markdown2html.strip_tags.truncate(60, separator: ' ', omission: '').gsub('_', '-')}"
     end
   end
   
