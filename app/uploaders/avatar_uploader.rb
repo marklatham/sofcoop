@@ -11,7 +11,11 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    "#{model.username}.#{file.extension}"
+    if file.extension == "jpeg"
+      "#{model.username}.jpg"
+    else
+      "#{model.username}.#{file.extension}"
+    end
   end
 
   def extension_white_list

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   
   get    '/images/:username/:filename.:ext', to:
   redirect('https://sofcoop.s3-us-west-2.amazonaws.com/images/%{username}/%{filename}.%{ext}')
-  get    '/avatars/:username.:ext',          to:
+  get    '/avatars/@:username.:ext',          to:
   redirect('https://sofcoop.s3-us-west-2.amazonaws.com/avatars/%{username}.%{ext}')
   
   resources :images, except: [:show, :edit, :destroy]
