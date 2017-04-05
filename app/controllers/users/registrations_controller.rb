@@ -75,6 +75,16 @@ class Users::RegistrationsController < DeviseController
         flash[:error] = "Sorry, username can't include a double underscore __"
         redirect_back(fallback_location: user_path(resource.username)) and return
       end
+      # Reload avatar if username changing:
+      unless account_update_params[:username] == resource.username
+        if resource.avatar.present?
+          unless account_update_params[:avatar].present?
+            unless account_update_params[:avatar_cache].present?
+              params[:user][:remote_avatar_url] = resource.avatar_url.partition('?').first
+            end
+          end
+        end
+      end
     end
     
     resource_updated = update_resource(resource, account_update_params)
@@ -85,7 +95,7 @@ class Users::RegistrationsController < DeviseController
         set_flash_message :notice, flash_key
       end
       bypass_sign_in resource, scope: resource_name
-      respond_with resource, location: user_path(resource.username)
+      redirect_to resource, location: user_path(resource.username)
     else
       clean_up_passwords resource
       flash[:notice] = flash[:notice].to_a.concat resource.errors.full_messages
@@ -200,7 +210,7 @@ class Users::RegistrationsController < DeviseController
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
     devise_parameter_sanitizer.permit(:account_update, keys:
-         [:username, :avatar, :avatar_cache, :remove_avatar])
+         [:username, :avatar, :avatar_cache, :remove_avatar, :remote_avatar_url])
   end
 
   def account_update_params
