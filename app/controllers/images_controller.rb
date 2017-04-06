@@ -1,6 +1,6 @@
 class ImagesController < ApplicationController
   rescue_from ActionController::RedirectBackError, with: :redirect_to_default
-  before_action :set_image, only: [:show, :edit, :destroy]
+  before_action :set_image, only: [:show, :data, :edit, :destroy]
 
   # GET /images
   def index
@@ -11,6 +11,10 @@ class ImagesController < ApplicationController
 
   # GET /images/1
   def show
+  end
+
+  # GET /images/1
+  def data
   end
 
   # GET /images/new
@@ -32,7 +36,7 @@ class ImagesController < ApplicationController
     authorize @image
     @image.user = current_user
     if @image.save
-      redirect_to image_path(@image.user.username, @image),
+      redirect_to image_data_path(@image.user.username, @image.slug, @image.format),
                   notice: 'Image was successfully created.'
     else
       render :new
@@ -44,7 +48,7 @@ class ImagesController < ApplicationController
     @image = Image.find(params[:id])
     authorize @image
     if @image.update(image_params)
-      redirect_to image_path(@image.user.username, @image),
+      redirect_to image_data_path(@image.user.username, @image.slug, @image.format),
                   notice: 'Image was successfully updated.'
     else
       render :edit
