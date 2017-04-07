@@ -21,6 +21,10 @@ class Image < ApplicationRecord
     end
   end
   
+  def should_generate_new_friendly_id?
+    title_changed? || super
+  end
+  
   validates_presence_of :slug
   after_validation :move_friendly_id_error_to_title
 

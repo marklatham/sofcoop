@@ -47,6 +47,18 @@ class ImagesController < ApplicationController
   def update
     @image = Image.find(params[:id])
     authorize @image
+    # Reload file if title changing:
+    if image_params[:title]
+      unless image_params[:title] == @image.title
+        if @image.file.present?
+          unless image_params[:file].present?
+            unless image_params[:file_cache].present?
+              params[:image][:remote_file_url] = @image.file_url.partition('?').first
+            end
+          end
+        end
+      end
+    end
     if @image.update(image_params)
       redirect_to image_data_path(@image.user.username, @image.slug, @image.format),
                   notice: 'Image was successfully updated.'
