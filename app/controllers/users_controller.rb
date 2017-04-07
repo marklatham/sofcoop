@@ -9,7 +9,9 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.friendly.find(params[:username])
+    @user = User.friendly.find(params[:username]) if params[:username]
+    # "fallback" to find-by-id
+    @user = User.find(params[:id]) unless @user
     authorize @user
     @posts = @user.posts.order('updated_at DESC')
     unless current_user == @user || current_user.is_admin?
