@@ -5,6 +5,13 @@ class AdminMailer < ApplicationMailer
     mail   to: Rails.application.secrets.admin_email,
       subject: "New registration"
   end
+  
+  def username_changed(user, old_username)
+    @user = user
+    @old_username = old_username
+    mail   to: Rails.application.secrets.admin_email,
+      subject: "Username changed"
+  end
 
   def account_cancelled(user, posts_count)
     @user = user
@@ -26,4 +33,5 @@ class AdminMailer < ApplicationMailer
     mail   to: Rails.application.secrets.admin_email,
       subject: "New post"
   end
+  
 end

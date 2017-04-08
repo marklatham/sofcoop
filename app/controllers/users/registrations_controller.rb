@@ -75,8 +75,9 @@ class Users::RegistrationsController < DeviseController
         flash[:error] = "Sorry, username can't include a double underscore __"
         redirect_back(fallback_location: user_path(resource.username)) and return
       end
-      # Reload avatar if username changing:
+      # Move avatar file to new AWS filename if username changing:
       unless account_update_params[:username] == resource.username
+        old_username = resource.username
         if resource.avatar.present?
           unless account_update_params[:avatar].present?
             unless account_update_params[:avatar_cache].present?
@@ -96,6 +97,7 @@ class Users::RegistrationsController < DeviseController
       end
       bypass_sign_in resource, scope: resource_name
       redirect_to resource, location: user_path(resource.username)
+      AdminMailer.username_changed(resource, old_username).deliver if old_username
     else
       clean_up_passwords resource
       flash[:notice] = flash[:notice].to_a.concat resource.errors.full_messages

@@ -47,7 +47,7 @@ class ImagesController < ApplicationController
   def update
     @image = Image.find(params[:id])
     authorize @image
-    # Reload file if title changing:
+    # Move image file to new AWS filename if title changing:
     if image_params[:title]
       unless image_params[:title] == @image.title
         if @image.file.present?
