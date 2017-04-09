@@ -32,4 +32,12 @@ class Image < ApplicationRecord
     errors.add :title, *errors.delete(:friendly_id) if errors[:friendly_id].present?
   end
   
+  def update_image_file(remote_file_url)
+    if self.update(remote_file_url: remote_file_url)
+      puts "Success!"
+    else
+      puts "Failed to update record. Handle the error."
+    end
+  end
+  
 end

@@ -97,7 +97,9 @@ class Users::RegistrationsController < DeviseController
       end
       bypass_sign_in resource, scope: resource_name
       redirect_to resource, location: user_path(resource.username)
-      AdminMailer.username_changed(resource, old_username).deliver if old_username
+      if old_username
+        after_changed_username(resource, old_username)
+      end
     else
       clean_up_passwords resource
       flash[:notice] = flash[:notice].to_a.concat resource.errors.full_messages
@@ -221,6 +223,24 @@ class Users::RegistrationsController < DeviseController
 
   def translation_scope
     'devise.registrations'
+  end
+  
+  def after_changed_username(resource, old_username)
+    images = Image.where(user_id: resource.id)
+    images_count = images.count
+    puts 'Images count = ' + images_count.to_s
+    puts 'old_username = ' + old_username
+    if images.any?
+      for image in images
+        puts image.file_url
+        substrings = image.file_url.partition('?').first.partition('/'+resource.username+'/')
+        remote_file_url = substrings.first + '/' + old_username + '/' + substrings.last
+        puts remote_file_url
+        image.update_image_file(remote_file_url)
+      end
+    end
+    AdminMailer.username_changed(resource, old_username, images_count).deliver
+    # Now delete https://sofcoop.s3-us-west-2.amazonaws.com/images/old_username/
   end
   
 end
