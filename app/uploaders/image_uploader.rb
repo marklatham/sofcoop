@@ -36,7 +36,11 @@ class ImageUploader < CarrierWave::Uploader::Base
     model.format = image[:format].downcase
     model.format = 'jpg' if model.format == 'jpeg'
     model.original_filename = original_filename if original_filename.present?
-    model.original_url = model.remote_file_url if model.remote_file_url.present?
+    if model.remote_file_url.present?
+      unless model.remote_file_url[0..17] == 'https://sofcoop.s3'
+        model.original_url = model.remote_file_url
+      end
+    end
   end
 
   # Put version name on the end of filename instead of the beginning:
