@@ -4,13 +4,12 @@ Rails.application.routes.draw do
   
   ### IMAGES: ######################
   
-  get    '/images/@:username/:slug.:ext/data',   to: 'images#data',     as: :image_data
-  get    '/images/@:username/:slug.:ext/edit',   to: 'images#edit',     as: :edit_image
-  delete '/images/@:username/:slug.:ext/delete', to: 'images#destroy',  as: :delete_image
+  get    '/images/@:username/:slug.:ext/data',       to: 'images#data',     as: :image_data
+  get    '/images/@:username/:slug.:ext/edit',       to: 'images#edit',     as: :edit_image
+  delete '/images/@:username/:slug.:ext/delete',     to: 'images#destroy',  as: :delete_image
+  get    '/images/@:username/:slug(.:version).:ext', to: 'images#show',     as: :image
   
-  get    '/images/@:username/:slug.:ext',        to:
-  redirect('https://sofcoop.s3-us-west-2.amazonaws.com/images/%{username}/%{slug}.%{ext}')
-  get    '/avatars/@:username.:ext',             to:
+  get    '/avatars/@:username.:ext',                 to:
   redirect('https://sofcoop.s3-us-west-2.amazonaws.com/avatars/%{username}.%{ext}')
   
   resources :images, except: [:show, :edit, :destroy]

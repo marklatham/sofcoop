@@ -11,6 +11,16 @@ class ImagesController < ApplicationController
 
   # GET /images/1
   def show
+    file_url = case params[:version]
+    when nil then @image.file_url(:v10)
+    when 'v10' then @image.file_url(:v10)
+    when 'v3' then @image.file_url(:v3)
+    when 'original' then @image.file_url
+    else @image.file_url(:v10)
+    end
+    substrings = file_url.partition('?').first.partition('/images/' + @image.user.username)
+    file_url = substrings[0] + '/images/' + @image.aws_username + substrings[2]
+    redirect_to file_url
   end
 
   # GET /images/1
@@ -86,7 +96,8 @@ class ImagesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def image_params
-      params.require(:image).permit(:title, :slug, :original_filename, :original_url, :format, :width, :height, :size, :description, :file, :file_cache, :remote_file_url)
+      params.require(:image).permit(:title, :slug, :original_filename, :original_url,
+      :format, :width, :height, :size, :description, :file, :file_cache, :remote_file_url)
     end
 
     def redirect_to_default

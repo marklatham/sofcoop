@@ -7,7 +7,7 @@ h2
   | Image Title: 
   = @image.title
   
-= link_to image_tag(image_url), image_url
+= link_to image_tag(image_url), image_path(@image.user.username, @image.slug, 'original', @image.format)
 
 p style='margin-top: 1em'
   strong Description: 

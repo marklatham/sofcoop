@@ -4,8 +4,8 @@ table.data.images
     - @images.each do |image|
       tr
         td style='width: 330px'
-          = link_to image_tag(shorten(image.file_url(:v3))),
-            image_data_path(image.user.username, image.slug, image.format)
+          = link_to image_tag(image_path(image.user.username, image.slug, 'v3', image.format)),
+                    image_data_path(image.user.username, image.slug, image.format)
         td.text
           .title = image.title
           p

@@ -41,6 +41,8 @@ class ImageUploader < CarrierWave::Uploader::Base
         model.original_url = model.remote_file_url
       end
     end
+    # In case username gets changed and aws image file path not updated yet:
+    model.aws_username = model.user.username
   end
 
   # Put version name on the end of filename instead of the beginning:
@@ -49,10 +51,8 @@ class ImageUploader < CarrierWave::Uploader::Base
     if parent_name = super(for_file)
       extension = File.extname(parent_name)
       base_name = parent_name.chomp(extension)
-      if version_name
-        base_name = base_name.reverse.chomp(version_name.to_s.reverse).reverse.from(1)
-      end
-      [base_name, version_name].compact.join("_") + extension
+      base_name = base_name[version_name.size.succ..-1] if version_name
+      [base_name, version_name].compact.join(".") + extension
     end
   end
 
@@ -60,10 +60,8 @@ class ImageUploader < CarrierWave::Uploader::Base
     parent_name = super
     extension = File.extname(parent_name)
     base_name = parent_name.chomp(extension)
-    if version_name
-      base_name = base_name.reverse.chomp(version_name.to_s.reverse).reverse.from(1)
-    end
-    [base_name, version_name].compact.join("_") + extension
+    base_name = base_name[version_name.size.succ..-1] if version_name
+    [base_name, version_name].compact.join(".") + extension
   end
 
 end
