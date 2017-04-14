@@ -7,11 +7,12 @@ class ImageUploader < CarrierWave::Uploader::Base
   process :store_parameters
 
   def store_dir
-    "images/#{model.user.username}/"
+    "images/"
   end
 
+  # Username might change, so store it along with filename:
   def filename
-    "#{model.slug}.#{model.format}"
+    "#{model.user.username}/#{model.slug}.#{model.format}"
   end
 
   def extension_white_list
@@ -41,8 +42,6 @@ class ImageUploader < CarrierWave::Uploader::Base
         model.original_url = model.remote_file_url
       end
     end
-    # In case username gets changed and aws image file path not updated yet:
-    model.aws_username = model.user.username
   end
 
   # Put version name on the end of filename instead of the beginning:

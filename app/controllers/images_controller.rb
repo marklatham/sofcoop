@@ -18,9 +18,7 @@ class ImagesController < ApplicationController
     when 'original' then @image.file_url
     else @image.file_url(:v10)
     end
-    substrings = file_url.partition('?').first.partition('/images/' + @image.user.username)
-    file_url = substrings[0] + '/images/' + @image.aws_username + substrings[2]
-    redirect_to file_url
+    redirect_to file_url.partition('?').first
   end
 
   # GET /images/1
