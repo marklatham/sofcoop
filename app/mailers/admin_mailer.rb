@@ -33,5 +33,11 @@ class AdminMailer < ApplicationMailer
     mail   to: Rails.application.secrets.admin_email,
       subject: "New post"
   end
+
+  def filenames_update(log_report)
+    @log_report = log_report
+    mail   to: Rails.application.secrets.admin_email,
+      subject: "Filenames Update"
+  end
   
 end
