@@ -1,3 +1,9 @@
 #{$all-buttons} {
   margin: 0.5em 0 0.5em;
 }
+.actions {
+  a:link, a:visited, a:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+}

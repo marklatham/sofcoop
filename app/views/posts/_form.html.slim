@@ -12,24 +12,6 @@
   .field
     = f.label 'Title:'
     = f.text_field :title
-  .field.form
-    = f.label 'Main Image:'
-    br
-    - if @post.main_image_url.present?
-      = image_tag @post.main_image_url(:thumb)
-      br If you want to replace it --
-    - else
-      |  &nbsp; None yet. (It's good to have, but optional.)
-    table style='width: auto'
-      tr
-        td.formtext
-          span style='font-weight: bold'
-            | - you can upload:
-          = f.hidden_field(:main_image_cache)
-        td
-          = f.file_field :main_image, accept: 'image/png,image/gif,image/jpeg,image/jpg'
-    = f.label :remote_main_image_url, '- or paste an image URL:'
-    = f.text_field :remote_main_image_url
   .field
     = f.label 'Body:'
     = f.text_area :body, rows: '15'
@@ -37,3 +19,5 @@
     = f.submit 'Save & edit more'
     |  &nbsp; &nbsp; 
     = f.submit 'Save & see post'
+    |  &nbsp; &nbsp; 
+    = link_to 'Add an image', new_image_path, target: '_blank', type: 'button'

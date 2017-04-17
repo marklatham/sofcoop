@@ -10,7 +10,6 @@
 @import "base/base";   // Bitters gem; builds on bourbon.
 // Override settings in /base/_samename.scss :
 @import "variables";    // Must come first in this group!
-@import "buttons";
 @import "forms";
 @import "layout";
 @import "typography";
@@ -20,6 +19,7 @@
 @import "navigation";
 @import "scaffolds";
 @import "style-classes";
+@import "buttons";
 /////////////////////////////////////////////
 @import "bootstrap/alerts";
 @import "bootstrap/close";
