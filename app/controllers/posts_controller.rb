@@ -14,11 +14,11 @@ class PostsController < ApplicationController
   # GET /posts/1
   def show
     authorize @post
-    if request.path != post_path(@post.user.username, @post)
+    if request.path != post_path(@post.user.username, @post.slug)
       if params[:username].downcase != @post.user.username.downcase
         flash[:notice] = 'Username @' + params[:username] +
                          ' has changed to @' + @post.user.username
-      elsif request.path.downcase != post_path(@post.user.username, @post).downcase
+      elsif request.path.downcase != post_path(@post.user.username, @post.slug).downcase
         flash[:notice] = 'That post has moved to this new URL (probably because title changed).'
       end
       return redirect_back(fallback_location: root_path)
@@ -44,7 +44,7 @@ class PostsController < ApplicationController
     authorize @post
     if @post.save
       AdminMailer.new_post(@post).deliver  # notify admin
-      redirect_to post_path(@post.user.username, @post),
+      redirect_to post_path(@post.user.username, @post.slug),
                   notice: 'Post was successfully created.'
     else
       render :new
@@ -58,9 +58,9 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       flash[:notice] = 'Post saved.'
       if params[:commit] == 'Save & edit more'
-        redirect_to edit_post_path(@post.user.username, @post) and return
+        redirect_to edit_post_path(@post.user.username, @post.slug) and return
       else # Should be the only other case: params[:commit] == 'Save & see post'
-        redirect_to post_path(@post.user.username, @post) and return
+        redirect_to post_path(@post.user.username, @post.slug) and return
       end
     else
       render :edit 

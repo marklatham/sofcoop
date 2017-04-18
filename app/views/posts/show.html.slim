@@ -24,7 +24,7 @@ hr style='margin-bottom: 2em'
 .post.avatar = link_to avatar_for(@post.user), user_path(@post.user.username)
 
 span.timestamp
-  |  Created by #{link_to '@'+@post.user.username, user_path(@post.user.username)} #{time_ago_in_words(@post.created_at)} ago.
+  |  Posted by #{link_to '@'+@post.user.username, user_path(@post.user.username)} #{time_ago_in_words(@post.created_at)} ago.
   - if @post.updated_at > @post.created_at
     |  Updated #{time_ago_in_words(@post.updated_at)} ago.
 p.timestamp
@@ -33,7 +33,7 @@ p.timestamp
 
 - if  is_author_or_admin?(current_user, @post)
   p.controls
-    = link_to 'Edit', edit_post_path(@post.user.username, @post)
+    = link_to 'Edit', edit_post_path(@post.user.username, @post.slug)
     |  | 
-    = link_to 'Delete', delete_post_path(@post.user.username, @post),
+    = link_to 'Delete', delete_post_path(@post.user.username, @post.slug),
               method: :delete, data: {confirm: "You sure?"}

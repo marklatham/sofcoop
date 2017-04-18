@@ -26,10 +26,10 @@ table.data.posts
             .username = link_to '@'+post.user.username, user_path(post.user.username)
         td.left.title
           - if post.title.present?
-            = link_to post.title, post_path(post.user.username, post), method: :get
+            = link_to post.title, post_path(post.user.username, post.slug), method: :get
           - else
             = link_to post.body.markdown2html.strip_tags.truncate(50, separator: ' '),
-                      post_path(post.user.username, post), method: :get
+                      post_path(post.user.username, post.slug), method: :get
         td = post.body.split.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
         td title=conditional_strftime(post.created_at, 3)
@@ -40,8 +40,8 @@ table.data.posts
           - else
             = time_ago_in_words(post.updated_at) + ' ago'
         - if manage
-          td = link_to 'Edit', edit_post_path(post.user.username, post)
-          td = link_to 'Delete', delete_post_path(post.user.username, post),
+          td = link_to 'Edit', edit_post_path(post.user.username, post.slug)
+          td = link_to 'Delete', delete_post_path(post.user.username, post.slug),
                method: :delete, data: {confirm: "You sure?"}
 
 = paginate @posts
