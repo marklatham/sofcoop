@@ -15,7 +15,7 @@ div.form
     div
       = f.label 'Avatar:'
       .avatar = link_to avatar_for(resource), user_path(resource.username)
-      = f.hidden_field(:avatar_cache)
+      = f.hidden_field :avatar_cache
       table style='width: auto'
         tr
           td.formtext Replace with new avatar:

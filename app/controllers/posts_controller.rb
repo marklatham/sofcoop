@@ -42,6 +42,7 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     authorize @post
+    @post.main_image = first_image(@post.body)
     if @post.save
       AdminMailer.new_post(@post).deliver  # notify admin
       redirect_to post_path(@post.user.username, @post.slug),
@@ -55,6 +56,7 @@ class PostsController < ApplicationController
   def update
     @post = Post.find(params[:id])
     authorize @post
+    params[:post][:main_image] = first_image(post_params[:body])
     if @post.update(post_params)
       flash[:notice] = 'Post saved.'
       if params[:commit] == 'Save & edit more'
@@ -92,11 +94,17 @@ class PostsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
-    params.require(:post).permit(:user_id, :visible, :title, :slug, :body, :main_image, :main_image_cache, :remote_main_image_url)
+    params.require(:post).permit(:user_id, :visible, :title, :slug, :body,
+                    :main_image, :main_image_cache, :remote_main_image_url)
   end
 
   def redirect_to_default
     redirect_to root_path
+  end
+
+  # Get URL of first image in @post.body markdown text:
+  def first_image(text)
+    text.split('![')[1].split('](')[1].split(')')[0] rescue nil
   end
 
 end

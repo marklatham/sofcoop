@@ -22,7 +22,6 @@ gem 'loofah'
 gem 'carrierwave', '~> 1.0'
 gem 'mini_magick'
 gem 'fog-aws'
-gem 'cloudinary'  # Load later than carrierwave.
 gem 'figaro'
 gem 'xmlrpc'      # Added when trying to get fog working. Maybe not needed?
 

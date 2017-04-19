@@ -18,7 +18,7 @@
         td.formtext
           span style='font-weight: bold'
             | You can upload:
-          = f.hidden_field(:file_cache)
+          = f.hidden_field :file_cache
         td
           = f.file_field :file, accept: 'image/png,image/gif,image/jpeg,image/jpg'
     = f.label :remote_file_url, 'OR paste an image URL:'
