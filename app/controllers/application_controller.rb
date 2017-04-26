@@ -2,9 +2,11 @@ class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
+  rescue_from ActiveRecord::RecordNotFound, with: :render_404
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   helper_method :is_author_or_admin?
   helper_method :is_uploader_or_admin?
+  require 'httparty'
   
   # A more specific version is in post_policy, since it's handy there.
   def is_author_or_admin?(user, post)
@@ -21,6 +23,10 @@ class ApplicationController < ActionController::Base
   end
   
   protected
+  
+  def render_404
+    raise ActionController::RoutingError.new('Not Found')
+  end
 
   def user_not_authorized(exception)
     policy_name = exception.policy.class.to_s.underscore

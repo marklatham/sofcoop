@@ -42,6 +42,7 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     authorize @post
+    @post.body = process_images(@post.body, @post)
     @post.main_image = first_image(@post.body)
     if @post.save
       AdminMailer.new_post(@post).deliver  # notify admin
@@ -56,7 +57,8 @@ class PostsController < ApplicationController
   def update
     @post = Post.find(params[:id])
     authorize @post
-    params[:post][:main_image] = first_image(post_params[:body])
+    params[:post][:body] = process_images(post_params[:body], @post)
+    params[:post][:main_image] = first_image(params[:post][:body])
     if @post.update(post_params)
       flash[:notice] = 'Post saved.'
       if params[:commit] == 'Save & edit more'
@@ -95,14 +97,115 @@ class PostsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
     params.require(:post).permit(:user_id, :visible, :title, :slug, :body,
-                    :main_image, :main_image_cache, :remote_main_image_url)
+                   :main_image, :main_image_cache, :remote_main_image_url)
   end
 
   def redirect_to_default
     redirect_to root_path
   end
+  
+  def process_images(old_body, post)
+    new_body = ''
+    remainder = old_body
+    flash[:process] = []
+    while remainder.size > 0 do
+      substrings = remainder.partition('![')
+      new_body += substrings[0]
+      break unless substrings[1].present?
+      substrings = substrings[2].partition('](')
+      new_body += '![' + substrings[0]
+      break unless substrings[1].present?
+      title = substrings[0]
+      substrings = substrings[2].partition(')')
+      unless substrings[1].present?
+        new_body += '](' + substrings[0]
+        break
+      end
+      old_image = substrings[0]
+      new_image = process_an_image(old_image, title, post)
+      new_body += '](' + new_image + ')'
+      remainder = substrings[2]
+    end
+    return new_body
+  end
+  
+  def process_an_image(old_image, title, post)
+    unless ['jpg', 'jpeg', 'gif', 'png'].include? old_image.split('.').last
+      flash[:process] <<
+      'Image file format must be jpg or jpeg or gif or png, but file is ' + old_image
+      return old_image
+    end
+    
+    # Does old_image point to our database?
+    test_path = nil
+    if old_image.first(8) == 'images/@'
+      test_path = old_image.from(8)
+    elsif old_image.first(9) == '/images/@'
+      test_path = old_image.from(9)
+    elsif old_image.include? 'sofcoop.org/images/@'
+      test_path = old_image.partition('sofcoop.org/images/@')[2]
+    elsif old_image.include? 'localhost:3000/images/@'
+      test_path = old_image.partition('localhost:3000/images/@')[2]
+    elsif old_image.include? 'sofcoop.s3'
+      test_path = old_image.partition('sofcoop.s3')[2].partition('/images/')[2]
+    end
+    
+    # If so, then look it up in our database to make sure:
+    if test_path
+      substrings = test_path.partition('/')
+      if substrings[2].present?
+        puts 'substrings[0]: ' + substrings[0]
+        if user = User.friendly.find(substrings[0]) rescue nil
+          substrings = substrings[2].split('.')
+          slug = substrings[0]
+          puts 'slug: ' + slug
+          version = nil
+          if substrings[2].present?
+            version = substrings[1]
+            puts 'version: ' + version
+          end
+          if image = Image.where(user_id: user.id).friendly.find(slug) rescue nil
+            new_image = image_path(image.user.username, image.slug, version, image.format)
+            unless new_image == old_image
+              flash[:process] << 'Updated image path from: ' + old_image
+              flash[:process] << '... to: ' + new_image
+            end
+            return new_image
+          end
+        end
+      end
+      flash[:process] <<
+      'Image path points to our database but image not found: ' + old_image
+      return old_image
+    end
+    
+    # For remote image paths, make sure they start with http
+    if old_image.first(4) == 'http'
+      test_path = old_image
+    else
+      test_path = 'http://' + old_image
+    end
+    
+    # Download & store remote image:
+    response = HTTParty.get(old_image)
+    if response.code == 200 && response.headers['Content-Type'].start_with?('image')
+      image_params = {remote_file_url: old_image, title: title, description: ''}
+      @image = Image.new(image_params)
+      @image.user = current_user
+      if @image.save
+        new_image = image_path(@image.user.username, @image.slug, version, @image.format)
+        flash[:process] << old_image + ' saved as ' + new_image
+        return new_image
+      else
+        flash[:process] << 'Tried to store ' + old_image +
+                           ' locally but failed, so linking to it remotely.'
+      end
+    end
+    puts 'Could not find image: ' + old_image
+    return old_image
+  end
 
-  # Get URL of first image in @post.body markdown text:
+  # Get URL of first image in post.body markdown text:
   def first_image(text)
     text.split('![')[1].split('](')[1].split(')')[0] rescue nil
   end

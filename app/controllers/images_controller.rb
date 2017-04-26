@@ -12,11 +12,11 @@ class ImagesController < ApplicationController
   # GET /images/1
   def show
     file_url = case params[:version]
-    when nil then @image.file_url(:v10)
-    when 'v10' then @image.file_url(:v10)
-    when 'v3' then @image.file_url(:v3)
-    when 'original' then @image.file_url
-    else @image.file_url(:v10)
+      when nil then @image.file_url(:v10)
+      when 'v10' then @image.file_url(:v10)
+      when 'v3' then @image.file_url(:v3)
+      when 'original' then @image.file_url
+      else @image.file_url(:v10)
     end
     redirect_to file_url.partition('?').first
   end

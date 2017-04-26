@@ -23,7 +23,7 @@ gem 'carrierwave', '~> 1.0'
 gem 'mini_magick'
 gem 'fog-aws'
 gem 'figaro'
-gem 'xmlrpc'      # Added when trying to get fog working. Maybe not needed?
+gem 'httparty'
 
 group :development, :test do
   gem 'byebug', platform: :mri
