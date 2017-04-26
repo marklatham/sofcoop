@@ -42,7 +42,7 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     authorize @post
-    @post.body = process_images(@post.body, @post)
+    @post.body = process_images_create(@post.body, @post)
     @post.main_image = first_image(@post.body)
     if @post.save
       AdminMailer.new_post(@post).deliver  # notify admin
@@ -57,7 +57,7 @@ class PostsController < ApplicationController
   def update
     @post = Post.find(params[:id])
     authorize @post
-    params[:post][:body] = process_images(post_params[:body], @post)
+    params[:post][:body] = process_images_update(post_params[:body], @post)
     params[:post][:main_image] = first_image(params[:post][:body])
     if @post.update(post_params)
       flash[:notice] = 'Post saved.'
@@ -104,32 +104,65 @@ class PostsController < ApplicationController
     redirect_to root_path
   end
   
-  def process_images(old_body, post)
-    new_body = ''
-    remainder = old_body
+  def process_images_create(input_body, post)
+    processed_body = ''
+    remainder = input_body
     flash[:process] = []
     while remainder.size > 0 do
       substrings = remainder.partition('![')
-      new_body += substrings[0]
+      processed_body += substrings[0]
       break unless substrings[1].present?
       substrings = substrings[2].partition('](')
-      new_body += '![' + substrings[0]
+      processed_body += '![' + substrings[0]
       break unless substrings[1].present?
       title = substrings[0]
       substrings = substrings[2].partition(')')
       unless substrings[1].present?
-        new_body += '](' + substrings[0]
+        processed_body += '](' + substrings[0]
         break
       end
       old_image = substrings[0]
       new_image = process_an_image(old_image, title, post)
-      new_body += '](' + new_image + ')'
+      processed_body += '](' + new_image + ')'
       remainder = substrings[2]
     end
-    return new_body
+    return processed_body
   end
   
-  def process_an_image(old_image, title, post)
+  def process_images_update(input_body, post)
+    new_lines = ''
+    Diffy::Diff.new(post.body, input_body).each do |line|
+      new_lines << line if /^\+/.match(line)
+    end
+    puts 'New lines: '
+    puts new_lines
+    
+    processed_body = input_body
+    remainder = new_lines
+    flash[:process] = []
+    while remainder.size > 0 do
+      substrings = remainder.partition('![')
+      break unless substrings[1].present?
+      substrings = substrings[2].partition('](')
+      break unless substrings[1].present?
+      title = substrings[0]
+      substrings = substrings[2].partition(')')
+      unless substrings[1].present?
+        break
+      end
+      old_image = substrings[0]
+      new_image = process_an_image(old_image, title)
+      if new_image != old_image
+        new_image = '](' + new_image + ')'
+        old_image = '](' + old_image + ')'
+        processed_body.gsub!(old_image, new_image)
+      end
+      remainder = substrings[2]
+    end
+    return processed_body
+  end
+  
+  def process_an_image(old_image, title)
     unless ['jpg', 'jpeg', 'gif', 'png'].include? old_image.split('.').last
       flash[:process] <<
       'Image file format must be jpg or jpeg or gif or png, but file is ' + old_image
@@ -138,10 +171,10 @@ class PostsController < ApplicationController
     
     # Does old_image point to our database?
     test_path = nil
-    if old_image.first(8) == 'images/@'
-      test_path = old_image.from(8)
-    elsif old_image.first(9) == '/images/@'
+    if old_image.first(9) == '/images/@'
       test_path = old_image.from(9)
+    elsif old_image.first(8) == 'images/@'
+      test_path = old_image.from(8)
     elsif old_image.include? 'sofcoop.org/images/@'
       test_path = old_image.partition('sofcoop.org/images/@')[2]
     elsif old_image.include? 'localhost:3000/images/@'

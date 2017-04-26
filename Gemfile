@@ -24,6 +24,7 @@ gem 'mini_magick'
 gem 'fog-aws'
 gem 'figaro'
 gem 'httparty'
+gem 'diffy'
 
 group :development, :test do
   gem 'byebug', platform: :mri
