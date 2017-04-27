@@ -55,6 +55,12 @@ class ImagesController < ApplicationController
 
   # POST /images
   def create
+    unless params[:image][:remote_file_url].present? ||
+           params[:image][:file].present?
+      flash[:error] = 'You need to either upload an image file or paste an image URL.'
+      redirect_to new_image_path
+      return
+    end
     @image = Image.new(image_params)
     authorize @image
     @image.user = current_user
