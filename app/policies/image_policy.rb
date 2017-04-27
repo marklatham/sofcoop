@@ -12,6 +12,10 @@ class ImagePolicy < ApplicationPolicy
   def index?
     user
   end
+
+  def user_images?
+    user
+  end
   
   def show?
     user

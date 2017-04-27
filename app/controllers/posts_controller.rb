@@ -11,6 +11,21 @@ class PostsController < ApplicationController
     puts @posts
   end
 
+  # GET /images
+  def user_posts
+    authorize Post
+    @user = User.friendly.find(params[:username])
+    @posts = @user.posts.order('updated_at DESC')
+    @posts = Kaminari.paginate_array(@posts).page(params[:page])
+    if request.path != user_posts_path(@user.username)
+      if params[:username].downcase != @user.username.downcase
+        flash[:notice] = 'Username @' + params[:username] +
+                         ' has changed to @' + @user.username
+      end
+      return redirect_to user_posts_path(@user.username)
+    end
+  end
+  
   # GET /posts/1
   def show
     authorize @post

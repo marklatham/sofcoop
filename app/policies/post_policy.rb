@@ -12,6 +12,10 @@ class PostPolicy < ApplicationPolicy
   def index?
     true
   end
+
+  def user_posts?
+    true
+  end
   
   def show?
     record.visible > 1 || user_is_author_or_admin?

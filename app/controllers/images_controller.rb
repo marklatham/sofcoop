@@ -9,6 +9,21 @@ class ImagesController < ApplicationController
     @images = Kaminari.paginate_array(@images).page(params[:page])
   end
 
+  # GET /images
+  def user_images
+    authorize Image
+    @user = User.friendly.find(params[:username])
+    @images = @user.images.order('created_at DESC')
+    @images = Kaminari.paginate_array(@images).page(params[:page])
+    if request.path != user_images_path(@user.username)
+      if params[:username].downcase != @user.username.downcase
+        flash[:notice] = 'Username @' + params[:username] +
+                         ' has changed to @' + @user.username
+      end
+      return redirect_to user_images_path(@user.username)
+    end
+  end
+  
   # GET /images/1
   def show
     file_url = case params[:version]
@@ -79,7 +94,13 @@ class ImagesController < ApplicationController
   def destroy
     authorize @image
     @image.destroy
-    redirect_to images_url, notice: 'Image was successfully destroyed.'
+    flash[:notice] = 'Image was successfully destroyed.'
+    from_path = Rails.application.routes.recognize_path(request.referrer)
+    if from_path[:controller] == 'images' && from_path[:action] == 'data'
+      redirect_to user_images_path(from_path[:username])
+    else
+      redirect_back(fallback_location: root_path)
+    end
   end
 
   private

@@ -1,0 +1,5 @@
+- provide :title, "Posts - @" + @user.username
+
+h2 Posts by @#{@user.username}:
+
+= render 'table'

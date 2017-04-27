@@ -8,9 +8,10 @@ Rails.application.routes.draw do
   get    '/images/@:username/:slug.:ext/edit',       to: 'images#edit',     as: :edit_image
   delete '/images/@:username/:slug.:ext/delete',     to: 'images#destroy',  as: :delete_image
   get    '/images/@:username/:slug(.:version).:ext', to: 'images#show',     as: :image
+  get    '/images/@:username',                   to: 'images#user_images',  as: :user_images
   
-  get    '/avatars/@:username.:ext',                 to:
-  redirect('https://sofcoop.s3-us-west-2.amazonaws.com/avatars/%{username}.%{ext}')
+  get    '/avatars/@:username.:ext',             to:
+         redirect('https://sofcoop.s3-us-west-2.amazonaws.com/avatars/%{username}.%{ext}')
   
   resources :images, except: [:show, :edit, :destroy]
   
@@ -19,6 +20,7 @@ Rails.application.routes.draw do
   get    '/@:username/:slug',        to: 'posts#show',         as: :post
   get    '/@:username/:slug/edit',   to: 'posts#edit',         as: :edit_post
   delete '/@:username/:slug/delete', to: 'posts#destroy',      as: :delete_post
+  get    '/posts/@:username',        to: 'posts#user_posts',   as: :user_posts
   
   resources :posts, except: [:show, :edit, :destroy]
   
