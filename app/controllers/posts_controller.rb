@@ -240,7 +240,17 @@ class PostsController < ApplicationController
 
   # Get URL of first image in post.body markdown text:
   def first_image(text)
-    text.split('![')[1].split('](')[1].split(')')[0] rescue nil
+    path = text.partition('![')[2].partition('](')[2].partition(')')[0] rescue nil
+    if path.first(9) == '/images/@'
+      substrings = path.split('.')
+      if substrings[2].present?
+        substrings[0] + '.v3.' + substrings[2] rescue nil
+      else
+        substrings[0] + '.v3.' + substrings[1] rescue nil
+      end
+    else
+      nil
+    end
   end
 
 end

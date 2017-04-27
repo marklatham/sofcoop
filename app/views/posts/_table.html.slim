@@ -6,9 +6,10 @@
 table.data.posts
   thead
     tr
+      th style='min-width: 6em' Image
+      th.left style='width: 20em' Title
       - unless local_assigns[:author]
         th Author
-      th.left style='width: 25em;' Title & Link
       th Words
       th style='width: 5em' Visible
       th style='width: 6em' Created
@@ -20,16 +21,20 @@ table.data.posts
   tbody
     - @posts.each do |post|
       tr
+        td
+          - if post.main_image
+            = link_to image_tag(post.main_image, width: 150),
+                      post_path(post.user.username, post.slug)
+        td.left.title
+          - if post.title.present?
+            = link_to post.title, post_path(post.user.username, post.slug)
+          - else
+            = link_to post.body.markdown2html.strip_tags.truncate(50, separator: ' '),
+                      post_path(post.user.username, post.slug)
         - unless local_assigns[:author]
           td.author
             .avatar = link_to avatar_for(post.user), user_path(post.user.username)
             .username = link_to '@'+post.user.username, user_path(post.user.username)
-        td.left.title
-          - if post.title.present?
-            = link_to post.title, post_path(post.user.username, post.slug), method: :get
-          - else
-            = link_to post.body.markdown2html.strip_tags.truncate(50, separator: ' '),
-                      post_path(post.user.username, post.slug), method: :get
         td = post.body.split.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
         td title=conditional_strftime(post.created_at, 3)
