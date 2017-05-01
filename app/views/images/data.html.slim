@@ -25,6 +25,10 @@ p
   |  on 
   = @image.created_at.strftime("%B %e, %Y")
 
+p
+  strong Credit: 
+  = @image.credit
+
 - if @image.original_url.present?
   p
     strong Source URL: 

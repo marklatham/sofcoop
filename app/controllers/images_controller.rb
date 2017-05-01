@@ -122,7 +122,8 @@ class ImagesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def image_params
       params.require(:image).permit(:title, :slug, :original_filename, :original_url,
-      :format, :width, :height, :size, :description, :file, :file_cache, :remote_file_url)
+      :format, :width, :height, :size, :credit, :description, :file, :file_cache,
+      :remote_file_url)
     end
 
     def redirect_to_default
