@@ -57,7 +57,7 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     authorize @post
-    @post.body = process_images_create(@post.body, @post)
+    @post.body = process_images(@post.body, @post.body)
     @post.main_image = first_image(@post.body)
     if @post.save
       AdminMailer.new_post(@post).deliver  # notify admin
@@ -72,7 +72,11 @@ class PostsController < ApplicationController
   def update
     @post = Post.find(params[:id])
     authorize @post
-    params[:post][:body] = process_images_update(post_params[:body], @post)
+    new_lines = ''
+    Diffy::Diff.new(@post.body, post_params[:body]).each do |line|
+      new_lines << line if /^\+/.match(line)
+    end
+    params[:post][:body] = process_images(post_params[:body], new_lines)
     params[:post][:main_image] = first_image(params[:post][:body])
     if @post.update(post_params)
       flash[:notice] = 'Post saved.'
@@ -119,39 +123,7 @@ class PostsController < ApplicationController
     redirect_to root_path
   end
   
-  def process_images_create(input_body, post)
-    processed_body = ''
-    remainder = input_body
-    flash[:process] = []
-    while remainder.size > 0 do
-      substrings = remainder.partition('![')
-      processed_body += substrings[0]
-      break unless substrings[1].present?
-      substrings = substrings[2].partition('](')
-      processed_body += '![' + substrings[0]
-      break unless substrings[1].present?
-      title = substrings[0]
-      substrings = substrings[2].partition(')')
-      unless substrings[1].present?
-        processed_body += '](' + substrings[0]
-        break
-      end
-      old_image = substrings[0]
-      new_image = process_an_image(old_image, title, post)
-      processed_body += '](' + new_image + ')'
-      remainder = substrings[2]
-    end
-    return processed_body
-  end
-  
-  def process_images_update(input_body, post)
-    new_lines = ''
-    Diffy::Diff.new(post.body, input_body).each do |line|
-      new_lines << line if /^\+/.match(line)
-    end
-    puts 'New lines: '
-    puts new_lines
-    
+  def process_images(input_body, new_lines)
     processed_body = input_body
     remainder = new_lines
     flash[:process] = []
@@ -165,20 +137,21 @@ class PostsController < ApplicationController
       unless substrings[1].present?
         break
       end
+      remainder = substrings[2]
+      substrings = substrings[0].partition(' ')
       old_image = substrings[0]
       new_image = process_an_image(old_image, title)
       if new_image != old_image
-        new_image = '](' + new_image + ')'
-        old_image = '](' + old_image + ')'
+        new_image = '](' + new_image
+        old_image = '](' + old_image
         processed_body.gsub!(old_image, new_image)
       end
-      remainder = substrings[2]
     end
     return processed_body
   end
   
   def process_an_image(old_image, title)
-    unless ['jpg', 'jpeg', 'gif', 'png'].include? old_image.split('.').last
+    unless ['jpg', 'jpeg', 'gif', 'png'].include? old_image.partition('?')[0].split('.').last
       flash[:process] <<
       'Image file format must be jpg or jpeg or gif or png, but file is ' + old_image
       return old_image
