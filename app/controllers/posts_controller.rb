@@ -128,47 +128,86 @@ class PostsController < ApplicationController
     remainder = new_lines
     flash[:process] = []
     while remainder.size > 0 do
-      substrings = remainder.partition('![')
-      break unless substrings[1].present?
-      substrings = substrings[2].partition('](')
-      break unless substrings[1].present?
-      title = substrings[0]
+      substrings = remainder.partition('![')     # Find next old_image_string.
+      return processed_body unless substrings[2].present?
+      
+      if substrings[0].last == '['               # Does it have a web link?
+        old_image_string = '[!['
+        
+        substrings = substrings[2].partition('](')
+        unless substrings[2].present?
+          flash[:process] << "Strange: couldn't find image string after " +
+                             old_image_string + substrings[0]
+          return processed_body
+        end
+        title = substrings[0]
+        old_image_string << substrings[0] + ']('
+        
+        substrings = substrings[2].partition(')](')
+        unless substrings[2].present?
+          flash[:process] << "Strange: couldn't find image web link after " +
+                             old_image_string + substrings[0]
+          return processed_body
+        end
+        old_image_string << substrings[0] + ')]('
+        
+      else                                       # No web link (to do: DRY this):
+        old_image_string = '!['
+        
+        substrings = substrings[2].partition('](')
+        unless substrings[2].present?
+          flash[:process] << "Strange: couldn't find image link after " +
+                             old_image_string + substrings[0]
+          return processed_body
+        end
+        title = substrings[0]
+        old_image_string << substrings[0] + ']('
+        
+      end
+      
       substrings = substrings[2].partition(')')
       unless substrings[1].present?
-        break
+        flash[:process] << "Strange: couldn't find ) after image string " +
+                           old_image_string + substrings[0]
+        return processed_body
       end
+      old_image_string << substrings[0] + ')'
+      
       remainder = substrings[2]
-      substrings = substrings[0].partition(' ')
-      old_image = substrings[0]
-      new_image = process_an_image(old_image, title)
-      if new_image != old_image
-        new_image = '](' + new_image
-        old_image = '](' + old_image
-        processed_body.gsub!(old_image, new_image)
+      new_image_string = process_an_image(old_image_string, title)
+      if new_image_string != old_image_string
+        processed_body.gsub!(old_image_string, new_image_string)
       end
     end
     return processed_body
   end
   
-  def process_an_image(old_image, title)
-    unless ['jpg', 'jpeg', 'gif', 'png'].include? old_image.partition('?')[0].split('.').last
-      flash[:process] <<
-      'Image file format must be jpg or jpeg or gif or png, but file is ' + old_image
-      return old_image
+  def process_an_image(old_image_string, title)
+    
+    if old_image_string.first == '['     # ... then strip off the web link:
+      old_image_string = old_image_string[1..-1].partition(')](')[0] + ')'
     end
     
-    # Does old_image point to our database?
+    old_image_path = old_image_string.partition('![')[2].partition('](')[2].partition(')')[0].partition(' ')[0]
+    
+    unless ['jpg', 'jpeg', 'gif', 'png'].include? old_image_path.partition('?')[0].split('.').last
+      flash[:process] <<
+      'Image file format must be jpg or jpeg or gif or png, but file is ' + old_image_path
+      return old_image_string
+    end
+    
+    # Does old_image_string point to our database?
     test_path = nil
-    if old_image.first(9) == '/images/@'
-      test_path = old_image.from(9)
-    elsif old_image.first(8) == 'images/@'
-      test_path = old_image.from(8)
-    elsif old_image.include? 'sofcoop.org/images/@'
-      test_path = old_image.partition('sofcoop.org/images/@')[2]
-    elsif old_image.include? 'localhost:3000/images/@'
-      test_path = old_image.partition('localhost:3000/images/@')[2]
-    elsif old_image.include? 'sofcoop.s3'
-      test_path = old_image.partition('sofcoop.s3')[2].partition('/images/')[2]
+    if old_image_path.first(9) == '/images/@'
+      test_path = old_image_path.from(9)
+    elsif old_image_path.first(8) == 'images/@'
+      test_path = old_image_path.from(8)
+    elsif old_image_path.include? 'sofcoop.org/images/@'
+      test_path = old_image_path.partition('sofcoop.org/images/@')[2]
+    elsif old_image_path.include? 'localhost:3000/images/@'
+      test_path = old_image_path.partition('localhost:3000/images/@')[2]
+    elsif old_image_path.include? 'sofcoop.s3'
+      test_path = old_image_path.partition('sofcoop.s3')[2].partition('/images/')[2]
     end
     
     # If so, then look it up in our database to make sure:
@@ -186,44 +225,50 @@ class PostsController < ApplicationController
             puts 'version: ' + version
           end
           if image = Image.where(user_id: user.id).friendly.find(slug) rescue nil
-            new_image = image_path(image.user.username, image.slug, version, image.format)
-            unless new_image == old_image
-              flash[:process] << 'Updated image path from: ' + old_image
-              flash[:process] << '... to: ' + new_image
+            new_image_path = image_path(image.user.username, image.slug, version, image.format)
+            unless new_image_path == old_image_path
+              flash[:process] << 'Updated image path from: ' + old_image_path
+              flash[:process] << '... to: ' + new_image_path
             end
-            return new_image
+            new_image_string = old_image_string.gsub(old_image_path, new_image_path)
+            new_image_string = '[' + new_image_string + '](' +
+              image_data_path(image.user.username, image.slug, image.format) + ')'
+            return new_image_string
           end
         end
       end
       flash[:process] <<
-      'Image path points to our database but image not found: ' + old_image
-      return old_image
+      'Image path points to our database but image not found: ' + old_image_string
+      return old_image_string
     end
     
     # For remote image paths, make sure they start with http
-    if old_image.first(4) == 'http'
-      test_path = old_image
+    if old_image_path.first(4) == 'http'
+      test_path = old_image_path
     else
-      test_path = 'http://' + old_image
+      test_path = 'http://' + old_image_path
     end
     
     # Download & store remote image:
-    response = HTTParty.get(old_image)
+    response = HTTParty.get(test_path)
     if response.code == 200 && response.headers['Content-Type'].start_with?('image')
-      image_params = {remote_file_url: old_image, title: title, description: ''}
-      @image = Image.new(image_params)
-      @image.user = current_user
-      if @image.save
-        new_image = image_path(@image.user.username, @image.slug, version, @image.format)
-        flash[:process] << old_image + ' saved as ' + new_image
-        return new_image
+      image_params = {remote_file_url: test_path, title: title, description: ''}
+      image = Image.new(image_params)
+      image.user = current_user
+      if image.save
+        new_image_path = image_path(image.user.username, image.slug, version, image.format)
+        flash[:process] << old_image_path + ' saved as ' + new_image_path
+        new_image_string = old_image_string.gsub(old_image_path, new_image_path)
+        new_image_string = '[' + new_image_string + '](' +
+          image_data_path(image.user.username, image.slug, image.format) + ')'
+        return new_image_string
       else
-        flash[:process] << 'Tried to store ' + old_image +
+        flash[:process] << 'Tried to store ' + old_image_string +
                            ' locally but failed, so linking to it remotely.'
       end
     end
-    puts 'Could not find image: ' + old_image
-    return old_image
+    puts 'Could not find image: ' + old_image_string
+    return old_image_string
   end
 
   # Get URL of first image in post.body markdown text:
