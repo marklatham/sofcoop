@@ -128,21 +128,23 @@ class PostsController < ApplicationController
     remainder = new_lines
     flash[:process] = []
     while remainder.size > 0 do
-      substrings = remainder.partition('![')     # Find next old_image_string.
+      substrings = remainder.partition('![')                # Find next old_image_string.
       return processed_body unless substrings[2].present?
       
-      if substrings[0].last == '['               # Does it have a web link?
-        old_image_string = '[!['
+      old_image_string = ''
+      old_image_string << '[' if substrings[0].last == '['  # Does it have a web link?
+      old_image_string << '!['
         
-        substrings = substrings[2].partition('](')
-        unless substrings[2].present?
-          flash[:process] << "Strange: couldn't find image string after " +
-                             old_image_string + substrings[0]
-          return processed_body
-        end
-        title = substrings[0]
-        old_image_string << substrings[0] + ']('
-        
+      substrings = substrings[2].partition('](')
+      unless substrings[2].present?
+        flash[:process] << "Strange: couldn't find image link after " +
+                           old_image_string + substrings[0]
+        return processed_body
+      end
+      title = substrings[0]
+      old_image_string << substrings[0] + ']('
+      
+      if old_image_string.first == '['                      # Does it have a web link?
         substrings = substrings[2].partition(')](')
         unless substrings[2].present?
           flash[:process] << "Strange: couldn't find image web link after " +
@@ -150,19 +152,6 @@ class PostsController < ApplicationController
           return processed_body
         end
         old_image_string << substrings[0] + ')]('
-        
-      else                                       # No web link (to do: DRY this):
-        old_image_string = '!['
-        
-        substrings = substrings[2].partition('](')
-        unless substrings[2].present?
-          flash[:process] << "Strange: couldn't find image link after " +
-                             old_image_string + substrings[0]
-          return processed_body
-        end
-        title = substrings[0]
-        old_image_string << substrings[0] + ']('
-        
       end
       
       substrings = substrings[2].partition(')')
@@ -184,7 +173,7 @@ class PostsController < ApplicationController
   
   def process_an_image(old_image_string, title)
     
-    if old_image_string.first == '['     # ... then strip off the web link:
+    if old_image_string.first == '['                       # ...then strip off the web link:
       old_image_string = old_image_string[1..-1].partition(')](')[0] + ')'
     end
     
