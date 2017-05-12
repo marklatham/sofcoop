@@ -34,9 +34,9 @@ p.timestamp
 
 - if  is_author_or_admin?(current_user, @post)
   p.controls
-    = link_to 'Edit', edit_post_path(@post.user.username, @post.slug)
+    = link_to 'Edit Post', edit_post_path(@post.user.username, @post.slug)
     |  | 
-    = link_to 'Delete', delete_post_path(@post.user.username, @post.slug),
+    = link_to 'Delete Post', delete_post_path(@post.user.username, @post.slug),
               method: :delete, data: {confirm: "You sure?"}
   
 hr style='height: 2px; margin-bottom: 1em'

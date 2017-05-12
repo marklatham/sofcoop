@@ -1,6 +1,10 @@
 .comments
   .avatar = link_to avatar_for(comment.user), user_path(comment.user.username)
   = link_to '@'+comment.user.username, user_path(comment.user.username)
+  |  &nbsp; 
+  = link_to image_tag('emblem_symbolic_link.png', title: 'link to this comment',
+                                    width: '20px', id: 'comment'+comment.id.to_s),
+    post_path(comment.post.user.username, comment.post.slug)+'#comment'+comment.id.to_s
 
   blockquote
     .comment-body = Loofah.scrub_fragment(comment.body.markdown2html, :prune).to_s.html_safe
@@ -9,9 +13,9 @@
       |  Commented #{time_ago_in_words(comment.created_at)} ago.
       - if comment.updated_at > comment.created_at
         |  Edited #{time_ago_in_words(comment.updated_at)} ago.
-
-    - if  is_author_or_admin?(current_user, comment)
-      p.controls
-        = link_to 'Delete this comment', comment, method: :delete, data: {confirm: "You sure?"}
+      - if  is_author_or_admin?(current_user, comment)
+        span.controls
+          |  &nbsp; 
+          = link_to 'Delete your comment.', comment, method: :delete, data: {confirm: "You sure?"}
   
   hr style='margin-bottom: 1em; background: #aaa'
