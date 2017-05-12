@@ -12,19 +12,20 @@ h1 = @post.title
   .flashy
     | Only logged-in users can see this post's content. Please 
     = link_to 'log in', new_user_session_path
-    |  or 
-    = link_to 'create a free login', new_user_registration_path
-    | .
+    | . ( 
+    = link_to 'Create a free login', new_user_registration_path
+    |  if you don't have one yet.)
 
 - else
   .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
   
-hr style='margin-bottom: 2em'
+hr style='margin-bottom: 1em; background: #aaa'
 
 .post.avatar = link_to avatar_for(@post.user), user_path(@post.user.username)
 
 span.timestamp
-  |  Posted by #{link_to '@'+@post.user.username, user_path(@post.user.username)} #{time_ago_in_words(@post.created_at)} ago.
+  |  Posted by #{link_to '@'+@post.user.username, user_path(@post.user.username)}
+  |  #{time_ago_in_words(@post.created_at)} ago.
   - if @post.updated_at > @post.created_at
     |  Updated #{time_ago_in_words(@post.updated_at)} ago.
 p.timestamp
@@ -37,3 +38,22 @@ p.timestamp
     |  | 
     = link_to 'Delete', delete_post_path(@post.user.username, @post.slug),
               method: :delete, data: {confirm: "You sure?"}
+  
+hr style='height: 2px; margin-bottom: 1em'
+
+- unless @post.visible == 3 && !current_user
+  .comments
+
+    h2 Comments:
+  
+    == render @post.comments.sort_by{|comment| comment.updated_at}
+
+    - if current_user
+      == render 'comment_form', post: @post
+    - else
+      p
+        | To comment, please 
+        = link_to 'log in', new_user_session_path
+        | . ( 
+        = link_to 'Create a free login', new_user_registration_path
+        |  if you don't have one yet.)

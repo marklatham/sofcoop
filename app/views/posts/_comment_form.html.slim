@@ -1,0 +1,16 @@
+= form_for @comment do |f|
+  - if @comment.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@comment.errors.count, "error")} prohibited this comment from being saved:"
+      ul
+        - @comment.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = hidden_field_tag 'comment[post_id]', local_assigns[:post].id
+    = f.label 'Make a comment:'
+    = f.text_area :body, rows: '4'
+  .actions
+    = f.submit 'Submit comment'
+    |  &nbsp; &nbsp; 
+    = link_to 'How to format', '/@SofcoopAdmin/markdown-guide', target: '_blank', type: 'button'

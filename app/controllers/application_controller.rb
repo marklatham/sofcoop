@@ -5,20 +5,12 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   helper_method :is_author_or_admin?
-  helper_method :is_uploader_or_admin?
   require 'httparty'
   
-  # A more specific version is in post_policy, since it's handy there.
-  def is_author_or_admin?(user, post)
+  # More specific versions are in [resource]_policy, since handy there.
+  def is_author_or_admin?(user, resource)
     if user
-      user == post.user || user.is_admin?
-    end
-  end
-  
-  # A more specific version is in image_policy, since it's handy there.
-  def is_uploader_or_admin?(user, image)
-    if user
-      user == image.user || user.is_admin?
+      user == resource.user || user.is_admin?
     end
   end
   

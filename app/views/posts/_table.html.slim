@@ -11,6 +11,7 @@ table.data.posts
       - unless local_assigns[:author]
         th Author
       th Words
+      th Comments
       th style='width: 5em' Visible
       th style='width: 6em' Created
       th style='width: 6em' Updated
@@ -36,6 +37,7 @@ table.data.posts
             .avatar = link_to avatar_for(post.user), user_path(post.user.username)
             .username = link_to '@'+post.user.username, user_path(post.user.username)
         td = post.body.split.size
+        td = post.comments.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
         td title=conditional_strftime(post.created_at, 3)
           = time_ago_in_words(post.created_at) + ' ago'

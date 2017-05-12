@@ -22,7 +22,8 @@ Rails.application.routes.draw do
   delete '/@:username/:slug/delete', to: 'posts#destroy',      as: :delete_post
   get    '/posts/@:username',        to: 'posts#user_posts',   as: :user_posts
   
-  resources :posts, except: [:show, :edit, :destroy]
+  resources :posts,    except: [:show, :edit, :destroy]
+  resources :comments, only:   [:create, :update, :destroy]
   
   ### USERS: #######################
   

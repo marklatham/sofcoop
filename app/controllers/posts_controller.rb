@@ -8,7 +8,6 @@ class PostsController < ApplicationController
     @posts = Post.all.select{|post| post.visible > 1 || is_author_or_admin?(current_user, post)}.
              sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
-    puts @posts
   end
 
   # GET /images
@@ -29,6 +28,7 @@ class PostsController < ApplicationController
   # GET /posts/1
   def show
     authorize @post
+    @comment = Comment.new(post: @post)
     if request.path != post_path(@post.user.username, @post.slug)
       if params[:username].downcase != @post.user.username.downcase
         flash[:notice] = 'Username @' + params[:username] +
