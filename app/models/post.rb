@@ -1,6 +1,7 @@
 class Post < ApplicationRecord
 
   extend FriendlyId
+  acts_as_taggable_on :tags  # Unless fixed?: stackoverflow.com/questions/18725506/acts-as-taggable-on
   belongs_to :user
   has_many :comments
   friendly_id :slug_candidates, use: [:slugged, :scoped, :history], scope: :user

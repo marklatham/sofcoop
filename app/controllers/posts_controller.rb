@@ -116,7 +116,7 @@ class PostsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
     params.require(:post).permit(:user_id, :visible, :title, :slug, :body,
-                   :main_image, :main_image_cache, :remote_main_image_url)
+        :main_image, :main_image_cache, :remote_main_image_url, :tag_list)
   end
 
   def redirect_to_default

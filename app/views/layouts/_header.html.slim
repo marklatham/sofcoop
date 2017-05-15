@@ -9,6 +9,7 @@ nav
               b.down-arrow
               ul.droplink
                 li = link_to 'Posts feed', posts_path
+                li = link_to 'Tags', tags_path
                 - if current_user
                   li = link_to 'Images feed', images_path
                   li = link_to 'List users', users_path

@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   
   resources :posts,    except: [:show, :edit, :destroy]
   resources :comments, only:   [:create, :update, :destroy]
+  resources :tags,     only:   [:index, :show]
   
   ### USERS: #######################
   
