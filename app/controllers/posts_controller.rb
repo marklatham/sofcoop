@@ -5,8 +5,10 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     authorize Post
-    @posts = Post.all.select{|post| post.visible > 1 || is_author_or_admin?(current_user, post)}.
-             sort_by{|post| post.updated_at}.reverse!
+    @q = Post.ransack(params[:q])
+    @posts = @q.result(distinct: true).
+        select{|post| post.visible > 1 || is_author_or_admin?(current_user, post)}.
+        sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
 

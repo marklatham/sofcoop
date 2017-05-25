@@ -18,6 +18,7 @@ h1 = @post.title
 
 - else
   .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
+  strong style='float: left; margin-right: 1em' Tags:
   ul.tags = render @post.tags
   
 hr style='margin-bottom: 1em; background: #aaa'

@@ -1,7 +1,9 @@
 - provide :title, "Posts - All Sources"
 
-h2 Posts created by any users:
-p style='margin-bottom: 1.5em'
- | This listing is not (yet) designed to be well organized. We will incentivize channels to organize content, by rewarding them with our votes.
+h2 Posts:
+
+= search_form_for @q do |f|
+  span style='float: left; margin: 0' = f.submit 'Search for:'
+  span style='float: left' = f.search_field :title_or_body_cont, placeholder: 'Search'
 
 = render 'table'
