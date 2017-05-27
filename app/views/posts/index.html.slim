@@ -2,8 +2,4 @@
 
 h2 Posts:
 
-= search_form_for @q do |f|
-  span style='float: left; margin: 0' = f.submit 'Search for:'
-  span style='float: left' = f.search_field :title_or_body_cont, placeholder: 'Search'
-
 = render 'table'

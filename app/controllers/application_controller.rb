@@ -1,11 +1,16 @@
 class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception
+  before_action :set_search
   before_action :configure_permitted_parameters, if: :devise_controller?
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   helper_method :is_author_or_admin?
   require 'httparty'
+
+  def set_search
+    @search = Post.ransack(params[:q])
+  end
   
   # More specific versions are in [resource]_policy, since handy there.
   def is_author_or_admin?(user, resource)

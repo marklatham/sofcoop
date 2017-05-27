@@ -21,8 +21,13 @@ Rails.application.routes.draw do
   get    '/@:username/:slug/edit',   to: 'posts#edit',         as: :edit_post
   delete '/@:username/:slug/delete', to: 'posts#destroy',      as: :delete_post
   get    '/posts/@:username',        to: 'posts#user_posts',   as: :user_posts
-  
+
   resources :posts,    except: [:show, :edit, :destroy]
+  resources :posts do
+    collection do
+      match 'search' => 'posts#search', via: [:get, :post], as: :search
+    end
+  end
   resources :comments, only:   [:create, :update, :destroy]
   resources :tags,     only:   [:index, :show]
   

@@ -27,6 +27,7 @@ gem 'httparty'
 gem 'diffy'
 gem 'acts-as-taggable-on', '~> 4.0'
 gem 'ransack', github: 'activerecord-hackery/ransack'  # = master branch, recommended
+gem 'font-awesome-rails'
 
 group :development, :test do
   gem 'byebug', platform: :mri

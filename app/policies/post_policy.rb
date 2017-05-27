@@ -13,6 +13,10 @@ class PostPolicy < ApplicationPolicy
     true
   end
 
+  def search?
+    true
+  end
+
   def user_posts?
     true
   end
