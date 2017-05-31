@@ -1,0 +1,29 @@
+h1 Listing channels
+
+table
+  thead
+    tr
+      th User
+      th Name
+      th Slug
+      th Color
+      th Avatar
+      th
+      th
+      th
+
+  tbody
+    - @channels.each do |channel|
+      tr
+        td = channel.user
+        td = channel.name
+        td = channel.slug
+        td = channel.color
+        td = channel.avatar
+        td = link_to 'Show', channel
+        td = link_to 'Edit', edit_channel_path(channel)
+        td = link_to 'Destroy', channel, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Channel', new_channel_path
