@@ -7,8 +7,8 @@
           li = message
 
   .field
-    = f.label :user
-    = f.text_field :user
+    = f.label 'User ID'
+    = f.text_field :user_id
   .field
     = f.label :name
     = f.text_field :name
@@ -19,6 +19,14 @@
     = f.label :color
     = f.text_field :color
   .field
-    = f.label :avatar
-    = f.text_field :avatar
+    = f.label 'Avatar:'
+    - if @channel.avatar_url.present?
+      .avatar = link_to image_tag(@channel.avatar_url.to_s, alt: '@@'+@channel.slug),
+                        channel_path(@channel.slug)
+    = f.hidden_field :avatar_cache
+    table style='width: auto'
+      tr
+        td.formtext Replace with new avatar:
+        td = f.file_field :avatar,
+          accept: 'image/png,image/gif,image/jpeg,image/jpg,image/tif,image/tiff,image/bmp'
   .actions = f.submit

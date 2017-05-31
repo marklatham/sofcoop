@@ -6,7 +6,7 @@ class ChannelUploader < CarrierWave::Uploader::Base
   process resize_to_fill: [200, 200]
 
   def store_dir
-    "avatars/"
+    "channels/"
   end
 
   def filename

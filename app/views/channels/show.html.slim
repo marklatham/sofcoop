@@ -1,20 +1,23 @@
 p#notice = notice
 
 p
-  strong User:
-  = @channel.user
+  strong User ID: 
+  = @channel.user_id
 p
-  strong Name:
+  strong Name: 
   = @channel.name
 p
-  strong Slug:
+  strong Slug: 
   = @channel.slug
 p
-  strong Color:
+  strong Color: 
   = @channel.color
-p
-  strong Avatar:
-  = @channel.avatar
+  
+- if @channel.avatar_url.present?
+  p
+    strong Avatar:
+    .avatar = link_to image_tag(@channel.avatar_url.to_s, alt: '@@'+@channel.slug),
+                      channel_path(@channel.slug)
 
 = link_to 'Edit', edit_channel_path(@channel)
 '|

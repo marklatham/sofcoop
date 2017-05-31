@@ -15,11 +15,12 @@ table
   tbody
     - @channels.each do |channel|
       tr
-        td = channel.user
+        td = channel.user_id
         td = channel.name
         td = channel.slug
         td = channel.color
-        td = channel.avatar
+        td.avatar = link_to image_tag(channel.avatar_url.to_s, alt: '@@'+channel.slug),
+                            channel_path(channel.slug)
         td = link_to 'Show', channel
         td = link_to 'Edit', edit_channel_path(channel)
         td = link_to 'Destroy', channel, data: { confirm: 'Are you sure?' }, method: :delete

@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :channels
   root 'visitors#index'
+  
+  ### CHANNELS: ####################
+  
+  get       '/@@:channelslug',                       to: 'channels#show',   as: :channel
+  resources :channels, except: [:show]
   
   ### IMAGES: ######################
   
@@ -18,10 +22,11 @@ Rails.application.routes.draw do
   
   ### POSTS: #######################
   
-  get    '/@:username/:slug',        to: 'posts#show',         as: :post
-  get    '/@:username/:slug/edit',   to: 'posts#edit',         as: :edit_post
-  delete '/@:username/:slug/delete', to: 'posts#destroy',      as: :delete_post
-  get    '/posts/@:username',        to: 'posts#user_posts',   as: :user_posts
+  get    '/@@:channelslug/@:username/:slug', to: 'posts#show',       as: :channel_post
+  get    '/@:username/:slug',                to: 'posts#show',       as: :post
+  get    '/@:username/:slug/edit',           to: 'posts#edit',       as: :edit_post
+  delete '/@:username/:slug/delete',         to: 'posts#destroy',    as: :delete_post
+  get    '/posts/@:username',                to: 'posts#user_posts', as: :user_posts
 
   resources :posts,    except: [:show, :edit, :destroy]
   resources :posts do
@@ -34,8 +39,8 @@ Rails.application.routes.draw do
   
   ### USERS: #######################
   
-  get    '/@:username',              to: 'users#show',         as: :user
-  get    '/users',                   to: 'users#index',        as: :users
+  get    '/@:username',                  to: 'users#show',       as: :user
+  get    '/users',                       to: 'users#index',      as: :users
 
   devise_for :users, path: '',
              path_names:  {      sign_up: 'register',

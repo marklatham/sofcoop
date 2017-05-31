@@ -16,20 +16,21 @@ class ChannelsController < ApplicationController
   def new
     @channel = Channel.new
     authorize @channel
+    @body_class = 'grayback'
   end
 
   # GET /channels/1/edit
   def edit
     authorize @channel
+    @body_class = 'grayback'
   end
 
   # POST /channels
   def create
     @channel = Channel.new(channel_params)
     authorize @channel
-
     if @channel.save
-      redirect_to @channel, notice: 'Channel was successfully created.'
+      redirect_to channel_path(@channel.slug), notice: 'Channel was successfully created.'
     else
       render :new
     end
@@ -53,13 +54,19 @@ class ChannelsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_channel
+
+  # Use callbacks to share common setup or constraints between actions.
+  
+  def set_channel
+    if @channel = Channel.find_by_slug(params[:channelslug])
+    else
       @channel = Channel.find(params[:id])
     end
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def channel_params
-      params.require(:channel).permit(:user_id, :name, :slug, :color, :avatar)
-    end
+  # Only allow a trusted parameter "white list" through.
+  def channel_params
+    params.require(:channel).permit(:user_id, :name, :slug, :color, :avatar, :avatar_cache)
+  end
+  
 end
