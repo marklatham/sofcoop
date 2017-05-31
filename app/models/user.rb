@@ -12,7 +12,7 @@ class User < ApplicationRecord
   friendly_id :username, :use => [:slugged, :history]
 
   VALID_USERNAME_REGEX = /\A[a-zA-Z0-9_]+\z/
-  validates :username, length: { maximum: 15, minimum: 1 },
+  validates :username, length: { maximum: 15, minimum: 2 },
             format: { with: VALID_USERNAME_REGEX }, 
             uniqueness: { case_sensitive: false },
             :allow_nil => false

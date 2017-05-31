@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531172707) do
+ActiveRecord::Schema.define(version: 20170531194940) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -74,6 +74,8 @@ ActiveRecord::Schema.define(version: 20170531172707) do
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.string   "main_image"
+    t.integer  "channel_id"
+    t.index ["channel_id"], name: "index_posts_on_channel_id", using: :btree
     t.index ["user_id", "slug"], name: "index_posts_on_user_id_and_slug", unique: true, using: :btree
     t.index ["user_id"], name: "index_posts_on_user_id", using: :btree
   end
@@ -155,5 +157,6 @@ ActiveRecord::Schema.define(version: 20170531172707) do
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "images", "users"
+  add_foreign_key "posts", "channels"
   add_foreign_key "posts", "users"
 end

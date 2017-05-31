@@ -1,3 +1,6 @@
+// Rails created all these styles as part of channels scaffold 2017-05-31.
+// They seem to be a super-set of what I'm using in the partial _scaffolds:
+
 body {
   background-color: #fff;
   color: #333;

@@ -1,6 +1,5 @@
-class AvatarUploader < CarrierWave::Uploader::Base
+class ChannelUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
-  # include Sprockets::Rails::Helper   # do I need this?
 
   storage :fog
 
@@ -12,9 +11,9 @@ class AvatarUploader < CarrierWave::Uploader::Base
 
   def filename
     if file.extension == "jpeg"
-      "#{model.username}.jpg"
+      "#{model.slug}.jpg"
     else
-      "#{model.username}.#{file.extension}"
+      "#{model.slug}.#{file.extension}"
     end
   end
 

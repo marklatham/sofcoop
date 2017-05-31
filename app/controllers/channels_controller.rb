@@ -3,25 +3,30 @@ class ChannelsController < ApplicationController
 
   # GET /channels
   def index
+    authorize Channel
     @channels = Channel.all
   end
 
   # GET /channels/1
   def show
+    authorize @channel
   end
 
   # GET /channels/new
   def new
     @channel = Channel.new
+    authorize @channel
   end
 
   # GET /channels/1/edit
   def edit
+    authorize @channel
   end
 
   # POST /channels
   def create
     @channel = Channel.new(channel_params)
+    authorize @channel
 
     if @channel.save
       redirect_to @channel, notice: 'Channel was successfully created.'
@@ -32,6 +37,7 @@ class ChannelsController < ApplicationController
 
   # PATCH/PUT /channels/1
   def update
+    authorize @channel
     if @channel.update(channel_params)
       redirect_to @channel, notice: 'Channel was successfully updated.'
     else
@@ -41,6 +47,7 @@ class ChannelsController < ApplicationController
 
   # DELETE /channels/1
   def destroy
+    authorize @channel
     @channel.destroy
     redirect_to channels_url, notice: 'Channel was successfully destroyed.'
   end
