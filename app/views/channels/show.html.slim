@@ -22,3 +22,6 @@ p
 = link_to 'Edit', edit_channel_path(@channel)
 '|
 = link_to 'Back', channels_path
+
+p style='margin-top: 1em'
+  strong = link_to 'Posts in ' + @channel.name, channel_posts_path(@channel.slug)

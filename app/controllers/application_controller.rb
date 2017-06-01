@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   helper_method :is_author_or_admin?
+  helper_method :the_post_path
   require 'httparty'
 
   def set_search
@@ -16,6 +17,14 @@ class ApplicationController < ActionController::Base
   def is_author_or_admin?(user, resource)
     if user
       user == resource.user || user.is_admin?
+    end
+  end
+  
+  def the_post_path(post)
+    if post.channel
+      channel_post_path(post.channel.slug, post.user.username, post.slug)
+    else
+      post_path(post.user.username, post.slug)
     end
   end
   

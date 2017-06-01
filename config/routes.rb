@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   ### CHANNELS: ####################
   
   get       '/@@:channelslug',                       to: 'channels#show',   as: :channel
+  get       '/@@:channelslug/posts',                 to: 'channels#posts',  as: :channel_posts
   resources :channels, except: [:show]
   
   ### IMAGES: ######################

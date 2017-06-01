@@ -17,6 +17,10 @@ class ChannelPolicy < ApplicationPolicy
     true
   end
 
+  def posts?
+    true
+  end
+
   def edit?
     user.is_admin?
   end

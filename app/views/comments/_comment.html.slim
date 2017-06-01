@@ -8,7 +8,7 @@
 
     span.timestamp style='font-size: 80%'
       = link_to image_tag('emblem_symbolic_link.png', title: 'Link to this comment', width: '20px'),
-        post_path(comment.post.user.username, comment.post.slug)+'#comment-'+comment.id.to_s
+        the_post_path(comment.post)+'#comment-'+comment.id.to_s
       |  &nbsp; 
       span title=comment.created_at.strftime("%F %T") Commented #{time_ago_in_words(comment.created_at)} ago.
       - if  policy(comment).destroy?

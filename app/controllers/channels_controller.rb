@@ -1,5 +1,5 @@
 class ChannelsController < ApplicationController
-  before_action :set_channel, only: [:show, :edit, :update, :destroy]
+  before_action :set_channel, only: [:show, :posts, :edit, :update, :destroy]
 
   # GET /channels
   def index
@@ -7,9 +7,17 @@ class ChannelsController < ApplicationController
     @channels = Channel.all
   end
 
-  # GET /channels/1
+  # GET /@@channelslug
   def show
     authorize @channel
+  end
+
+  # GET /@@channelslug/posts
+  def posts
+    authorize @channel
+    @posts = @channel.posts.select{|post| policy(post).show?}.
+             sort_by{|post| post.updated_at}.reverse!
+    @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
 
   # GET /channels/new
