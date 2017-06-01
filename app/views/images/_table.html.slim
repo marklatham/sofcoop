@@ -14,7 +14,7 @@ table.data.images
             |  on 
             = image.created_at.strftime("%B %e, %Y")
           
-          - if is_author_or_admin?(current_user, image)
+          - if policy(image).edit?
             = link_to 'Edit', edit_image_path(image.user.username, image.slug, image.format)
             |  | 
             = link_to 'Delete', delete_image_path(image.user.username, image.slug, image.format),

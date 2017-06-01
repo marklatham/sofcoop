@@ -34,12 +34,13 @@ p.timestamp
   | Content visible to: 
   = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
 
-- if  is_author_or_admin?(current_user, @post)
+- if  policy(@post).edit?
   p.controls
     = link_to 'Edit Post', edit_post_path(@post.user.username, @post.slug)
-    |  | 
-    = link_to 'Delete Post', delete_post_path(@post.user.username, @post.slug),
-              method: :delete, data: {confirm: "You sure?"}
+    - if  policy(@post).destroy?
+      |  | 
+      = link_to 'Delete Post', delete_post_path(@post.user.username, @post.slug),
+                method: :delete, data: {confirm: "You sure?"}
   
 hr style='height: 2px; margin-bottom: 1em'
 

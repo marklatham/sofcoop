@@ -43,7 +43,7 @@ p
   = number_with_precision(@image.size/1000, precision: 0, delimiter: ',')
   |  kb
 
-- if  is_author_or_admin?(current_user, @image)
+- if  policy(@image).edit?
   p.controls
     = link_to 'Edit', edit_image_path(@image.user.username, @image.slug, @image.format)
     |  | 

@@ -30,7 +30,7 @@ class ImagePolicy < ApplicationPolicy
   end
   
   def update?
-    user_is_uploader_or_admin?
+    edit?
   end
 
   def destroy?

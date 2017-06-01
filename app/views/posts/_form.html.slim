@@ -8,7 +8,7 @@
 
   .field
     = f.label 'Who can see this post:'
-    = f.select :visible, options_for_select(visible_options)
+    = f.select :visible, options_for_select(visible_options, selected: f.object.visible)
   .field
     = f.label 'Title:'
     = f.text_field :title
@@ -26,3 +26,7 @@
     = link_to 'How to format', '/@SofcoopAdmin/markdown-guide', target: '_blank', type: 'button'
     |  &nbsp; &nbsp; 
     = link_to 'Add an image', new_image_path, target: '_blank', type: 'button'
+
+  .field
+    = f.label nil, 'Assign this post to a channel: [usually leave as None]'
+    = f.select :channel_id, options_for_select(channels_array, selected: f.object.channel_id)

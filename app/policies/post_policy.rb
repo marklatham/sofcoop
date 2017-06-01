@@ -28,7 +28,7 @@ class PostPolicy < ApplicationPolicy
   end
 
   def edit?
-    user_is_author_or_admin?
+    user_is_author_or_admin? || user == record.channel.user
   end
 
   def create?
@@ -36,7 +36,7 @@ class PostPolicy < ApplicationPolicy
   end
   
   def update?
-    user_is_author_or_admin?
+    edit?
   end
 
   def destroy?

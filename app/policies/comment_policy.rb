@@ -20,7 +20,7 @@ class CommentPolicy < ApplicationPolicy
   end
   
   def show?
-    record.post.visible > 1 || user_is_author_or_admin?
+    policy(record.post).show?
   end
 
   def edit?
@@ -32,7 +32,7 @@ class CommentPolicy < ApplicationPolicy
   end
   
   def update?
-    user_is_author_or_admin?
+    edit?
   end
 
   def destroy?

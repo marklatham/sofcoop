@@ -11,7 +11,7 @@
         post_path(comment.post.user.username, comment.post.slug)+'#comment-'+comment.id.to_s
       |  &nbsp; 
       span title=comment.created_at.strftime("%F %T") Commented #{time_ago_in_words(comment.created_at)} ago.
-      - if  is_author_or_admin?(current_user, comment)
+      - if  policy(comment).destroy?
         span.controls
           |  | 
           = link_to 'Delete your comment.', comment, method: :delete, data: {confirm: "You sure?"}

@@ -26,7 +26,6 @@
     = f.hidden_field :avatar_cache
     table style='width: auto'
       tr
-        td.formtext Replace with new avatar:
-        td = f.file_field :avatar,
-          accept: 'image/png,image/gif,image/jpeg,image/jpg,image/tif,image/tiff,image/bmp'
+        td.formtext Replace with new avatar: &nbsp;
+        td = f.file_field :avatar, accept: 'image/png,image/gif,image/jpeg,image/jpg,image/tif,image/tiff,image/bmp'
   .actions = f.submit

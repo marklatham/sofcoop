@@ -6,9 +6,8 @@ class PostsController < ApplicationController
   def index
     authorize Post
     #@search = Post.ransack(params[:q]) # moved to ApplicationController
-    @posts = @search.result(distinct: true).
-        select{|post| post.visible > 1 || is_author_or_admin?(current_user, post)}.
-        sort_by{|post| post.updated_at}.reverse!
+    @posts = @search.result(distinct: true).select{|post| policy(post).show?}.
+             sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
 
@@ -123,7 +122,7 @@ class PostsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
     params.require(:post).permit(:user_id, :visible, :title, :slug, :body,
-        :main_image, :main_image_cache, :remote_main_image_url, :tag_list)
+        :main_image, :main_image_cache, :remote_main_image_url, :tag_list, :channel_id)
   end
 
   def redirect_to_default
