@@ -30,7 +30,7 @@ class ChannelPolicy < ApplicationPolicy
   end
   
   def update?
-    user.is_admin?
+    edit?
   end
 
   def destroy?

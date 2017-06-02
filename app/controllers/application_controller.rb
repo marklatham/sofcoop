@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   helper_method :is_author_or_admin?
   helper_method :the_post_path
+  helper_method :the_post_url
   require 'httparty'
 
   def set_search
@@ -28,6 +29,14 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def the_post_url(post)
+    if post.channel
+      channel_post_url(post.channel.slug, post.user.username, post.slug)
+    else
+      post_url(post.user.username, post.slug)
+    end
+  end
+
   protected
   
   def render_404

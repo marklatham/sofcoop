@@ -28,10 +28,29 @@ class AdminMailer < ApplicationMailer
       subject: "Cancel account manually"
   end
 
-  def new_post(post)
+  def new_post(post, post_url)
     @post = post
+    @post_url = post_url
     mail   to: Rails.application.secrets.admin_email,
       subject: "New post"
+  end
+
+  def post_assigned(post, channel, current_user)
+    @post = post
+    @channel = channel
+    @current_user = current_user
+    mail   to: [channel.user.email, post.user.email],
+           cc: Rails.application.secrets.admin_email,
+      subject: "Post assigned to channel"
+  end
+
+  def post_unassigned(post, channel, current_user)
+    @post = post
+    @channel = channel
+    @current_user = current_user
+    mail   to: [channel.user.email, post.user.email],
+           cc: Rails.application.secrets.admin_email,
+      subject: "Post UNassigned FROM channel"
   end
 
   def filenames_update(log_report)

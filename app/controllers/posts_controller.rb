@@ -68,7 +68,10 @@ class PostsController < ApplicationController
     @post.body = process_images(@post.body, @post.body)
     @post.main_image = first_image(@post.body)
     if @post.save
-      AdminMailer.new_post(@post).deliver  # notify admin
+      AdminMailer.new_post(@post, the_post_url(@post)).deliver  # notify admin
+      if @post.channel
+        AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
+      end
       redirect_to the_post_path(@post), notice: 'Post was successfully created.'
     else
       render :new
@@ -85,8 +88,23 @@ class PostsController < ApplicationController
     end
     params[:post][:body] = process_images(post_params[:body], new_lines)
     params[:post][:main_image] = first_image(params[:post][:body])
+    old_channel = @post.channel if @post.channel
     if @post.update(post_params)
       flash[:notice] = 'Post saved.'
+      unless old_channel && @post.channel == old_channel
+        if @post.channel
+          unless @post.channel.user == current_user && @post.user == current_user
+            AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
+          end
+        end
+      end
+      unless @post.channel && @post.channel == old_channel
+        if old_channel
+          unless old_channel.user == current_user && @post.user == current_user
+            AdminMailer.post_unassigned(@post, old_channel, current_user).deliver
+          end
+        end
+      end
       if params[:commit] == 'Save & edit more'
         redirect_to edit_post_path(@post.user.username, @post.slug) and return
       else # Should be the only other case: params[:commit] == 'Save & see post'

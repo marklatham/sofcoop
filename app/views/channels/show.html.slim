@@ -1,27 +1,22 @@
+- provide :title, @channel.name
+
+h2 style='color: #{@channel.color}' = @channel.name
+
 p#notice = notice
 
 p
-  strong User ID: 
-  = @channel.user_id
-p
-  strong Name: 
-  = @channel.name
-p
-  strong Slug: 
-  = @channel.slug
-p
-  strong Color: 
-  = @channel.color
-  
-- if @channel.avatar_url.present?
-  p
-    strong Avatar:
-    .avatar = link_to image_tag(@channel.avatar_url.to_s, alt: '@@'+@channel.slug),
-                      channel_path(@channel.slug)
+  strong Manager: 
+  .avatar = link_to avatar_for(@channel.user), user_path(@channel.user.username)
+  = '@' + @channel.user.username
 
-= link_to 'Edit', edit_channel_path(@channel)
-'|
-= link_to 'Back', channels_path
+p
+  strong Avatar:
+  .avatar = image_tag(@channel.avatar_url.to_s, alt: '@@'+@channel.slug)
+
+= link_to 'Edit', edit_channel_path(@channel) if policy(@channel).edit?
+- if policy(@channel).destroy?
+  |  | 
+  = link_to 'Delete', channels_path
 
 p style='margin-top: 1em'
   strong = link_to 'Posts in ' + @channel.name, channel_posts_path(@channel.slug)

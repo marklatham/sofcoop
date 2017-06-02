@@ -2,6 +2,6 @@ p Hello Sofcoop Admin --
 
 p We just got a new post from user #{@post.user.email}:
 
-p = link_to @post.title, root_url + '/@' + @post.user.username + '/' + @post.slug
+p = link_to @post.title, @post_url
 
 p Sincerely, Sofcoop Website
