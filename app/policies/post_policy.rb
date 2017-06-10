@@ -22,13 +22,13 @@ class PostPolicy < ApplicationPolicy
   end
   
   def show?
-    record.visible > 1 || user_is_author_or_admin?
+    record.visible > 1 || user_is_author_or_admin_or_manager?
     # More granular restrictions (hiding post.body) are coded in the view
     # to give more granular "unauthorized" messages.
   end
 
   def edit?
-    user_is_author_or_admin? || user == record.channel.user
+    user_is_author_or_admin_or_manager?
   end
 
   def create?
@@ -49,6 +49,12 @@ class PostPolicy < ApplicationPolicy
   def user_is_author_or_admin?
     if user
       user == record.user || user.is_admin?
+    end
+  end
+  
+  def user_is_author_or_admin_or_manager?
+    if user
+      user == record.user || user.is_admin? || record.channel && user == record.channel.user
     end
   end
   

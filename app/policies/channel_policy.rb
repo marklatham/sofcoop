@@ -22,11 +22,11 @@ class ChannelPolicy < ApplicationPolicy
   end
 
   def edit?
-    user.is_admin?
+    user && user.is_admin?
   end
 
   def create?
-    user.is_admin?
+    user && user.is_admin?
   end
   
   def update?
@@ -34,7 +34,7 @@ class ChannelPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.is_admin?
+    user && user.is_admin?
   end
   
 end
