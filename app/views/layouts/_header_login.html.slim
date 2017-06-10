@@ -4,7 +4,7 @@ div.login.dropdown
       li
         - if avatar?(current_user)
           div
-            .avatar = link_to avatar_for(current_user), user_path(current_user.username)
+            .avatar = link_to avatar_for_user(current_user), user_path(current_user.username)
             b.down-arrow.avatar-arrow
         - else
           .textlink = link_to '@'+current_user.username, user_path(current_user.username)

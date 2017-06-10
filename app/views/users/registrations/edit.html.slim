@@ -14,7 +14,7 @@ div.form
           td = f.text_field :username
     div
       = f.label 'Avatar:'
-      .avatar = link_to avatar_for(resource), user_path(resource.username)
+      .avatar = link_to avatar_for_user(resource), user_path(resource.username)
       = f.hidden_field :avatar_cache
       table style='width: auto'
         tr

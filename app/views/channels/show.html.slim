@@ -6,7 +6,7 @@ p#notice = notice
 
 p
   strong Manager: 
-  .avatar = link_to avatar_for(@channel.user), user_path(@channel.user.username)
+  .avatar = link_to avatar_for_user(@channel.user), user_path(@channel.user.username)
   = '@' + @channel.user.username
 
 p

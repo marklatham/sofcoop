@@ -1,5 +1,5 @@
 .comments
-  .avatar = link_to avatar_for(comment.user), user_path(comment.user.username),
+  .avatar = link_to avatar_for_user(comment.user), user_path(comment.user.username),
             id: 'comment-'+comment.id.to_s
   = link_to '@'+comment.user.username, user_path(comment.user.username)
 

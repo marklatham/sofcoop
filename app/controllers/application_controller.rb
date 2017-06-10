@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   end
   
   # More specific versions are in [resource]_policy, since handy there.
+  # So far only using this where resource is a post.
   def is_author_or_admin?(user, resource)
     if user
       user == resource.user || user.is_admin?

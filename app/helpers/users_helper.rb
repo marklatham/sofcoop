@@ -8,7 +8,7 @@ module UsersHelper
     image_tag(gravatar_url, alt: '@'+user.username, class: options[:class])
   end
   
-  def avatar_for(user)
+  def avatar_for_user(user)
     if user.avatar_url.present?
       substrings = user.avatar_url.partition('?').first.partition('/avatars/')
       avatar_url = substrings[1] + '@' + substrings[2]

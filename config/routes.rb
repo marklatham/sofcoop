@@ -19,6 +19,9 @@ Rails.application.routes.draw do
   get    '/avatars/@:username.:ext',             to:
          redirect('https://sofcoop.s3-us-west-2.amazonaws.com/avatars/%{username}.%{ext}')
   
+  get    '/channels/@@:channelslug.:ext',             to:
+          redirect('https://sofcoop.s3-us-west-2.amazonaws.com/channels/%{channelslug}.%{ext}')
+  
   resources :images, except: [:show, :edit, :destroy]
   
   ### POSTS: #######################

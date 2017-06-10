@@ -15,7 +15,7 @@ table.data {
     padding: 0.5em 0.5em 0.5em 0.5em;
     line-height: 1.2em;
     text-align: center;
-    &.author {
+    &.author, &.channel {
       padding: 0.4em 0.2em 0.1em 0.2em;
     }
     &.left {

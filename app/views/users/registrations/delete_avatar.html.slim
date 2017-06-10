@@ -8,7 +8,7 @@ div.form
 
     - if avatar?(current_user)
       = f.label nil, 'Your avatar uploaded to Sofcoop:'
-      .avatar = avatar_for(current_user)
+      .avatar = avatar_for_user(current_user)
       
       - if gravatar?(current_user)
         = f.label nil, 'Your avatar uploaded to Gravatar.com:'

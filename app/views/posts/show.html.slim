@@ -23,7 +23,7 @@ h1 = @post.title
   
 hr style='margin-bottom: 1em; background: #aaa'
 
-.post.avatar = link_to avatar_for(@post.user), user_path(@post.user.username)
+.post.avatar = link_to avatar_for_user(@post.user), user_path(@post.user.username)
 
 span.timestamp
   |  Posted by #{link_to '@'+@post.user.username, user_path(@post.user.username)}

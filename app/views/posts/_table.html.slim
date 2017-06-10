@@ -8,6 +8,7 @@ table.data.posts
     tr
       th style='min-width: 6em' Image
       th.left style='width: 20em' Title
+      th Channel
       - unless local_assigns[:author]
         th Author
       th Words
@@ -32,9 +33,13 @@ table.data.posts
           - else
             = link_to post.body.markdown2html.strip_tags.truncate(50, separator: ' '),
                       the_post_path(post)
+        td.channel
+          - if post.channel.present?
+            .avatar = link_to avatar_for_channel(post.channel), channel_path(post.channel.slug)
+            .username = link_to post.channel.name, channel_path(post.channel.slug)
         - unless local_assigns[:author]
           td.author
-            .avatar = link_to avatar_for(post.user), user_path(post.user.username)
+            .avatar = link_to avatar_for_user(post.user), user_path(post.user.username)
             .username = link_to '@'+post.user.username, user_path(post.user.username)
         td = post.body.split.size
         td = post.comments.size
