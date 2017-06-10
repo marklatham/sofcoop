@@ -11,8 +11,7 @@ table
     - @channels.each do |channel|
       tr
         td.avatar
-          = link_to image_tag(channel.avatar_url.to_s, alt: '@@'+channel.slug),
-                    channel_path(channel.slug)
+          = link_to avatar_for_channel(channel), channel_path(channel.slug)
         td
           strong style='color: #{channel.color}; font-size: 125%' = link_to channel.name,
                                                                channel_path(channel.slug)
