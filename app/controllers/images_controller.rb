@@ -1,5 +1,4 @@
 class ImagesController < ApplicationController
-  rescue_from ActionController::RedirectBackError, with: :redirect_to_default
   before_action :set_image, only: [:show, :data, :edit, :destroy]
 
   # GET /images
@@ -126,8 +125,4 @@ class ImagesController < ApplicationController
       :remote_file_url)
     end
 
-    def redirect_to_default
-      redirect_to root_path
-    end
-    
 end

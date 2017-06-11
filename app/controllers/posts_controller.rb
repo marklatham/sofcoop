@@ -1,5 +1,4 @@
 class PostsController < ApplicationController
-  rescue_from ActionController::RedirectBackError, with: :redirect_to_default
   before_action :set_post, only: [:show, :edit, :destroy]
 
   # GET /posts
@@ -144,10 +143,6 @@ class PostsController < ApplicationController
         :main_image, :main_image_cache, :remote_main_image_url, :tag_list, :channel_id)
   end
 
-  def redirect_to_default
-    redirect_to root_path
-  end
-  
   def process_images(input_body, new_lines)
     processed_body = input_body
     remainder = new_lines
