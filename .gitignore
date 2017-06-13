@@ -18,7 +18,8 @@
 
 # Ignore other non-public & non-code files.
 /config/database.yml
-/config/secrets.yml
+/config/secrets.yml       # Replaced by secrets.yml.enc which is public.
+/config/secrets.yml.key
 /config/application.yml
 /.capistrano/*
 /public/images/*
