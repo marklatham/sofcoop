@@ -18,9 +18,12 @@
 
 # Ignore other non-public & non-code files.
 /config/database.yml
-/config/secrets.yml       # Replaced by secrets.yml.enc which is public.
-/config/secrets.yml.key
+/config/secrets.yml # Safeguard in case recreate secrets.yml when changing key.
 /config/application.yml
 /.capistrano/*
 /public/images/*
 /public/uploads/*
+
+# Keep next 2 lines at the end of this file; else may get added again:
+# Ignore encrypted secrets key file.
+config/secrets.yml.key

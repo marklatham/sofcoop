@@ -39,10 +39,10 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.perform_caching = false
   config.action_mailer.smtp_settings = {
-    user_name: Rails.application.secrets.email_provider_username,
-    password: Rails.application.secrets.email_provider_password,
-    address: Rails.application.secrets.email_provider_address,
-    domain: Rails.application.secrets.domain_name,
+    user_name: Sofcoop::Application.secrets.email_provider_username,
+    password: Sofcoop::Application.secrets.email_provider_password,
+    address: Sofcoop::Application.secrets.email_provider_address,
+    domain: Sofcoop::Application.secrets.domain_name,
     port: 587,
     authentication: "plain",
     enable_starttls_auto: true
