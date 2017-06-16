@@ -68,7 +68,7 @@ GEM
     brakeman (3.4.1)
     builder (3.2.3)
     byebug (9.0.6)
-    carrierwave (1.0.0)
+    carrierwave (1.1.0)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
@@ -268,7 +268,7 @@ DEPENDENCIES
   bourbon
   brakeman
   byebug
-  carrierwave (~> 1.0)
+  carrierwave (~> 1.1)
   coffee-rails (~> 4.2)
   devise
   diffy
