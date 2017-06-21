@@ -2,17 +2,30 @@
 
 div.form
 
-  = form_for(resource, as: resource_name, url: user_registration_path(resource), html: { role: 'form'}) do |f|
+  = form_for(resource, as: resource_name, url: user_registration_path(resource),
+             html: { role: 'form'}) do |f|
   
     h2 Register a free login
     = devise_error_messages!
+    p
+      strong You can choose: &nbsp; 
+      = link_to image_tag('sign-in-with-twitter-gray.png',
+                          title: 'Sign in with Twitter', width: '160px'),
+                user_twitter_omniauth_authorize_path
+    p
+      strong Or: &nbsp;  
+      = link_to image_tag('continue-with-facebook.png',
+                          title: 'Continue with Facebook', width: '160px'),
+                user_facebook_omniauth_authorize_path
+    p
+      strong Or input below:
     div
       = hidden_field_tag :username, resource.username
       = f.label 'Email:'
-      = f.email_field :email, autofocus: true
+      = f.email_field :email
     div
       = f.label 'Password: '
-      | (6 characters or more)
+      |  (6 characters or more)
       = f.password_field :password
     = f.submit 'Register'
 

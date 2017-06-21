@@ -20,7 +20,8 @@ class User < ApplicationRecord
   rolify
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :confirmable, :lockable, :timeoutable # , :omniauthable
+         :confirmable, :lockable, :timeoutable, :omniauthable,
+         omniauth_providers: [:twitter, :facebook]
   
   def should_generate_new_friendly_id?
     username_changed? || super
@@ -31,6 +32,19 @@ class User < ApplicationRecord
 
   def move_friendly_id_error_to_username
     errors.add :username, *errors.delete(:friendly_id) if errors[:friendly_id].present?
+  end
+  
+  def self.from_omniauth(auth)
+    puts auth
+#    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+#      user.email = auth.info.email
+#      user.password = Devise.friendly_token[0,20]
+#      user.last_name = auth.info.name   # assuming the user model has a name
+#      user.image = auth.info.image # assuming the user model has an image
+      # If you are using confirmable and the provider(s) you use validate emails, 
+      # uncomment the line below to skip the confirmation emails.
+#      user.skip_confirmation!
+#    end
   end
   
 end
