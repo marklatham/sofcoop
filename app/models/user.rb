@@ -21,7 +21,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :lockable, :timeoutable, :omniauthable,
-         omniauth_providers: [:twitter, :facebook]
+         omniauth_providers: [:twitter, :facebook, :google_oauth2]
   
   def should_generate_new_friendly_id?
     username_changed? || super

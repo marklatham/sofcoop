@@ -251,6 +251,8 @@ Devise.setup do |config|
                   Sofcoop::Application.secrets.twitter_api_secret
   config.omniauth :facebook, Sofcoop::Application.secrets.facebook_api_key,
                   Sofcoop::Application.secrets.facebook_api_secret
+  config.omniauth :google_oauth2, Sofcoop::Application.secrets.google_api_key,
+                  Sofcoop::Application.secrets.google_api_secret
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

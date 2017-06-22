@@ -18,6 +18,11 @@ div.form
                           title: 'Continue with Facebook', width: '160px'),
                 user_facebook_omniauth_authorize_path
     p
+      strong Or: &nbsp;  
+      = link_to image_tag('g-google.png',
+                          title: 'Login with Google', width: '160px'),
+                user_google_oauth2_omniauth_authorize_path
+    p
       strong Or input below:
     div
       = hidden_field_tag :username, resource.username
