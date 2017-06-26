@@ -6,10 +6,10 @@
   blockquote
     .comment-body = Loofah.scrub_fragment(comment.body.markdown2html, :prune).to_s.html_safe
 
-    span.timestamp style='font-size: 80%'
-      = link_to image_tag('emblem_symbolic_link.png', title: 'Link to this comment', width: '20px'),
+    span.comment-link
+      = link_to fa_icon('link', title: 'Link to this comment'),
         the_post_path(comment.post)+'#comment-'+comment.id.to_s
-      |  &nbsp; 
+    span.timestamp
       span title=comment.created_at.strftime("%F %T") Commented #{time_ago_in_words(comment.created_at)} ago.
       - if  policy(comment).destroy?
         span.controls
