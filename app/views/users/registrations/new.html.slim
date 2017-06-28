@@ -7,29 +7,20 @@ div.form
   
     h2 Register a free login
     = devise_error_messages!
-    p
-      strong You can choose: &nbsp; 
-      = link_to image_tag('sign-in-with-twitter-gray.png',
-                          title: 'Sign in with Twitter', width: '160px'),
-                user_twitter_omniauth_authorize_path
-    p
-      strong Or: &nbsp;  
-      = link_to image_tag('continue-with-facebook.png',
-                          title: 'Continue with Facebook', width: '160px'),
-                user_facebook_omniauth_authorize_path
-    p
-      strong Or: &nbsp;  
-      = link_to image_tag('g-google.png',
-                          title: 'Login with Google', width: '160px'),
-                user_google_oauth2_omniauth_authorize_path
-    p
-      strong Or input below:
+
+    button.auth.facebook 
+      = link_to fa_icon('facebook', text: '  Facebook'), user_facebook_omniauth_authorize_path
+    button.auth.twitter
+      = link_to fa_icon('twitter', text: 'Twitter'), user_twitter_omniauth_authorize_path
+    button.auth.google 
+      = link_to fa_icon('google', text: '  Google'), user_google_oauth2_omniauth_authorize_path
+    
     div
       = hidden_field_tag :username, resource.username
-      = f.label 'Email:'
+      = f.label nil, 'or input email:'
       = f.email_field :email
     div
-      = f.label 'Password: '
+      = f.label nil, 'and a password: '
       |  (6 characters or more)
       = f.password_field :password
     = f.submit 'Register'

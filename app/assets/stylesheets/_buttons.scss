@@ -7,3 +7,24 @@
     text-decoration: none;
   }
 }
+
+////////// LOGIN: ////////////
+
+.auth {
+  background-color: $facebook;
+  margin: 1em;
+  a:link, a:visited, a:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.facebook {
+  background-color: $facebook;
+}
+.twitter {
+  background-color: $twitter;
+}
+.google {
+  background-color: $google;
+}
