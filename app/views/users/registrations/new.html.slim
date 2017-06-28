@@ -2,26 +2,17 @@
 
 div.form
 
-  = form_for(resource, as: resource_name, url: user_registration_path(resource),
-             html: { role: 'form'}) do |f|
+  = form_for(resource, as: resource_name, url: user_registration_path(resource), html: { role: 'form'}) do |f|
   
     h2 Register a free login
     = devise_error_messages!
-
-    button.auth.facebook 
-      = link_to fa_icon('facebook', text: '  Facebook'), user_facebook_omniauth_authorize_path
-    button.auth.twitter
-      = link_to fa_icon('twitter', text: 'Twitter'), user_twitter_omniauth_authorize_path
-    button.auth.google 
-      = link_to fa_icon('google', text: '  Google'), user_google_oauth2_omniauth_authorize_path
-    
     div
       = hidden_field_tag :username, resource.username
-      = f.label nil, 'or input email:'
-      = f.email_field :email
+      = f.label 'Email:'
+      = f.email_field :email, autofocus: true
     div
-      = f.label nil, 'and a password: '
-      |  (6 characters or more)
+      = f.label 'Password: '
+      | (6 characters or more)
       = f.password_field :password
     = f.submit 'Register'
 
