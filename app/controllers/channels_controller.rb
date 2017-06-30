@@ -48,7 +48,7 @@ class ChannelsController < ApplicationController
   def update
     authorize @channel
     if @channel.update(channel_params)
-      redirect_to @channel, notice: 'Channel was successfully updated.'
+      redirect_to channel_path(@channel.slug), notice: 'Channel was successfully updated.'
     else
       render :edit
     end
