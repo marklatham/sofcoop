@@ -12,15 +12,15 @@ table.data {
 
   th, td {
     border: 1px solid $gray-medium;
-    padding: 0.5em 0.5em 0.5em 0.5em;
-    line-height: 1.2em;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    line-height: 1.2rem;
     text-align: center;
     &.author, &.channel {
-      padding: 0.4em 0.2em 0.1em 0.2em;
+      padding: 0.4rem 0.2rem 0.1rem 0.2rem;
     }
     &.left {
       text-align: left;
-      padding: 0.5em 1em 0.5em 1em;
+      padding: 0.5rem 1rem 0.5rem 1rem;
     }
   }
 
@@ -46,14 +46,14 @@ table.images {
   margin: auto;
   table-layout: auto;
   width: auto;
-  max-width: 55em;
+  max-width: 55rem;
   .text {
     text-align: left;
   }
   .title {
     font-weight: bold;
     font-size: 125%;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
   }
 }
 
@@ -72,8 +72,8 @@ table.posts {
 
 table.pubs {
   table-layout: auto;
-  min-width: 32em;
-  max-width: 80em;
+  min-width: 32rem;
+  max-width: 80rem;
   tr:nth-child(even) {
     background-color: $gray-lightest;
   }
@@ -83,7 +83,7 @@ table.pubs {
 
 table.minimal {
   table-layout: auto;
-  width: 30em;
+  width: 30rem;
   h1 {
     line-height: 1.2;
     margin: 0;
@@ -93,6 +93,6 @@ table.minimal {
     margin: 0;
   }
   td.button {
-    margin: 1em 0 0 0;
+    margin: 1rem 0 0 0;
   }
 }

@@ -16,7 +16,7 @@ footer {
 
 footer {
   box-sizing: content-box;
-  padding: 0.5em 0 0.5em 5%;
+  padding: 0.5rem 0 0.5rem 5%;
   background-color: $gray-dark;
 }
 
@@ -34,7 +34,7 @@ footer tr {
 footer td {
   border-width: 0;
   padding: 0;
-  margin: 0 1.5em 0 0;
+  margin: 0 1.5rem 0 0;
   white-space: nowrap;
   font-size: 100%;
   a:link, a:visited {
@@ -69,7 +69,7 @@ header table {
 li.navbar-brand {
   font-family: 'Lobster', cursive;
   margin: 0;
-  padding: 0.1em 0 0.1em 0;
+  padding: 0.1rem 0 0.1rem 0;
   color: black;
   text-align: left;
   a:link, a:visited {
@@ -94,7 +94,7 @@ li.navbar-brand {
 }
 
 .dropdown ul li {
-  margin: 0 0 0 1em;
+  margin: 0 0 0 1rem;
   float: left;
   white-space: nowrap;
   font-size: 100%;
@@ -109,8 +109,8 @@ li.navbar-brand {
 .dropdown li ul {
   position: absolute;
   background-color: white;
-  width: 1em;
-  left: -999em;
+  width: 1rem;
+  left: -999rem;
   list-style: none;
 }
 .dropdown li:hover ul {
@@ -120,7 +120,7 @@ li.navbar-brand {
   white-space: normal;
   margin-left: 0;
   padding: 3px 0 3px 8px;
-  width: 12em;
+  width: 12rem;
   border-left:   1px solid $theme-color;
   border-right:  1px solid $theme-color;
   border-bottom: 1px solid $theme-color;
@@ -165,10 +165,10 @@ div.login {
 }
 .login li:hover ul {
   top: 45px;
-  right: 9.3em;          // Tweak together with width below!
+  right: 9.3rem;          // Tweak together with width below!
 }
 .login ul li ul li{
-  width: 11em;           // Tweak together with right above!
+  width: 11rem;           // Tweak together with right above!
   padding: 3px 0 3px 3px;
   text-align: center;
 }

@@ -9,7 +9,7 @@ h2
   
 = link_to image_tag(image_url), image_path(@image.user.username, @image.slug, 'original', @image.format)
 
-p style='margin-top: 1em'
+p style='margin-top: 1rem'
   strong Copy into post: 
   = '![' + @image.title + '](' + image_url + ')'
 

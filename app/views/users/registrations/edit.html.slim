@@ -29,7 +29,7 @@ div.form
       = f.password_field :current_password
     = f.submit 'Save changes'
 
-hr style='margin-bottom: 1em'
+hr style='margin-bottom: 1rem'
 
 - if resource.avatar_url.present?
   p = link_to 'Delete avatar', delete_avatar_path

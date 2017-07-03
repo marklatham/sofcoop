@@ -1,3 +1,4 @@
 html {
+  font-size: 100%;   // To over-ride setting from /base/_layout.scss
   height: inherit;   // Because height 100% messes up sticky footer.
 }

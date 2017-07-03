@@ -18,10 +18,10 @@ h1 = @post.title
 
 - else
   .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
-  strong style='float: left; margin-right: 1em' Tags:
+  strong style='float: left; margin-right: 1rem' Tags:
   ul.tags = render @post.tags
   
-hr style='margin-bottom: 1em; background: #aaa'
+hr style='margin-bottom: 1rem; background: #aaa'
 
 .post.avatar = link_to avatar_for_user(@post.user), user_path(@post.user.username)
 
@@ -42,7 +42,7 @@ p.timestamp
       = link_to 'Delete Post', delete_post_path(@post.user.username, @post.slug),
                 method: :delete, data: {confirm: "You sure?"}
   
-hr style='height: 2px; margin-bottom: 1em'
+hr style='height: 2px; margin-bottom: 1rem'
 
 - unless @post.visible == 3 && !current_user
   .comments

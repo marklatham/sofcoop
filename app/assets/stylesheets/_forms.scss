@@ -3,12 +3,12 @@ label {
 }
 
 .check_box {
-  margin: 0 0 0.5em 2em;
+  margin: 0 0 0.5rem 2rem;
 }
 
 div.form div {
   line-height: 1.15;
-  padding-bottom: 0.5em;
+  padding-bottom: 0.5rem;
 }
 
 .form table {
@@ -17,18 +17,18 @@ div.form div {
     border-style: none;
   }
   .atsign {
-    width: 1em;
+    width: 1rem;
     text-align: right;
-    padding: 0 0 0.8em 0;
+    padding: 0 0 0.8rem 0;
   }
   .formtext {
     text-align: right;
-    padding: 0 0.5em 0.8em 0;
+    padding: 0 0.5rem 0.8rem 0;
   }
 }
 
 .radio-buttons {
-  margin-left: 2em;
+  margin-left: 2rem;
   label {
     display: inline;
     font-weight: normal;
@@ -41,8 +41,8 @@ div.form div {
 ////////// SEARCH: ///////////
 
 .search {
-  font-size: 0.8em;
-  padding: 0.7em 0 0 0;
+  font-size: 0.8rem;
+  padding: 0.7rem 0 0 0;
 }
 
 .search-box {
@@ -52,7 +52,7 @@ div.form div {
 .search button {
   background-color: inherit;
   color: #777;
-  padding: 0 0 0 0.5em;
+  padding: 0 0 0 0.5rem;
   &:hover {
     background-color: inherit;
     color: #000;

@@ -3,7 +3,7 @@
 // -----------------------------
 
 .close {
-  font-size: 1.5em;
+  font-size: 1.5rem;
   color: #999;
   @include opacity(1);  // Otherwise it shows through dropdowns.
   &:hover,
