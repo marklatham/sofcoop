@@ -3,7 +3,7 @@ table.data.images
   tbody
     - @images.each do |image|
       tr
-        td style='width: 330px'
+        td style='width: 21rem'
           = link_to image_tag(image_path(image.user.username, image.slug, 'v3', image.format)),
                     image_data_path(image.user.username, image.slug, image.format)
         td.text

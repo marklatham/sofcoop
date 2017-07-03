@@ -3,9 +3,9 @@
 table
   thead
     tr
-      th style='width: 80px'
-      th style='font-size: 150%' Channel
-      th style='font-size: 150%' Manager
+      th style='width: 5rem'
+      th style='font-size: 1.5rem' Channel
+      th style='font-size: 1.5rem' Manager
 
   tbody
     - @channels.each do |channel|
@@ -13,7 +13,7 @@ table
         td.avatar
           = link_to avatar_for_channel(channel), channel_path(channel.slug)
         td
-          strong style='color: #{channel.color}; font-size: 125%' = link_to channel.name,
+          strong style='color: #{channel.color}; font-size: 1.25rem' = link_to channel.name,
                                                                channel_path(channel.slug)
         td.author
           .avatar = link_to avatar_for_user(channel.user), user_path(channel.user.username)
