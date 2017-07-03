@@ -34,7 +34,7 @@ class PostsController < ApplicationController
   def show
     authorize @post
     @comment = Comment.new(post: @post)
-    if request.path != the_post_path(@post)
+    if params[:username] && request.path != the_post_path(@post)
       if params[:username].downcase != @post.user.username.downcase
         flash[:notice] = 'Username @' + params[:username] +
                          ' has changed to @' + @post.user.username
@@ -130,10 +130,16 @@ class PostsController < ApplicationController
   private
 
   def set_post
-    if user = User.friendly.find(params[:username])
+    if params[:username]
+      user = User.friendly.find(params[:username])
       @post = Post.where(user_id: user.id).friendly.find(params[:slug])
-    else
+    elsif params[:id]
       @post = Post.find(params[:id])
+    elsif params[:vanity_slug]
+      @post = case params[:vanity_slug]
+        when 'terms' then Post.find(15)
+        else Post.find(21)
+      end
     end
   end
 

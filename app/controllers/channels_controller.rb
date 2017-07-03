@@ -7,12 +7,12 @@ class ChannelsController < ApplicationController
     @channels = Channel.all
   end
 
-  # GET /@@channelslug
+  # GET /@@channel_slug
   def show
     authorize @channel
   end
 
-  # GET /@@channelslug/posts
+  # GET /@@channel_slug/posts
   def posts
     authorize @channel
     @posts = @channel.posts.select{|post| policy(post).show?}.
@@ -66,7 +66,7 @@ class ChannelsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   
   def set_channel
-    if @channel = Channel.find_by_slug(params[:channelslug])
+    if @channel = Channel.find_by_slug(params[:channel_slug])
     else
       @channel = Channel.find(params[:id])
     end

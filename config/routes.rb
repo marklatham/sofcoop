@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   
   ### CHANNELS: ####################
   
-  get       '/@@:channelslug',                       to: 'channels#show',   as: :channel
-  get       '/@@:channelslug/posts',                 to: 'channels#posts',  as: :channel_posts
+  get       '/@@:channel_slug',                       to: 'channels#show',   as: :channel
+  get       '/@@:channel_slug/posts',                 to: 'channels#posts',  as: :channel_posts
   resources :channels, except: [:show]
   
   ### IMAGES: ######################
@@ -19,14 +19,14 @@ Rails.application.routes.draw do
   get    '/avatars/@:username.:ext',             to:
          redirect('https://sofcoop.s3-us-west-2.amazonaws.com/avatars/%{username}.%{ext}')
   
-  get    '/channels/@@:channelslug.:ext',             to:
-          redirect('https://sofcoop.s3-us-west-2.amazonaws.com/channels/%{channelslug}.%{ext}')
+  get    '/channels/@@:channel_slug.:ext',             to:
+          redirect('https://sofcoop.s3-us-west-2.amazonaws.com/channels/%{channel_slug}.%{ext}')
   
   resources :images, except: [:show, :edit, :destroy]
   
   ### POSTS: #######################
   
-  get    '/@@:channelslug/@:username/:slug', to: 'posts#show',       as: :channel_post
+  get    '/@@:channel_slug/@:username/:slug', to: 'posts#show',       as: :channel_post
   get    '/@:username/:slug',                to: 'posts#show',       as: :post
   get    '/@:username/:slug/edit',           to: 'posts#edit',       as: :edit_post
   delete '/@:username/:slug/delete',         to: 'posts#destroy',    as: :delete_post
@@ -63,5 +63,9 @@ Rails.application.routes.draw do
     get '/change_password', to: 'users/registrations#change_password', as: :change_password
     get '/delete_avatar',   to: 'users/registrations#delete_avatar',   as: :delete_avatar
   end
+  
+  ### VANITY SLUGS: ##################
+  
+  get    '/:vanity_slug',    to: 'posts#show'
   
 end
