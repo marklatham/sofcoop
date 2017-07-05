@@ -137,8 +137,10 @@ class PostsController < ApplicationController
       @post = Post.find(params[:id])
     elsif params[:vanity_slug]
       @post = case params[:vanity_slug]
-        when 'terms' then Post.find(15)
-        else Post.find(21)
+        when 'terms' then Post.find(26)
+        when 'privacy' then Post.find(28)
+        when 'markdown' then Post.find(29)
+        else Post.find(27)
       end
     end
   end

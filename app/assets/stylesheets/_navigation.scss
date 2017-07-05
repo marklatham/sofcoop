@@ -108,6 +108,7 @@ li.navbar-brand {
 
 .dropdown li ul {
   position: absolute;
+  z-index: 1;
   background-color: white;
   width: 1rem;
   left: -999rem;
@@ -164,7 +165,7 @@ div.login {
   padding-top: 0.4rem;
 }
 .login li:hover ul {
-  top: 3.8rem;
+  top: 3.3rem;
   right: 9.3rem;          // Tweak together with width below!
 }
 .login ul li ul li{

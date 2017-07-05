@@ -1,4 +1,7 @@
-- provide :title, 'Edit Post'
+- if @post.title.present?
+  - provide :title, 'EDIT: ' + @post.title
+- else
+  - provide :title, 'Edit Post'
 
 h2 Edit Post
 
