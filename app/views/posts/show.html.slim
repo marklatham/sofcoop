@@ -1,62 +1,64 @@
 - provide :title, @post.title
 
-h1 = @post.title
+.post
 
-/ The logic below works together with other logic in post_policy > show.
-/ Both should be reviewed/revised when sofcoop has paying members.
+  h1 = @post.title
 
-/- if  is_author_or_admin?(current_user, @post) || @post.visible == 4
-/  .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
+  / The logic below works together with other logic in post_policy > show.
+  / Both should be reviewed/revised when sofcoop has paying members.
+
+  /- if  is_author_or_admin?(current_user, @post) || @post.visible == 4
+  /  .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
   
-- if @post.visible == 3 && !current_user
-  .flashy
-    | Only logged-in users can see this post's content. Please 
-    = link_to 'log in', new_user_session_path
-    | . ( 
-    = link_to 'Create a free login', new_user_registration_path
-    |  if you don't have one yet.)
+  - if @post.visible == 3 && !current_user
+    .flashy
+      | Only logged-in users can see this post's content. Please 
+      = link_to 'log in', new_user_session_path
+      | . ( 
+      = link_to 'Create a free login', new_user_registration_path
+      |  if you don't have one yet.)
 
-- else
-  .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
-  strong style='float: left; margin-right: 1rem' Tags:
-  ul.tags = render @post.tags
+  - else
+    .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
+    strong style='float: left; margin-right: 1rem' Tags:
+    ul.tags = render @post.tags
   
-hr style='margin-bottom: 1rem; background: #aaa'
+  hr style='margin-bottom: 1rem; background: #aaa'
 
-.post.avatar = link_to avatar_for_user(@post.user), user_path(@post.user.username)
+  .avatar = link_to avatar_for_user(@post.user), user_path(@post.user.username)
 
-span.timestamp
-  |  Posted by #{link_to '@'+@post.user.username, user_path(@post.user.username)}
-  |  #{time_ago_in_words(@post.created_at)} ago.
-  - if @post.updated_at > @post.created_at
-    |  Updated #{time_ago_in_words(@post.updated_at)} ago.
-p.timestamp
-  | Content visible to: 
-  = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
+  span.timestamp
+    |  Posted by #{link_to '@'+@post.user.username, user_path(@post.user.username)}
+    |  #{time_ago_in_words(@post.created_at)} ago.
+    - if @post.updated_at > @post.created_at
+      |  Updated #{time_ago_in_words(@post.updated_at)} ago.
+  p.timestamp
+    | Content visible to: 
+    = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
 
-- if  policy(@post).edit?
-  p.controls
-    = link_to 'Edit Post', edit_post_path(@post.user.username, @post.slug)
-    - if  policy(@post).destroy?
-      |  | 
-      = link_to 'Delete Post', delete_post_path(@post.user.username, @post.slug),
-                method: :delete, data: {confirm: "You sure?"}
+  - if  policy(@post).edit?
+    p.controls
+      = link_to 'Edit Post', edit_post_path(@post.user.username, @post.slug)
+      - if  policy(@post).destroy?
+        |  | 
+        = link_to 'Delete Post', delete_post_path(@post.user.username, @post.slug),
+                  method: :delete, data: {confirm: "You sure?"}
   
-hr style='height: 2px; margin-bottom: 1rem'
+  hr style='height: 2px; margin-bottom: 1rem'
 
-- unless @post.visible == 3 && !current_user
-  .comments
+  - unless @post.visible == 3 && !current_user
+    .comments
 
-    h2 Comments:
+      h2 Comments:
   
-    == render @post.comments.sort_by{|comment| comment.updated_at}
+      == render @post.comments.sort_by{|comment| comment.updated_at}
 
-    - if current_user
-      == render 'comment_form', post: @post
-    - else
-      p
-        | To comment, please 
-        = link_to 'log in', new_user_session_path
-        | . ( 
-        = link_to 'Create a free login', new_user_registration_path
-        |  if you don't have one yet.)
+      - if current_user
+        == render 'comment_form', post: @post
+      - else
+        p
+          | To comment, please 
+          = link_to 'log in', new_user_session_path
+          | . ( 
+          = link_to 'Create a free login', new_user_registration_path
+          |  if you don't have one yet.)
