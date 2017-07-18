@@ -22,8 +22,18 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def vanity_slugs  # Should be unique in both columns:
+    {
+    26 => "terms",
+    28 => "privacy",
+    29 => "markdown"
+    }
+  end
+  
   def the_post_path(post)
-    if post.channel
+    if vanity_slug = vanity_slugs[post.id]
+      '/' + vanity_slug
+    elsif post.channel
       channel_post_path(post.channel.slug, post.user.username, post.slug)
     else
       post_path(post.user.username, post.slug)

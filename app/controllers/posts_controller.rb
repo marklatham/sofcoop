@@ -136,11 +136,10 @@ class PostsController < ApplicationController
     elsif params[:id]
       @post = Post.find(params[:id])
     elsif params[:vanity_slug]
-      @post = case params[:vanity_slug]
-        when 'terms' then Post.find(26)
-        when 'privacy' then Post.find(28)
-        when 'markdown' then Post.find(29)
-        else Post.find(27)
+      if post_id = vanity_slugs.key(params[:vanity_slug])
+        @post = Post.find(post_id)
+      else
+        @post = Post.find(27)  # "Page Not Found"
       end
     end
   end
