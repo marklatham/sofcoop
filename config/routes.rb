@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   get    '/avatars/@:username.:ext',             to:
          redirect('https://sofcoop.s3-us-west-2.amazonaws.com/avatars/%{username}.%{ext}')
   
-  get    '/channels/@@:channel_slug.:ext',             to:
+  get    '/channels/@@:channel_slug.:ext',       to:
           redirect('https://sofcoop.s3-us-west-2.amazonaws.com/channels/%{channel_slug}.%{ext}')
   
   resources :images, except: [:show, :edit, :destroy]
@@ -27,10 +27,10 @@ Rails.application.routes.draw do
   ### POSTS: #######################
   
   get    '/@@:channel_slug/@:username/:slug', to: 'posts#show',       as: :channel_post
-  get    '/@:username/:slug',                to: 'posts#show',       as: :post
-  get    '/@:username/:slug/edit',           to: 'posts#edit',       as: :edit_post
-  delete '/@:username/:slug/delete',         to: 'posts#destroy',    as: :delete_post
-  get    '/posts/@:username',                to: 'posts#user_posts', as: :user_posts
+  get    '/@:username/:slug',                 to: 'posts#show',       as: :post
+  get    '/@:username/:slug/edit',            to: 'posts#edit',       as: :edit_post
+  delete '/@:username/:slug/delete',          to: 'posts#destroy',    as: :delete_post
+  get    '/posts/@:username',                 to: 'posts#user_posts', as: :user_posts
 
   resources :posts,    except: [:show, :edit, :destroy]
   resources :posts do
@@ -66,6 +66,6 @@ Rails.application.routes.draw do
   
   ### VANITY SLUGS: ##################
   
-  get    '/:vanity_slug',    to: 'posts#show'
+  get    '/:vanity_slug',    to: 'posts#show',                         as: :vanity
   
 end

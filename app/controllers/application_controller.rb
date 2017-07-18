@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   
   def the_post_path(post)
     if vanity_slug = vanity_slugs[post.id]
-      '/' + vanity_slug
+      vanity_path(vanity_slug)
     elsif post.channel
       channel_post_path(post.channel.slug, post.user.username, post.slug)
     else
@@ -41,7 +41,9 @@ class ApplicationController < ActionController::Base
   end
   
   def the_post_url(post)
-    if post.channel
+    if vanity_slug = vanity_slugs[post.id]
+      vanity_url(vanity_slug)
+    elsif post.channel
       channel_post_url(post.channel.slug, post.user.username, post.slug)
     else
       post_url(post.user.username, post.slug)
