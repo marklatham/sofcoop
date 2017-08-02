@@ -8,13 +8,13 @@ table
       th style='font-size: 1.5rem' Manager
 
   tbody
-    - @channels.each do |channel|
+    - for channel in @channels
       tr
         td.avatar
           = link_to avatar_for_channel(channel), channel_path(channel.slug)
         td
-          strong style='color: #{channel.color}; font-size: 1.25rem' = link_to channel.name,
-                                                               channel_path(channel.slug)
+          strong = link_to channel.name, channel_path(channel.slug),
+                   style: 'color: ' +  channel.color + '; font-size: 1.25rem'
         td.author
           .avatar = link_to avatar_for_user(channel.user), user_path(channel.user.username)
           .username = link_to '@' + channel.user.username, user_path(channel.user.username)

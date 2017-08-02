@@ -1,24 +1,15 @@
-div.dropdown
-  ul
-    //// These "links" are still just placeholders for now:
-    li
-      = link_to 'Overview', root_path
-      b.down-arrow
-      ul.droplink
-        li = link_to 'About/Contact', '/about-contact'
-        li = link_to 'Problems to solve', '/problems'
-        li = link_to 'Posts Index', '/posts'
-        /li = link_to 'Publications', publications_path
-    li
-      = link_to 'Reforms', '/reforms'
-      b.down-arrow
-      ul.droplink
-        li = link_to 'Voter Info Systems', '/voter-info'
-        li = link_to 'VM Reform Strategies', '/reform-strategies'
-    li
-      | Organizations
-      b.down-arrow
-      ul.droplink
-        li = link_to 'Student Unions', '/student-unions'
-        li = link_to 'Condo HOAs', '/condos'
-        li = link_to 'Co-ops, Credit Unions', '/co-ops'
+- channels = Channel.all
+
+table.channels-menu
+  tr
+    - for channel in channels
+      td style='background-color:#{channel.color}'
+        div.dropdown
+          ul
+            li 
+              = link_to channel.name, channel_path(channel.slug)
+              b.down-arrow
+              ul.droplink
+                li = link_to 'About/Contact', '/about-contact'
+                li = link_to 'Problems to solve', '/problems'
+                li = link_to 'Posts Index', '/posts'

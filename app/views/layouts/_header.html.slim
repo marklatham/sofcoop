@@ -1,10 +1,10 @@
 nav
-  table
+  table.top-line
     tr
       td
         div.dropdown style='margin-left: 0'
           ul
-            li.navbar-brand style='font-size: 175%; margin: 0'
+            li.navbar-brand style='font-size: 175%'
               = link_to 'Sofcoop', root_path
               b.down-arrow
               ul.droplink
@@ -16,5 +16,5 @@ nav
                   li = link_to 'Users', users_path
                   
       td = render 'posts/search'
-      td = render 'layouts/header_channels'
       td = render 'layouts/header_login'
+  = render 'layouts/header_channels'

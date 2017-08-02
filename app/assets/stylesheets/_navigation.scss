@@ -49,27 +49,36 @@ footer td {
 ///////////////////// HEADER & DROPDOWN NAV:
 
 header {
-  padding: 0 3% 0 5%;
   background-color: $gray-lightest;
   border-bottom: solid black;
   border-bottom-width: 1px;
 }
 
-header table {
+header table.top-line {
   border-width: 0;
-  margin: 0;
   table-layout: auto;
+  margin: 0;
   td {
     border-width: 0;
     padding: 0;
   }
 }
 
+header table.channels-menu {
+  border-width: 0;
+  margin: 0;
+  td {
+    border-width: 0;
+    padding: 0.2rem;
+    margin: 0;
+  }
+}
+
 @import url("http://fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
-li.navbar-brand {
+.dropdown ul li.navbar-brand {
   font-family: 'Lobster', cursive;
   margin: 0;
-  padding: 0.1rem 0 0.1rem 0;
+  padding: 0.1rem 0 0.1rem 5vw;
   color: black;
   text-align: left;
   a:link, a:visited {
