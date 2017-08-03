@@ -7,8 +7,7 @@ table.channels-menu
         div.dropdown
           ul
             li 
-              = link_to channel.name, channel_path(channel.slug)
-              b.down-arrow
+              = link_to channel.name.upcase, channel_path(channel.slug)
               ul.droplink
                 li = link_to 'About/Contact', '/about-contact'
                 li = link_to 'Problems to solve', '/problems'

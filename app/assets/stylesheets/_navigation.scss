@@ -69,8 +69,15 @@ header table.channels-menu {
   margin: 0;
   td {
     border-width: 0;
-    padding: 0.2rem;
+    padding: 0.3rem;
     margin: 0;
+    li {
+      margin: 0;
+      a:link, a:visited {
+        color: white;
+        text-decoration: none;
+      }
+    }
   }
 }
 
