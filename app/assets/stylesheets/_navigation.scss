@@ -50,8 +50,6 @@ footer td {
 
 header {
   background-color: $gray-lightest;
-  border-bottom: solid black;
-  border-bottom-width: 1px;
 }
 
 header table.top-line {
@@ -65,14 +63,17 @@ header table.top-line {
 }
 
 header table.channels-menu {
-  border-width: 0;
   margin: 0;
-  td {
-    border-width: 0;
-    padding: 0.3rem;
-    margin: 0;
-    li {
-      margin: 0;
+  border-width: 0;
+  text-align: center;
+  tr {
+    line-height: 40px;
+    td {
+      border-width: 0;
+      padding: 0;
+      a {
+        display: block;
+      }
       a:link, a:visited {
         color: white;
         text-decoration: none;

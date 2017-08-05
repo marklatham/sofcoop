@@ -4,11 +4,4 @@ table.channels-menu
   tr
     - for channel in channels
       td style='background-color:#{channel.color}'
-        div.dropdown
-          ul
-            li 
-              = link_to channel.name.upcase, channel_path(channel.slug)
-              ul.droplink
-                li = link_to 'About/Contact', '/about-contact'
-                li = link_to 'Problems to solve', '/problems'
-                li = link_to 'Posts Index', '/posts'
+        = link_to channel.name.upcase, channel_path(channel.slug)
