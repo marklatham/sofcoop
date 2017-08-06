@@ -63,14 +63,18 @@ header table.top-line {
 }
 
 header table.channels-menu {
+  table-layout: fixed;
   margin: 0;
   border-width: 0;
   text-align: center;
+  position: relative;
   tr {
     line-height: 40px;
     td {
       border-width: 0;
       padding: 0;
+      white-space: nowrap;
+      overflow: hidden;
       a {
         display: block;
       }
@@ -78,6 +82,19 @@ header table.channels-menu {
         color: white;
         text-decoration: none;
       }
+    }
+    td:hover > div {
+      display:block;
+    }
+    td div {
+      color: white;
+      padding: 0;
+      text-align: center;
+      display: none;
+      width: 100%;
+      position: absolute;
+      top: 40px;
+      left: 0px;
     }
   }
 }

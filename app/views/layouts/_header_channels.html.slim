@@ -5,3 +5,5 @@ table.channels-menu
     - for channel in channels
       td style='background-color:#{channel.color}'
         = link_to channel.name.upcase, channel_path(channel.slug)
+        div style='border: 5px solid #{channel.color}'
+          | hello
