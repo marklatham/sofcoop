@@ -19,6 +19,12 @@
     = f.label :color
     = f.text_field :color
   .field
+    = f.label 'Background Color'
+    = f.text_field :color_bg
+  .field
+    = f.label 'Dropdown Post ID'
+    = f.text_field :dropdown_id
+  .field
     = f.label 'Avatar:'
     - if @channel.avatar_url.present?
       .avatar = link_to image_tag(@channel.avatar_url.to_s, alt: '@@'+@channel.slug),

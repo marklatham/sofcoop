@@ -3,7 +3,11 @@
 table.channels-menu
   tr
     - for channel in channels
-      td style='background-color:#{channel.color}'
+      td style='background-color: #{channel.color}'
         = link_to channel.name.upcase, channel_path(channel.slug)
-        div style='border: 5px solid #{channel.color}'
-          | hello
+        div.dropdown style='border: 5px solid #{channel.color}; background-color: #{channel.color_bg}'
+          div.body
+            - if post = Post.find(channel.dropdown_id) rescue nil
+              = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
+            - else
+              = link_to channel.name, channel_path(channel.slug)

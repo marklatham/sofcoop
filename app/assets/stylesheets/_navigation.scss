@@ -75,26 +75,36 @@ header table.channels-menu {
       padding: 0;
       white-space: nowrap;
       overflow: hidden;
-      a {
+      > a {
         display: block;
       }
-      a:link, a:visited {
+      > a:link, > a:visited {
         color: white;
         text-decoration: none;
       }
     }
-    td:hover > div {
-      display:block;
+    td:hover div.dropdown {
+      display: inline;
+      max-height: 25vh;
     }
-    td div {
-      color: white;
-      padding: 0;
-      text-align: center;
+    td div.dropdown {
       display: none;
-      width: 100%;
       position: absolute;
       top: 40px;
       left: 0px;
+      width: 100%;
+      max-height: 25vh;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      padding: 0;
+      text-align: left;
+      line-height: 1.5;
+      color: black;
+      div.body {
+        display: hidden;
+        margin: 0 5% 0 5%;
+        white-space: normal;
+      }
     }
   }
 }
