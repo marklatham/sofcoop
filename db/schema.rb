@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170811153942) do
+ActiveRecord::Schema.define(version: 20170812160611) do
 
   create_table "channels", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "user_id"
     t.string "name"
     t.string "slug", null: false
-    t.string "color"
+    t.string "color", default: "#666"
     t.string "avatar"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "color_bg"
+    t.string "color_bg", default: "#F2F2F2"
     t.integer "dropdown_id"
     t.index ["slug"], name: "index_channels_on_slug", unique: true
     t.index ["user_id"], name: "index_channels_on_user_id"
