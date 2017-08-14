@@ -110,7 +110,7 @@ header table.channels-menu {
 }
 
 @import url("http://fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
-.dropdown ul li.navbar-brand {
+.dropdown .navbar-brand {
   font-family: 'Lobster', cursive;
   margin: 0;
   padding: 0.1rem 0 0.1rem 5vw;
@@ -150,7 +150,7 @@ header table.channels-menu {
   }
 }
 
-.dropdown li ul {
+.dropdown ul {
   position: absolute;
   z-index: 1;
   background-color: white;
@@ -158,10 +158,10 @@ header table.channels-menu {
   left: -999rem;
   list-style: none;
 }
-.dropdown li:hover ul {
+div.dropdown:hover ul {
   left: auto;
 }
-.dropdown ul li ul li{
+.dropdown ul li{
   white-space: normal;
   margin-left: 0;
   padding: 0.2rem 0 0.2rem 0.5rem;
@@ -174,10 +174,10 @@ header table.channels-menu {
   float: left;
   font-size: 1rem;
 }
-.dropdown ul li ul li:first-child{
+.dropdown ul li:first-child{
   border-top: 1px solid $theme-color;
 }
-.dropdown ul li ul li {
+.dropdown ul li {
   a:link, a:visited {
     color: $link-color;
     text-decoration: none;
@@ -189,7 +189,7 @@ ul.droplink {
     color: $link-color;
   }
 }
-.dropdown ul li ul li a:hover {
+.dropdown ul li a:hover {
   text-decoration: underline;
 }
 .down-arrow {
