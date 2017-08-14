@@ -62,6 +62,125 @@ header table.top-line {
   }
 }
 
+@import url("http://fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
+.dropdown .navbar-brand {
+  font-family: 'Lobster', cursive;
+  margin: 0;
+  padding: 0.1rem 0 0.1rem 5vw;
+  color: black;
+  text-align: left;
+  a:link, a:visited {
+    color: black;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.dropdown {
+  padding: 0;
+  display: table;
+  margin: 0 auto;
+}
+
+.dropdown ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  width: 1rem;
+  left: -999rem;
+  list-style: none;
+}
+
+div.dropdown:hover ul {
+  left: auto;
+}
+
+.dropdown ul li {
+  margin: 0;
+  float: left;
+  white-space: nowrap;
+  font-size: 100%;
+  a:link, a:visited {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  padding: 0.2rem 0 0.2rem 0.5rem;
+  width: 12rem;
+  border-left:   1px solid $theme-color;
+  border-right:  1px solid $theme-color;
+  border-bottom: 1px solid $theme-color;
+  background-color: $gray-lightest;
+  color: black;
+  float: left;
+  font-size: 1rem;
+}
+
+.dropdown ul li:first-child{
+  border-top: 1px solid $theme-color;
+}
+
+.dropdown ul li {
+  a:link, a:visited {
+    color: $link-color;
+    text-decoration: none;
+  }
+}
+
+ul.droplink {
+  a:link, a:visited {
+    color: $link-color;
+  }
+}
+.dropdown ul li a:hover {
+  text-decoration: underline;
+}
+.down-arrow {
+  @include triangle(down, black, 0.6rem);
+  display: inline-block;
+  margin: 0 0 0.2rem 0.2rem;
+}
+
+////// CSS CHANGES FOR LOGIN DROPDOWN:
+
+div.login {
+  min-width: 6.3rem;       // Prevents avatar from shrinking in small window.
+  .avatar   {padding: 0.5rem 0 0 2rem;}
+  .textlink {padding: 0.7rem 0 0 2rem;}
+}
+.login ul li{
+  padding-left: 1rem;     // Tweak together with min-width above!
+}
+.login:hover ul {
+  top: 3.3rem;
+  right: 9.3rem;          // Tweak together with width below!
+}
+.login ul li{
+  width: 10rem;           // Tweak together with right above!
+  padding: 0.2rem 0 0.2rem 0.2rem;
+  text-align: center;
+}
+.login .textlink a {
+  float: left;
+  display: block;
+  padding-bottom: 0.6rem;  // Extends hover area down to dropdown.
+  margin-top: 0.2rem;
+}
+.avatar-arrow {
+  margin: 0 0 0 0.2rem;
+}
+.text-arrow {
+  margin: 0 0 0 0.1rem;
+}
+
+////// CHANNELS NAV MENU BAR:
+
 header table.channels-menu {
   table-layout: fixed;
   margin: 0;
@@ -107,125 +226,4 @@ header table.channels-menu {
       }
     }
   }
-}
-
-@import url("http://fonts.googleapis.com/css?family=Lobster|Cabin:400,700");
-.dropdown .navbar-brand {
-  font-family: 'Lobster', cursive;
-  margin: 0;
-  padding: 0.1rem 0 0.1rem 5vw;
-  color: black;
-  text-align: left;
-  a:link, a:visited {
-    color: black;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-}
-
-.dropdown {
-  padding: 0;
-  display: table;
-  margin: 0 auto;
-}
-
-.dropdown ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.dropdown ul li {
-  margin: 0 0 0 1rem;
-  float: left;
-  white-space: nowrap;
-  font-size: 100%;
-  a:link, a:visited {
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-}
-
-.dropdown ul {
-  position: absolute;
-  z-index: 1;
-  background-color: white;
-  width: 1rem;
-  left: -999rem;
-  list-style: none;
-}
-div.dropdown:hover ul {
-  left: auto;
-}
-.dropdown ul li{
-  white-space: normal;
-  margin-left: 0;
-  padding: 0.2rem 0 0.2rem 0.5rem;
-  width: 12rem;
-  border-left:   1px solid $theme-color;
-  border-right:  1px solid $theme-color;
-  border-bottom: 1px solid $theme-color;
-  background-color: $gray-lightest;
-  color: black;
-  float: left;
-  font-size: 1rem;
-}
-.dropdown ul li:first-child{
-  border-top: 1px solid $theme-color;
-}
-.dropdown ul li {
-  a:link, a:visited {
-    color: $link-color;
-    text-decoration: none;
-  }
-}
-
-ul.droplink {
-  a:link, a:visited {
-    color: $link-color;
-  }
-}
-.dropdown ul li a:hover {
-  text-decoration: underline;
-}
-.down-arrow {
-  @include triangle(down, black, 0.6rem);
-  display: inline-block;
-  margin: 0 0 0.2rem 0.2rem;
-}
-
-////// CSS CHANGES FOR LOGIN DROPDOWN:
-
-div.login {
-  min-width: 6.3rem;       // Prevents avatar from shrinking in small window.
-}
-.login ul li{
-  padding-left: 1rem;     // Tweak together with min-width above!
-}.login ul li div{
-  padding-top: 0.4rem;
-}
-.login li:hover ul {
-  top: 3.3rem;
-  right: 9.3rem;          // Tweak together with width below!
-}
-.login ul li ul li{
-  width: 10rem;           // Tweak together with right above!
-  padding: 0.2rem 0 0.2rem 0.2rem;
-  text-align: center;
-}
-.login .textlink a {
-  float: left;
-  display: block;
-  padding-bottom: 0.6rem;  // Extends hover area down to dropdown.
-  margin-top: 0.2rem;
-}
-.avatar-arrow {
-  margin: 0 0 0 0.2rem;
-}
-.text-arrow {
-  margin: 0 0 0 0.1rem;
 }
