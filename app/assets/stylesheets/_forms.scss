@@ -37,24 +37,3 @@ div.form div {
     vertical-align: 8%;
   }
 }
-
-////////// SEARCH: ///////////
-
-.search {
-  font-size: 0.8rem;
-  padding: 0.7rem 0 0 0;
-}
-
-.search-box {
-  float: left;
-}
-
-.search button {
-  background-color: inherit;
-  color: #777;
-  padding: 0 0 0 0.5rem;
-  &:hover {
-    background-color: inherit;
-    color: #000;
-  }
-}
