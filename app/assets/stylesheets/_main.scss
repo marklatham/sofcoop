@@ -1,3 +1,12 @@
+// css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice:
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+///////////////////////////
+
 body {
   margin: 0 0 $footer-height 0;
   padding: 0;
@@ -17,7 +26,7 @@ h4 { font-size: 100% }
 h1, h2, h3, h4 { color: $theme-color-darker }
 
 main {
-  margin: 0 5% 4rem 5%;
+  margin: 0 5vw 4rem 5vw;
 }
 
 a:link, a:visited {

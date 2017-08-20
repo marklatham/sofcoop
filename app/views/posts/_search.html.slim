@@ -1,4 +1,5 @@
 = search_form_for @search, url: search_posts_path, method: :get do |f|
-  div.search
-    .search-box = f.search_field :title_or_body_cont, placeholder: 'Search posts'
-    button.fa.fa-search name='commit' type='submit'
+  div.search-box
+    = f.search_field :title_or_body_cont, placeholder: 'Search posts',
+                     style: 'margin-bottom: 0; padding: 0.3rem;'
+  button.fa.fa-search name='commit' type='submit'

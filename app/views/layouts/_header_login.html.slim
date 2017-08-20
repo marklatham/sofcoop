@@ -1,4 +1,4 @@
-div.login.dropdown
+div.dropdown
   - if user_signed_in?
     - if avatar?(current_user)
       .avatar = link_to avatar_for_user(current_user), user_path(current_user.username)
