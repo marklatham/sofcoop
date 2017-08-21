@@ -3,8 +3,9 @@ nav
     tr
       td.navbar-brand
         div.dropdown
-          = link_to 'Sofcoop', root_path
-          b.down-arrow
+          a href=root_path
+            | Sofcoop
+            b.down-arrow
           ul.droplink
             li = link_to 'Posts', posts_path
             li = link_to 'Tags', tags_path

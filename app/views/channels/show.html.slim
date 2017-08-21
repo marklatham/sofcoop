@@ -5,12 +5,12 @@ h2 style='color: #{@channel.color}' = @channel.name
 p#notice = notice
 
 p
-  strong Manager: 
+  b Manager: 
   .avatar = link_to avatar_for_user(@channel.user), user_path(@channel.user.username)
   = '@' + @channel.user.username
 
 p
-  strong Avatar:
+  b Avatar:
   .avatar = image_tag(@channel.avatar_url.to_s, alt: '@@'+@channel.slug)
 
 = link_to 'Edit', edit_channel_path(@channel) if policy(@channel).edit?
@@ -19,4 +19,4 @@ p
   = link_to 'Delete', channels_path
 
 p style='margin-top: 1rem'
-  strong = link_to 'Posts in ' + @channel.name, channel_posts_path(@channel.slug)
+  b = link_to 'Posts in ' + @channel.name, channel_posts_path(@channel.slug)

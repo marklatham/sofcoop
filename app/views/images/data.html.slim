@@ -10,32 +10,32 @@ h2
 = link_to image_tag(image_url), image_path(@image.user.username, @image.slug, 'original', @image.format)
 
 p style='margin-top: 1rem'
-  strong Copy into post: 
+  b Copy into post: 
   = '![' + @image.title + '](' + image_url + ')'
 
 - if @image.description.present?
   p
-    strong Description: 
+    b Description: 
     = @image.description
 
 p
-  strong Uploaded: 
+  b Uploaded: 
   | by @
   = @image.user.username
   |  on 
   = @image.created_at.strftime("%B %e, %Y")
 
 p
-  strong Credit: 
+  b Credit: 
   = @image.credit
 
 - if @image.original_url.present?
   p
-    strong Source URL: 
+    b Source URL: 
     = @image.original_url
 
 p
-  strong Original: 
+  b Original: 
   = @image.width
   |  x 
   = @image.height
