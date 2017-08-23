@@ -1,8 +1,6 @@
-- channels = Channel.all
-
 table.channels-menu
   tr
-    - for channel in channels
+    - for channel in Channel.all
       td style='background-color: #{channel.color}'
         = link_to channel.name.upcase, channel_path(channel.slug)
         div.channels-dropdown style='border: 5px solid #{channel.color}; background-color: #{channel.color_bg}'

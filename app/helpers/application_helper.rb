@@ -5,7 +5,11 @@ module ApplicationHelper
   end
   
   def channels_array
-    [['None', nil], ['Admin', '5'], ['Channel 3', '6']]
+    array = [['None', nil]]
+    for channel in Channel.all
+      array << [channel.name, channel.id.to_s]
+    end
+    return array
   end
   
   def conditional_strftime(datetime, cutoff)
