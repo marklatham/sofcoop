@@ -1,0 +1,2 @@
+- if @post
+  = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe

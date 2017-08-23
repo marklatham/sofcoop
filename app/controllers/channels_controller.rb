@@ -1,6 +1,11 @@
 class ChannelsController < ApplicationController
   before_action :set_channel, only: [:show, :posts, :edit, :update, :destroy]
 
+  # Website Home Page
+  def home
+    @post = Post.find(30) rescue nil
+  end
+  
   # GET /channels
   def index
     authorize Channel
