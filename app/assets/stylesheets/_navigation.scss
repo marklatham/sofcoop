@@ -241,6 +241,9 @@ header table.channels-menu {
         color: white;
         text-decoration: none;
       }
+      > a:hover {
+        text-decoration: underline;
+      }
     }
     td div.channels-dropdown {
       display: none;

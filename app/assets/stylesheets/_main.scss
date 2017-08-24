@@ -31,10 +31,11 @@ main {
 
 a:link, a:visited {
   color: $link-color;
-  text-decoration: none;
+  text-decoration: underline;
 }
 a:hover {
   text-decoration: underline;
+  text-shadow: 1px 0;
 }
 
 ul {
