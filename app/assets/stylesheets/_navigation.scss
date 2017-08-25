@@ -90,11 +90,11 @@ td.navbar-brand {
 }
 
 .dropdown ul {
+  z-index: 2;
   padding: 0;
   margin: 0;
   list-style: none;
   position: absolute;
-  z-index: 1;
   background-color: white;
   width: 1rem;
   left: -999rem;
@@ -246,6 +246,7 @@ header table.channels-menu {
       }
     }
     td div.channels-dropdown {
+      z-index: 2;
       display: none;
       position: absolute;
       top: 32px;       // = tr line-height (above)
@@ -262,6 +263,11 @@ header table.channels-menu {
         display: hidden;
         margin: 0 5% 0 5%;
         white-space: normal;
+      }
+      i.fa-pencil-square-o {
+        position: absolute;
+        top: 5px;
+        left: 8px;
       }
     }
     td:hover div.channels-dropdown {

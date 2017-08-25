@@ -10,10 +10,14 @@ class ChannelUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    if file.extension == "jpeg"
-      "#{model.slug}.jpg"
+    if file
+      if file.extension == "jpeg"
+        "#{model.slug}.jpg"
+      else
+        "#{model.slug}.#{file.extension}"
+      end
     else
-      "#{model.slug}.#{file.extension}"
+      nil
     end
   end
 

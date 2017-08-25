@@ -13,6 +13,16 @@
   margin-bottom: 2rem;
 }
 
+.post.body.home-page {
+  z-index: 0;
+  position: relative;
+  i.fa-pencil-square-o {
+    position: absolute;
+    top: 5px;
+    left: -4vw;
+  }
+}
+
 .timestamp {
   color: $gray-medium;
   font-style: italic;
