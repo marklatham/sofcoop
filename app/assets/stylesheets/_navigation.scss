@@ -99,7 +99,7 @@ div.dropdown ul {
   width: 1rem;
   visibility: hidden;
   list-style: none;
-  transition: visibility 0.1s 0.1s;
+  transition: visibility 0.2s 0.1s;
 }
 
 div.dropdown:hover ul {
@@ -232,7 +232,7 @@ header table.channels-menu {
     line-height: 32px;  // = td div top (below)
     td {
       border-width: 0;
-      padding: 0;
+      padding: 0 0 0 0.2rem;
       white-space: nowrap;
       overflow: hidden;
       > a {

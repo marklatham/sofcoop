@@ -71,7 +71,11 @@ class PostsController < ApplicationController
       if @post.channel
         AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
       end
-      redirect_to the_post_path(@post), notice: 'Post was successfully created.'
+      if params[:commit] == 'Save & edit more'
+        redirect_to edit_post_path(@post.user.username, @post.slug) and return
+      else # Should be the only other case: params[:commit] == 'Save & see post'
+        redirect_to the_post_path(@post) and return
+      end
     else
       render :new
     end
