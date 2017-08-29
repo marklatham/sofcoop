@@ -19,7 +19,12 @@
       |  if you don't have one yet.)
 
   - else
+  
     .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
+    
+    - if  policy(@post).edit?
+      = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(@post.user.username, @post.slug)
+      
     b style='float: left; margin-right: 1rem' Tags:
     ul.tags = render @post.tags
   
