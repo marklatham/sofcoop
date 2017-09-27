@@ -1,0 +1,12 @@
+- provide :title, 'MARKDOWN: ' + @post.title
+
+h1 Markdown coding for post:
+
+h2 = link_to @post.title, the_post_path(@post)
+
+blockquote style="white-space: pre-line;"
+  = @post.body
+
+hr style='height: 2px; margin-bottom: 1rem'
+
+= link_to 'Overview of markdown', '/markdown', target: '_blank'

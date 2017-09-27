@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   
   get    '/@@:channel_slug/@:username/:slug', to: 'posts#show',       as: :channel_post
   get    '/@:username/:slug',                 to: 'posts#show',       as: :post
+  get    '/@:username/:slug/markdown',        to: 'posts#markdown'
+  get    '/@@:channel_slug/@:username/:slug/markdown', to: 'posts#markdown'
   get    '/@:username/:slug/edit',            to: 'posts#edit',       as: :edit_post
   delete '/@:username/:slug/delete',          to: 'posts#destroy',    as: :delete_post
   get    '/posts/@:username',                 to: 'posts#user_posts', as: :user_posts
@@ -66,6 +68,7 @@ Rails.application.routes.draw do
   
   ### VANITY SLUGS: ##################
   
-  get    '/:vanity_slug',    to: 'posts#show',                         as: :vanity
+  get    '/:vanity_slug',          to: 'posts#show',                   as: :vanity
+  get    '/:vanity_slug/markdown', to: 'posts#markdown'
   
 end

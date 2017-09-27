@@ -1,7 +1,6 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :destroy]
+  before_action :set_post, only: [:show, :markdown, :edit, :destroy]
 
-  # GET /posts
   def index
     authorize Post
     #@search = Post.ransack(params[:q]) # moved to ApplicationController
@@ -15,7 +14,6 @@ class PostsController < ApplicationController
     render :index
   end
 
-  # GET /images
   def user_posts
     authorize Post
     @user = User.friendly.find(params[:username])
@@ -30,7 +28,6 @@ class PostsController < ApplicationController
     end
   end
   
-  # GET /posts/1
   def show
     authorize @post
     @comment = Comment.new(post: @post)
@@ -46,21 +43,22 @@ class PostsController < ApplicationController
       return redirect_to the_post_path(@post)
     end
   end
+  
+  def markdown
+    authorize @post
+  end
 
-  # GET /posts/new
   def new
     @post = Post.new
     authorize @post
     @body_class = 'grayback'
   end
 
-  # GET /posts/1/edit
   def edit
     authorize @post
     @body_class = 'grayback'
   end
 
-  # POST /posts
   def create
     @post = current_user.posts.build(post_params)
     authorize @post
@@ -81,7 +79,6 @@ class PostsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /posts/1
   def update
     @post = Post.find(params[:id])
     authorize @post
@@ -118,7 +115,6 @@ class PostsController < ApplicationController
     end
   end
 
-  # DELETE /posts/1
   def destroy
     authorize @post
     @post.destroy

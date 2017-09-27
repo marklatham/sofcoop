@@ -26,6 +26,10 @@ class PostPolicy < ApplicationPolicy
     # More granular restrictions (hiding post.body) are coded in the view
     # to give more granular "unauthorized" messages.
   end
+  
+  def markdown?
+    record.visible > 2 && create?
+  end
 
   def edit?
     user_is_author_or_admin_or_manager?
