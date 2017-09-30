@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  as_of: 2017-09-30 09:17:21
+  days_full_value: 1.5
+  days_valid: 1.5
+  interpolation_range: 1.5
+  spread: 1.5
+  note: MyString
+
+two:
+  as_of: 2017-09-30 09:17:21
+  days_full_value: 1.5
+  days_valid: 1.5
+  interpolation_range: 1.5
+  spread: 1.5
+  note: MyString

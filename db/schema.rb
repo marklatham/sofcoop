@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170812160611) do
+ActiveRecord::Schema.define(version: 20170930161721) do
 
   create_table "channels", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "user_id"
@@ -65,6 +65,17 @@ ActiveRecord::Schema.define(version: 20170812160611) do
     t.string "credit"
     t.index ["user_id", "slug"], name: "index_images_on_user_id_and_slug", unique: true
     t.index ["user_id"], name: "index_images_on_user_id"
+  end
+
+  create_table "parameters", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.datetime "as_of"
+    t.float "days_full_value", limit: 24
+    t.float "days_valid", limit: 24
+    t.float "interpolation_range", limit: 24
+    t.float "spread", limit: 24
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "posts", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
