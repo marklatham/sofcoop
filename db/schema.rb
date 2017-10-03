@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170930161721) do
+ActiveRecord::Schema.define(version: 20171003163642) do
 
-  create_table "channels", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "user_id"
     t.string "name"
     t.string "slug", null: false
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20170930161721) do
     t.index ["user_id"], name: "index_channels_on_user_id"
   end
 
-  create_table "comments", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "post_id"
     t.integer "user_id"
     t.text "body"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20170930161721) do
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
   end
 
-  create_table "images", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "images", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "user_id"
     t.string "title"
     t.string "slug"
@@ -87,13 +87,13 @@ ActiveRecord::Schema.define(version: 20170930161721) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "main_image"
-    t.integer "channel_id"
+    t.bigint "channel_id"
     t.index ["channel_id"], name: "index_posts_on_channel_id"
     t.index ["user_id", "slug"], name: "index_posts_on_user_id_and_slug", unique: true
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
-  create_table "roles", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "resource_type"
     t.integer "resource_id"
@@ -164,7 +164,7 @@ ActiveRecord::Schema.define(version: 20170930161721) do
 
   create_table "users_roles", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "user_id"
-    t.integer "role_id"
+    t.bigint "role_id"
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
   end
 
