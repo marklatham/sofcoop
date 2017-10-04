@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171004173340) do
+ActiveRecord::Schema.define(version: 20171004185616) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
@@ -103,6 +103,18 @@ ActiveRecord::Schema.define(version: 20171004173340) do
     t.index ["name"], name: "index_roles_on_name"
   end
 
+  create_table "standings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "channel_id"
+    t.integer "rank"
+    t.float "share", limit: 24
+    t.float "count0", limit: 24
+    t.float "count1", limit: 24
+    t.datetime "tallied_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_standings_on_channel_id"
+  end
+
   create_table "taggings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "tag_id"
     t.string "taggable_type"
@@ -186,6 +198,7 @@ ActiveRecord::Schema.define(version: 20171004173340) do
   add_foreign_key "images", "users"
   add_foreign_key "posts", "channels"
   add_foreign_key "posts", "users"
+  add_foreign_key "standings", "channels"
   add_foreign_key "votes", "channels"
   add_foreign_key "votes", "users"
 end
