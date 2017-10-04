@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171003193946) do
+ActiveRecord::Schema.define(version: 20171004173340) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
@@ -168,10 +168,24 @@ ActiveRecord::Schema.define(version: 20171003193946) do
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
   end
 
+  create_table "votes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "user_id"
+    t.bigint "channel_id"
+    t.float "share", limit: 24
+    t.string "ip"
+    t.string "agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_votes_on_channel_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
+  end
+
   add_foreign_key "channels", "users"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "images", "users"
   add_foreign_key "posts", "channels"
   add_foreign_key "posts", "users"
+  add_foreign_key "votes", "channels"
+  add_foreign_key "votes", "users"
 end
