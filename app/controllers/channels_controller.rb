@@ -4,6 +4,7 @@ class ChannelsController < ApplicationController
   # Website Home Page
   def home
     @post = Post.find(30) rescue nil
+    @standings = Standing.all
   end
   
   # GET /channels

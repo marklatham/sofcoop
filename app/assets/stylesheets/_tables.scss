@@ -40,7 +40,7 @@ table.data {
   }
 }
 
-// IMAGES TABLE:
+// IMAGES TABLE "table.data.images":
 
 table.images {
   margin: auto;
@@ -57,7 +57,7 @@ table.images {
   }
 }
 
-// POSTS TABLE:
+// POSTS TABLE "table.data.posts":
 
 table.posts {
   margin: auto;
@@ -67,6 +67,56 @@ table.posts {
     font-size: 75%;
   }
 }
+
+// BALLOT "table.ballot":
+
+table.ballot {
+  margin: auto;
+  table-layout: auto;
+  width: auto;
+  border: 2px solid $theme-color2;
+  border-bottom: 5px solid $theme-color2;
+  border-collapse: collapse;
+
+  th {
+    padding: 0.2rem 0.5rem 0.3rem 0.5rem;
+    background-color: $theme-color2;
+    color: white;
+    border: 0;
+  }
+
+  th, td {
+    line-height: 1.2rem;
+    text-align: center;
+    vertical-align: middle;
+  }
+    
+  td {
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    border-bottom: 2px solid $gray-medium;
+  }
+  
+  .avatar img {
+    float: left;
+    width: 32px;
+  }
+  
+  .channel {
+    padding-left: 0;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.2rem;
+    a:link, a:visited {
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+  
+}
+
+////////// NOT USED YET: ///////////////////////////
 
 // PUBLICATIONS TABLE: might use some above?
 
