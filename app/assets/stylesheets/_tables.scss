@@ -96,6 +96,19 @@ table.ballot {
     border-bottom: 2px solid $gray-medium;
   }
   
+  td.vote {
+    width: 15vw;
+    max-width: 12rem;
+    padding: 0;
+    select.vote_menu {
+      width: 8vw;
+      min-width: 4rem;
+      max-width: 7rem;
+      margin: auto;
+      vertical-align: middle;
+    }
+  }
+  
   .avatar img {
     float: left;
     width: 32px;

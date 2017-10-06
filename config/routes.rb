@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   
   ### CHANNELS: ####################
   
-  get       '/@@:channel_slug',                       to: 'channels#show',   as: :channel
-  get       '/@@:channel_slug/posts',                 to: 'channels#posts',  as: :channel_posts
+  get       '/@@:channel_slug',               to: 'channels#show',          as: :channel
+  get       '/@@:channel_slug/posts',         to: 'channels#posts',         as: :channel_posts
+  post      'votes/vote_for_channel',         to: 'votes#vote_for_channel', as: :vote_for_channel
   resources :channels, except: [:show]
   
   ### IMAGES: ######################

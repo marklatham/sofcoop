@@ -1,7 +1,7 @@
 table.ballot
   tr
     th #
-    th Share
+    th style='padding-right: 0;' Share
     th Your Votes
     th
     th style='text-align: left; padding-left: 0' Channel
@@ -12,7 +12,10 @@ table.ballot
       td = standing.rank
       td style='color: #{channel.color}; font-weight: bold'
         = number_with_precision(standing.share, precision: 0) + '%'
-      td
+      td.vote
+        = form_tag vote_for_channel_path do
+          = select_tag :share, options_for_select([['Vote:', ''], ['5%', '5'], ['10%', '10'], ['20%', '20'], ['30%', '30'], ['40%', '40'], ['0%', '0']]), class: 'vote_menu', onchange: 'this.form.submit()'
+          = hidden_field_tag :channel_id, channel.id
       td.avatar = avatar_for_channel(channel)
       td.channel = link_to channel.name, channel_path(channel.slug),
                  style: 'color: ' +  channel.color
