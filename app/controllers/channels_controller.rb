@@ -4,7 +4,8 @@ class ChannelsController < ApplicationController
   # Website Home Page
   def home
     @post = Post.find(30) rescue nil
-    @standings = Standing.all
+    @standings = Standing.all.order('rank ASC')
+    @ballot = find_ballot
   end
   
   # GET /channels

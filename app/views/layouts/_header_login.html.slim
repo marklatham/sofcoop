@@ -12,9 +12,9 @@ div.dropdown
       li = link_to 'My Posts', user_posts_path(current_user.username)
       li = link_to 'My Images', user_images_path(current_user.username)
       li = link_to 'Edit account', edit_user_registration_path
-      li = link_to 'Log out', destroy_user_session_path, method: :delete
       - if policy(Channel).create?
         li = link_to 'Create Channel', new_channel_path
+      li = link_to 'Log out', destroy_user_session_path, method: :delete
           
         
   - else  # User not signed in:

@@ -34,6 +34,7 @@ gem 'diffy'
 gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'
 gem 'ransack', github: 'activerecord-hackery/ransack'  # = master branch, recommended
 gem 'font-awesome-rails'
+gem 'activerecord-session_store'
 
 group :development, :test do
   gem 'byebug', platform: :mri

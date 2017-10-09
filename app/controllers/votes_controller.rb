@@ -10,8 +10,8 @@ class VotesController < ApplicationController
     else
       vote = Vote.create!(share: share, channel_id: channel.id, ip: ip, agent: agent)
     end
-#    ballot = find_ballot
-#    ballot.add_vote(vote)
+    ballot = find_ballot
+    ballot.add_vote(vote)
     redirect_to root_path
   end
 

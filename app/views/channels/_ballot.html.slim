@@ -8,6 +8,16 @@ table.ballot
     
   - for standing in @standings
     - channel = standing.channel
+    / Find latest vote (if any) in this session for this channel:
+    - voted_flag = 0
+    - when_voted = Time.parse("2000-01-01 01:23:45.608000")
+    /- if @ballot.session_votes
+      - for session_vote in @ballot.session_votes
+        - if session_vote.share && session_vote.channel_id == channel.id
+          - voted_flag = 1
+          - if session_vote.created_at > when_voted
+            - when_voted = session_vote.created_at
+            - voted_share = session_vote.share
     tr
       td = standing.rank
       td style='color: #{channel.color}; font-weight: bold'
