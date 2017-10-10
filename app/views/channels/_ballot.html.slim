@@ -9,22 +9,30 @@ table.ballot
   - for standing in @standings
     - channel = standing.channel
     / Find latest vote (if any) in this session for this channel:
-    - voted_flag = 0
+    - voted_flag = false
     - when_voted = Time.parse("2000-01-01 01:23:45.608000")
-    /- if @ballot.session_votes
+    - if @ballot.session_votes
       - for session_vote in @ballot.session_votes
         - if session_vote.share && session_vote.channel_id == channel.id
-          - voted_flag = 1
+          - voted_flag = true
           - if session_vote.created_at > when_voted
             - when_voted = session_vote.created_at
             - voted_share = session_vote.share
     tr
       td = standing.rank
-      td style='color: #{channel.color}; font-weight: bold'
+      td style='color: #{channel.color}; font-weight: bold; font-size: 1.2rem'
         = number_with_precision(standing.share, precision: 0) + '%'
       td.vote
+        - menu_style = ''
+        - heading = 'Vote:'
+        - if voted_flag
+          - menu_style = 'font-size: 0.8rem; font-weight: normal'
+          - heading = 'Change:'
+          | You voted 
+          span style='color: #{channel.color}; font-weight: bold'
+            = number_with_precision(voted_share, :precision => 0) + '%'
         = form_tag vote_for_channel_path do
-          = select_tag :share, options_for_select([['Vote:', ''], ['5%', '5'], ['10%', '10'], ['20%', '20'], ['30%', '30'], ['40%', '40'], ['0%', '0']]), class: 'vote_menu', onchange: 'this.form.submit()'
+          = select_tag :share, options_for_select([[heading, ''], ['5%', '5'], ['10%', '10'], ['20%', '20'], ['30%', '30'], ['40%', '40'], ['0%', '0']]), class: 'vote_menu', style: menu_style, onchange: 'this.form.submit()'
           = hidden_field_tag :channel_id, channel.id
       td.avatar = avatar_for_channel(channel)
       td.channel = link_to channel.name, channel_path(channel.slug),

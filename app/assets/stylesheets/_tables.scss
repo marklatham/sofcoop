@@ -100,12 +100,14 @@ table.ballot {
     width: 15vw;
     max-width: 12rem;
     padding: 0;
+    font-size: 0.8rem;
     select.vote_menu {
       width: 8vw;
-      min-width: 4rem;
+      min-width: 4.5rem;
       max-width: 7rem;
       margin: auto;
       vertical-align: middle;
+      font-weight: bold;
     }
   }
   
