@@ -99,7 +99,7 @@ div.dropdown ul {
   width: 1rem;
   visibility: hidden;
   list-style: none;
-  transition: visibility 0.2s 0.1s;
+  transition: visibility 0.2s 0.2s;
 }
 
 div.dropdown:hover ul {
@@ -250,7 +250,7 @@ header table.channels-menu {
       z-index: 2;
       //display: none;
       visibility: hidden;
-      transition: visibility 0.1s 0.1s;
+      transition: visibility 0.2s 0.2s;
       position: absolute;
       top: 32px;       // = tr line-height (above)
       left: 0px;
@@ -278,5 +278,34 @@ header table.channels-menu {
       visibility: visible;
       max-height: 25vh;
     }
+  }
+}
+
+////// CSS CHANGES FOR "MORE" DROPDOWN:
+
+table.channels-menu tr td.more {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+}
+
+td.more div.dropdown {
+  margin: 0 0 0 0.2rem;
+  display: block;
+  margin: 0;
+}
+.more div:hover {
+}
+.more ul {
+  top: 32px;
+  right: 7rem;          // Tweak together with width below!
+}
+td.more div.dropdown ul li{
+  width: 8rem;
+  margin: 0;
+  padding: 0.2rem 0 0.2rem 0;
+  text-align: center;
+  a {
+    color: #fff;
   }
 }

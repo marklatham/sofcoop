@@ -14,5 +14,10 @@ table.channels-menu
               p = link_to channel.name, channel_path(channel.slug)
               
     - if nav_channels.size > 10
-      td style='color: #fff; background-color: #000' more
-      
+      td.more
+        div.dropdown
+          | more
+          ul.droplink
+            - for channel in nav_channels[10..-1]
+              li style='background-color: #{channel.color}'
+                = link_to channel.name.upcase, channel_path(channel.slug)
