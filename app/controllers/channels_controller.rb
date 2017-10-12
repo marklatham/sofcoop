@@ -5,6 +5,7 @@ class ChannelsController < ApplicationController
   def home
     @post = Post.find(30) rescue nil
     @standings = Standing.all.order('rank ASC')
+    @standings = Kaminari.paginate_array(@standings).page(params[:page])
     @ballot = find_ballot
   end
   

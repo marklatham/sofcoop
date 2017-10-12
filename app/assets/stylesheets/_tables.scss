@@ -129,35 +129,27 @@ table.ballot {
     }
   }
   
+  tr.last td {
+    background-color: #e5e5e5;
+    text-align: left;
+    font-size: 0.8rem;
+    nav {
+      display: inline;
+    }
+    span.divider {
+      padding-left: 0.3rem;
+      font-size: 1.2rem;
+    }
+  }
+  
 }
 
-////////// NOT USED YET: ///////////////////////////
+// CENTERING (a block of text):
 
-// PUBLICATIONS TABLE: might use some above?
-
-table.pubs {
-  table-layout: auto;
-  min-width: 32rem;
-  max-width: 80rem;
-  tr:nth-child(even) {
-    background-color: $gray-lightest;
-  }
-}
-
-// MINIMAL TABLE: not needed?
-
-table.minimal {
-  table-layout: auto;
-  width: 30rem;
-  h1 {
-    line-height: 1.2;
-    margin: 0;
-  }
+table.centering {
+  margin: auto;
+  width: auto;
   td {
     border: 0;
-    margin: 0;
-  }
-  td.button {
-    margin: 1rem 0 0 0;
   }
 }

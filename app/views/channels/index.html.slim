@@ -8,7 +8,7 @@ table
       th style='font-size: 1.5rem' Manager
 
   tbody
-    - for channel in @channels
+    - for channel in nav_channels
       tr
         td.avatar
           = link_to avatar_for_channel(channel), channel_path(channel.slug)

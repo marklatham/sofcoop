@@ -37,3 +37,10 @@ table.ballot
       td.avatar = avatar_for_channel(channel)
       td.channel = link_to channel.name, channel_path(channel.slug),
                  style: 'color: ' +  channel.color
+
+  tr.last
+    td[colspan='5']
+      | Page:
+      = paginate @standings
+      span.divider | 
+      = link_to 'FAQ on voting', '/@@admin/@mark/faq-voting', target: '_blank'

@@ -8,10 +8,20 @@ class ApplicationController < ActionController::Base
   helper_method :is_author_or_admin?
   helper_method :the_post_path
   helper_method :the_post_url
+  helper_method :nav_channels
   require 'httparty'
 
   def set_search
     @search = Post.ransack(params[:q])
+  end
+  
+  def nav_channels
+    response = []
+    standings = Standing.all.order('rank ASC')
+    for standing in standings
+      response << standing.channel
+    end
+    response << Channel.where(slug: 'admin').first
   end
   
   # More specific versions are in [resource]_policy, since handy there.
