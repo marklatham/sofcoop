@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171019190509) do
+ActiveRecord::Schema.define(version: 20171019214508) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 20171019190509) do
     t.string "avatar"
     t.string "provider"
     t.string "uid"
+    t.boolean "is_member", default: false, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -197,6 +198,7 @@ ActiveRecord::Schema.define(version: 20171019190509) do
     t.string "agent"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_member", default: false, null: false
     t.index ["channel_id"], name: "index_votes_on_channel_id"
     t.index ["user_id"], name: "index_votes_on_user_id"
   end
