@@ -6,8 +6,8 @@ p#notice = notice
 
 p
   b Manager: 
-  .avatar = link_to avatar_for_user(@channel.user), user_path(@channel.user.username)
-  = '@' + @channel.user.username
+  .avatar = link_to avatar_for_user(@channel.manager), user_path(@channel.manager.username)
+  = '@' + @channel.manager.username
 
 p
   b Avatar:

@@ -16,5 +16,5 @@ table
           strong = link_to channel.name, channel_path(channel.slug),
                    style: 'color: ' +  channel.color + '; font-size: 1.25rem'
         td.author
-          .avatar = link_to avatar_for_user(channel.user), user_path(channel.user.username)
-          .username = link_to '@' + channel.user.username, user_path(channel.user.username)
+          .avatar = link_to avatar_for_user(channel.manager), user_path(channel.manager.username)
+          .username = link_to '@' + channel.manager.username, user_path(channel.manager.username)

@@ -58,7 +58,7 @@ class PostPolicy < ApplicationPolicy
   
   def user_is_author_or_admin_or_manager?
     if user
-      user == record.user || user.is_admin? || record.channel && user == record.channel.user
+      user == record.user || user.is_admin? || record.channel && user == record.channel.manager
     end
   end
   

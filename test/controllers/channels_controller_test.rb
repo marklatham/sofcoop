@@ -17,7 +17,7 @@ class ChannelsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create channel" do
     assert_difference('Channel.count') do
-      post channels_url, params: { channel: { avatar: @channel.avatar, color: @channel.color, name: @channel.name, slug: @channel.slug, user_id: @channel.user_id } }
+      post channels_url, params: { channel: { avatar: @channel.avatar, color: @channel.color, name: @channel.name, slug: @channel.slug, manager_id: @channel.manager_id } }
     end
 
     assert_redirected_to channel_url(Channel.last)
@@ -34,7 +34,7 @@ class ChannelsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update channel" do
-    patch channel_url(@channel), params: { channel: { avatar: @channel.avatar, color: @channel.color, name: @channel.name, slug: @channel.slug, user_id: @channel.user_id } }
+    patch channel_url(@channel), params: { channel: { avatar: @channel.avatar, color: @channel.color, name: @channel.name, slug: @channel.slug, manager_id: @channel.manager_id } }
     assert_redirected_to channel_url(@channel)
   end
 

@@ -1,5 +1,5 @@
 div
-  | TO: &nbsp; @#{@channel.user.username}, Manager of 
+  | TO: &nbsp; @#{@channel.manager.username}, Manager of 
   = link_to @channel.name, channel_url(@channel.slug)
 div
   | AND: @#{@post.user.username}, Author of 

@@ -93,14 +93,14 @@ class PostsController < ApplicationController
       flash[:notice] = 'Post saved.'
       unless old_channel && @post.channel == old_channel
         if @post.channel
-          unless @post.channel.user == current_user && @post.user == current_user
+          unless @post.channel.manager == current_user && @post.user == current_user
             AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
           end
         end
       end
       unless @post.channel && @post.channel == old_channel
         if old_channel
-          unless old_channel.user == current_user && @post.user == current_user
+          unless old_channel.manager == current_user && @post.user == current_user
             AdminMailer.post_unassigned(@post, old_channel, current_user).deliver
           end
         end

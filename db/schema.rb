@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171009182759) do
+ActiveRecord::Schema.define(version: 20171019190509) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "user_id"
+    t.bigint "manager_id"
     t.string "name"
     t.string "slug", null: false
     t.string "color", default: "#666"
@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 20171009182759) do
     t.datetime "updated_at", null: false
     t.string "color_bg", default: "#F2F2F2"
     t.bigint "dropdown_id"
+    t.index ["manager_id"], name: "index_channels_on_manager_id"
     t.index ["slug"], name: "index_channels_on_slug", unique: true
-    t.index ["user_id"], name: "index_channels_on_user_id"
   end
 
   create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -201,7 +201,7 @@ ActiveRecord::Schema.define(version: 20171009182759) do
     t.index ["user_id"], name: "index_votes_on_user_id"
   end
 
-  add_foreign_key "channels", "users"
+  add_foreign_key "channels", "users", column: "manager_id"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "images", "users"
