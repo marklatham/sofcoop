@@ -293,6 +293,11 @@ td.more div.dropdown {
   margin: 0 0 0 0.2rem;
   display: block;
   margin: 0;
+  .down-arrow {
+    @include triangle(down, white, 0.6rem);
+    display: inline-block;
+    margin: 0 0 0.1rem 0.2rem;
+  }
 }
 .more div:hover {
 }

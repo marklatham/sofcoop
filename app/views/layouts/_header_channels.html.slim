@@ -17,7 +17,12 @@ table.channels-menu
       td.more
         div.dropdown
           | more
+          b.down-arrow
           ul.droplink
             - for channel in nav_channels[10..-1]
+              - if post = Post.find(channel.dropdown_id) rescue nil
+                - path = the_post_path(post)
+              - else
+                - path = channel_path(channel.slug)
               li style='background-color: #{channel.color}'
-                = link_to channel.name.upcase, channel_path(channel.slug)
+                = link_to channel.name.upcase, path
