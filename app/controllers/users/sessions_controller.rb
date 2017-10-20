@@ -9,6 +9,7 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
+    session[:ballot] = Ballot.new    # Don't show any pre-login votes.
     super do |resource|
       if resource.sign_in_count < 2
         flash[:notice] = 'Welcome! We gave you the username @' +
