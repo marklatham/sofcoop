@@ -1,6 +1,6 @@
 - manage = false
 - if local_assigns[:author] && current_user
-  - if current_user == local_assigns[:author] || current_user.is_admin?
+  - if current_user == author || current_user.is_admin?
     - manage = true
 
 table.data.posts
