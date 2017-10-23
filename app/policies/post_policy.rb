@@ -52,13 +52,13 @@ class PostPolicy < ApplicationPolicy
   # A more general version is in application_controller, but this version is handy here:
   def user_is_author_or_admin?
     if user
-      user == record.user || user.is_admin?
+      user == record.author || user.is_admin?
     end
   end
   
   def user_is_author_or_admin_or_manager?
     if user
-      user == record.user || user.is_admin? || record.channel && user == record.channel.manager
+      user == record.author || user.is_admin? || record.channel && user == record.channel.manager
     end
   end
   

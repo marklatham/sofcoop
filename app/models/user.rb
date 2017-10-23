@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   
   has_many :posts, foreign_key: 'author_id'
+  has_many :comments, foreign_key: 'author_id'
   has_many :images
-  has_many :comments
   has_many :votes
   
   attr_accessor :delete_content

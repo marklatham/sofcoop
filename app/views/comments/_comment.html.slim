@@ -1,7 +1,7 @@
 .comments
-  .avatar = link_to avatar_for_user(comment.user), user_path(comment.user.username),
+  .avatar = link_to avatar_for_user(comment.author), user_path(comment.author.username),
             id: 'comment-'+comment.id.to_s
-  = link_to '@'+comment.user.username, user_path(comment.user.username)
+  = link_to '@'+comment.author.username, user_path(comment.author.username)
 
   blockquote
     .comment-body = Loofah.scrub_fragment(comment.body.markdown2html, :prune).to_s.html_safe
