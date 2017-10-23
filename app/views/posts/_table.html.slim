@@ -39,8 +39,8 @@ table.data.posts
             .username = link_to post.channel.name, channel_path(post.channel.slug)
         - unless local_assigns[:author]
           td.author
-            .avatar = link_to avatar_for_user(post.user), user_path(post.user.username)
-            .username = link_to '@'+post.user.username, user_path(post.user.username)
+            .avatar = link_to avatar_for_user(post.author), user_path(post.author.username)
+            .username = link_to '@'+post.author.username, user_path(post.author.username)
         td = post.body.split.size
         td = post.comments.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
@@ -52,8 +52,8 @@ table.data.posts
           - else
             = time_ago_in_words(post.updated_at) + ' ago'
         - if manage
-          td = link_to 'Edit', edit_post_path(post.user.username, post.slug)
-          td = link_to 'Delete', delete_post_path(post.user.username, post.slug),
+          td = link_to 'Edit', edit_post_path(post.author.username, post.slug)
+          td = link_to 'Delete', delete_post_path(post.author.username, post.slug),
                method: :delete, data: {confirm: "You sure?"}
 
 = paginate @posts

@@ -39,7 +39,7 @@ class AdminMailer < ApplicationMailer
     @post = post
     @channel = channel
     @current_user = current_user
-    mail   to: [channel.manager.email, post.user.email],
+    mail   to: [channel.manager.email, post.author.email],
            cc: Sofcoop::Application.secrets.admin_email,
       subject: "Post assigned to channel"
   end
@@ -48,7 +48,7 @@ class AdminMailer < ApplicationMailer
     @post = post
     @channel = channel
     @current_user = current_user
-    mail   to: [channel.manager.email, post.user.email],
+    mail   to: [channel.manager.email, post.author.email],
            cc: Sofcoop::Application.secrets.admin_email,
       subject: "Post UNassigned FROM channel"
   end

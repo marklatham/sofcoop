@@ -108,13 +108,13 @@ class Users::RegistrationsController < DeviseController
   # GET /cancel_account (form)
   def cancel_account
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
-    @posts = Post.where(user_id: resource.id).order('updated_at DESC').page(params[:page])
+    @posts = Post.where(author_id: resource.id).order('updated_at DESC').page(params[:page])
     @body_class = 'grayback'
   end
 
   # DELETE /resource
   def destroy
-    posts = Post.where(user_id: resource.id)
+    posts = Post.where(author_id: resource.id)
     posts_count = posts.count
     if posts.any?
       # I thought :delete_content would be a boolean, but it's a string!:

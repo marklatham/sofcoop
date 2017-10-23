@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   # So far only using this where resource is a post.
   def is_author_or_admin?(user, resource)
     if user
-      user == resource.user || user.is_admin?
+      user == resource.author || user.is_admin?
     end
   end
   
@@ -44,9 +44,9 @@ class ApplicationController < ActionController::Base
     if vanity_slug = vanity_slugs[post.id]
       vanity_path(vanity_slug)
     elsif post.channel
-      channel_post_path(post.channel.slug, post.user.username, post.slug)
+      channel_post_path(post.channel.slug, post.author.username, post.slug)
     else
-      post_path(post.user.username, post.slug)
+      post_path(post.author.username, post.slug)
     end
   end
   
@@ -54,9 +54,9 @@ class ApplicationController < ActionController::Base
     if vanity_slug = vanity_slugs[post.id]
       vanity_url(vanity_slug)
     elsif post.channel
-      channel_post_url(post.channel.slug, post.user.username, post.slug)
+      channel_post_url(post.channel.slug, post.author.username, post.slug)
     else
-      post_url(post.user.username, post.slug)
+      post_url(post.author.username, post.slug)
     end
   end
 

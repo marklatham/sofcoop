@@ -32,9 +32,9 @@ class PostsController < ApplicationController
     authorize @post
     @comment = Comment.new(post: @post)
     if params[:username] && request.path != the_post_path(@post)
-      if params[:username].downcase != @post.user.username.downcase
+      if params[:username].downcase != @post.author.username.downcase
         flash[:notice] = 'Username @' + params[:username] +
-                         ' has changed to @' + @post.user.username
+                         ' has changed to @' + @post.author.username
       elsif params[:slug].downcase != @post.slug.downcase
         flash[:notice] = 'That post has changed its title and URL.'
       else
@@ -70,7 +70,7 @@ class PostsController < ApplicationController
         AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
       end
       if params[:commit] == 'Save & edit more'
-        redirect_to edit_post_path(@post.user.username, @post.slug) and return
+        redirect_to edit_post_path(@post.author.username, @post.slug) and return
       else # Should be the only other case: params[:commit] == 'Save & see post'
         redirect_to the_post_path(@post) and return
       end
@@ -93,20 +93,20 @@ class PostsController < ApplicationController
       flash[:notice] = 'Post saved.'
       unless old_channel && @post.channel == old_channel
         if @post.channel
-          unless @post.channel.manager == current_user && @post.user == current_user
+          unless @post.channel.manager == current_user && @post.author == current_user
             AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
           end
         end
       end
       unless @post.channel && @post.channel == old_channel
         if old_channel
-          unless old_channel.manager == current_user && @post.user == current_user
+          unless old_channel.manager == current_user && @post.author == current_user
             AdminMailer.post_unassigned(@post, old_channel, current_user).deliver
           end
         end
       end
       if params[:commit] == 'Save & edit more'
-        redirect_to edit_post_path(@post.user.username, @post.slug) and return
+        redirect_to edit_post_path(@post.author.username, @post.slug) and return
       else # Should be the only other case: params[:commit] == 'Save & see post'
         redirect_to the_post_path(@post) and return
       end
@@ -132,7 +132,7 @@ class PostsController < ApplicationController
   def set_post
     if params[:username]
       user = User.friendly.find(params[:username])
-      @post = Post.where(user_id: user.id).friendly.find(params[:slug])
+      @post = Post.where(author_id: user.id).friendly.find(params[:slug])
     elsif params[:id]
       @post = Post.find(params[:id])
     elsif params[:vanity_slug]
@@ -146,7 +146,7 @@ class PostsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
-    params.require(:post).permit(:user_id, :visible, :title, :slug, :body,
+    params.require(:post).permit(:author_id, :visible, :title, :slug, :body,
         :main_image, :main_image_cache, :remote_main_image_url, :tag_list, :channel_id)
   end
 

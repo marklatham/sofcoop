@@ -23,7 +23,7 @@
     .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
     
     - if  policy(@post).edit?
-      = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(@post.user.username, @post.slug)
+      = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(@post.author.username, @post.slug)
       
     hr style='height: 2px; margin-bottom: 1rem'
     
@@ -32,10 +32,10 @@
   
   hr style='margin-bottom: 1rem; background: #aaa'
 
-  .avatar = link_to avatar_for_user(@post.user), user_path(@post.user.username)
+  .avatar = link_to avatar_for_user(@post.author), user_path(@post.author.username)
 
   span.timestamp
-    |  Posted by #{link_to '@'+@post.user.username, user_path(@post.user.username)}
+    |  Posted by #{link_to '@'+@post.author.username, user_path(@post.author.username)}
     |  #{time_ago_in_words(@post.created_at)} ago.
     - if @post.updated_at > @post.created_at
       |  Updated #{time_ago_in_words(@post.updated_at)} ago.
@@ -45,10 +45,10 @@
 
   - if  policy(@post).edit?
     p.controls
-      = link_to 'Edit Post', edit_post_path(@post.user.username, @post.slug)
+      = link_to 'Edit Post', edit_post_path(@post.author.username, @post.slug)
       - if  policy(@post).destroy?
         |  | 
-        = link_to 'Delete Post', delete_post_path(@post.user.username, @post.slug),
+        = link_to 'Delete Post', delete_post_path(@post.author.username, @post.slug),
                   method: :delete, data: {confirm: "You sure?"}
   
   hr style='height: 2px; margin-bottom: 1rem'

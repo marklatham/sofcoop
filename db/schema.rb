@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171019214508) do
+ActiveRecord::Schema.define(version: 20171023181904) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20171019214508) do
   end
 
   create_table "posts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "user_id"
+    t.bigint "author_id"
     t.integer "visible", default: 0
     t.string "title"
     t.string "slug", null: false
@@ -88,9 +88,9 @@ ActiveRecord::Schema.define(version: 20171019214508) do
     t.datetime "updated_at", null: false
     t.string "main_image"
     t.bigint "channel_id"
+    t.index ["author_id", "slug"], name: "index_posts_on_author_id_and_slug", unique: true
+    t.index ["author_id"], name: "index_posts_on_author_id"
     t.index ["channel_id"], name: "index_posts_on_channel_id"
-    t.index ["user_id", "slug"], name: "index_posts_on_user_id_and_slug", unique: true
-    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "roles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -208,7 +208,7 @@ ActiveRecord::Schema.define(version: 20171019214508) do
   add_foreign_key "comments", "users"
   add_foreign_key "images", "users"
   add_foreign_key "posts", "channels"
-  add_foreign_key "posts", "users"
+  add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "standings", "channels"
   add_foreign_key "votes", "channels"
   add_foreign_key "votes", "users"
