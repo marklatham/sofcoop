@@ -6,12 +6,12 @@ namespace :filenames do
     mismatches = 0
     log_report = []
     log_report << "Start time = " + start_time.inspect
-    s3_client = Fog::Storage::AWS.new(aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-                                  aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+    s3_client = Fog::Storage::AWS.new(aws_access_key_id: Sofcoop::Application.secrets.aws_access_key_id,
+                                  aws_secret_access_key: Sofcoop::Application.secrets.aws_secret_access_key,
                                                  region: 'us-west-2')
-    puts "Bucket: " + ENV['AWS_S3_BUCKET']
+    puts "Bucket: " + Sofcoop::Application.secrets.aws_s3_bucket
     # bucket is synonym for directory
-    bucket = s3_client.directories.get(ENV['AWS_S3_BUCKET'],
+    bucket = s3_client.directories.get(Sofcoop::Application.secrets.aws_s3_bucket,
                                        options = {region: 'us-west-2'})
     puts "Bucket Region: " + bucket.location.to_s
     images = Image.all
