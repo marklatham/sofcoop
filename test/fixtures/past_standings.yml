@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  standing: one
+  channel: one
+  rank: 1
+  share: 1.5
+  count0: 1.5
+  count1: 1.5
+  tallied_at: 2017-10-24 11:21:29
+
+two:
+  standing: two
+  channel: two
+  rank: 1
+  share: 1.5
+  count0: 1.5
+  count1: 1.5
+  tallied_at: 2017-10-24 11:21:29
