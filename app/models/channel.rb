@@ -4,6 +4,7 @@ class Channel < ApplicationRecord
   has_many :posts
   has_many :votes
   has_one :standing
+  has_many :past_standings
   
   mount_uploader :avatar, ChannelUploader
   

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171023215310) do
+ActiveRecord::Schema.define(version: 20171024182129) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -76,6 +76,20 @@ ActiveRecord::Schema.define(version: 20171023215310) do
     t.string "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "past_standings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "standing_id"
+    t.bigint "channel_id"
+    t.integer "rank"
+    t.float "share", limit: 24
+    t.float "count0", limit: 24
+    t.float "count1", limit: 24
+    t.datetime "tallied_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_past_standings_on_channel_id"
+    t.index ["standing_id"], name: "index_past_standings_on_standing_id"
   end
 
   create_table "posts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -207,6 +221,8 @@ ActiveRecord::Schema.define(version: 20171023215310) do
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users", column: "author_id"
   add_foreign_key "images", "users"
+  add_foreign_key "past_standings", "channels"
+  add_foreign_key "past_standings", "standings"
   add_foreign_key "posts", "channels"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "standings", "channels"
