@@ -1,32 +1,5 @@
 namespace :votes do
 
-  desc "Fill in days & level for recent votes."
-  task process: :environment do
-    Time.zone = "Pacific Time (US & Canada)"
-    time_now = Time.now
-    puts "Time now = " + time_now.inspect
-    
-    votes = Vote.where("days IS NULL").order(:id)
-    puts votes.size.to_s + " new votes"
-    
-    for vote in votes
-      if previous_vote = Vote.where("ip = ? and created_at < ?",
-                                        vote.ip, vote.created_at).order("created_at").last
-        vote.days = (vote.created_at.in_time_zone.to_date - previous_vote.created_at.in_time_zone.to_date).to_f
-      else
-        vote.days = -1
-      end
-      
-      if auth = Auth.where("user_id = ? and created_at < ?",
-                             vote.user_id, vote.created_at).order("created_at").last
-        vote.level = auth.level
-      end
-      
-      vote.save
-    end
-  end
-
-
   desc "Tally votes for the next day."
   task tally: :environment do
     
@@ -113,35 +86,14 @@ namespace :votes do
     
     oldest_time = (parameter.days_valid + 1).days.until(cutoff_time)
     puts "oldest_time = " + oldest_time.inspect
-    votes_auth = Vote.where("created_at > ? and created_at < ? and level > ?",
-                                oldest_time,       cutoff_time,    parameter.ip_level)
+    votes_auth = Vote.where("created_at > ? and created_at < ? and is_member = 1",
+                                oldest_time,       cutoff_time)
                      .order(:user_id, :channel_id, created_at: :desc).to_a
-    votes_non_auth = Vote.where("created_at > ? and created_at < ? and (level IS NULL or level <= ?)",
-                                   oldest_time,       cutoff_time,               parameter.ip_level)
-                     .order(:ip,      :channel_id, created_at: :desc).to_a
     if votes_auth.any?
       puts "Found " + votes_auth.size.to_s + " votes_auth."
     else
       puts "Found no votes_auth."
     end
-    if votes_non_auth.any?
-      puts "Found " + votes_non_auth.size.to_s + " votes_non_auth."
-    else
-      puts "Found no votes_non_auth."
-    end
-    
-    # Don't count votes_non_auth with same ip as votes_auth:
-    votes_auth_ips = votes_auth.map(&:ip).uniq.sort
-    puts votes_auth_ips.inspect
-    puts votes_non_auth.inspect
-    votes_to_keep = []
-    for vote in votes_non_auth
-      puts vote.inspect
-      votes_to_keep << vote unless votes_auth_ips.include?(vote.ip)
-    end
-    votes_non_auth = votes_to_keep
-    puts votes_non_auth.inspect
-    puts votes_non_auth.size.to_s + " votes_non_auth left."
     
     # In votes_auth, only count the latest vote from each user on each channel.
     # For each [user_id, channel_id], votes are in reverse chronological order,
@@ -160,24 +112,7 @@ namespace :votes do
       puts votes_auth.size.to_s + " latest votes_auth for tallying."
     end
     
-    # In votes_non_auth, only count the latest vote from each ip on each channel.
-    # For each [ip, channel_id], votes are in reverse chronological order,
-    # so keep the first one in each group:
-    if votes_non_auth.any?
-      votes_to_keep = []
-      keep_vote = votes_non_auth[0]
-      votes_to_keep << keep_vote
-      for vote in votes_non_auth
-        unless vote.ip ==  keep_vote.ip &&  vote.channel_id == keep_vote.channel_id
-          keep_vote = vote
-          votes_to_keep << keep_vote
-        end
-      end
-      votes_non_auth = votes_to_keep
-      puts votes_non_auth.size.to_s + " latest votes_non_auth for tallying."
-    end
-    
-    votes = votes_auth | votes_non_auth
+    votes = votes_auth
     
     # Make sure shares are nonnegative whole numbers, not all zero:
     for standing in standings
@@ -306,10 +241,7 @@ namespace :votes do
           support_fraction = 0.5 + ( (vote.share - cutoff_share) / parameter.interpolation_range )
         end
         
-        auth_level = parameter.ip_level
-        auth_level = vote.level if vote.level
-        
-        count += decayed_weight * support_fraction * auth_level
+        count += decayed_weight * support_fraction
       end
     end
     

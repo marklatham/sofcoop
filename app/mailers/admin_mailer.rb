@@ -59,4 +59,10 @@ class AdminMailer < ApplicationMailer
       subject: "Filenames Update"
   end
   
+  def votes_tally(cutoff_time)
+    @cutoff_time = cutoff_time
+    mail   to: Sofcoop::Application.secrets.admin_email,
+      subject: "Votes tally"
+  end
+  
 end
