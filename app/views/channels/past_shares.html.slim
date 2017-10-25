@@ -1,18 +1,18 @@
-- provide :title, 'History of Channel Shares'
+- provide :title, 'Past Award Shares'
 
-h2.center History of Channel Shares
+h2.center Past Award Shares
 
-table.history[cellspacing="0"]
+table.past-shares[cellspacing="0"]
 
   = render partial: 'header_channels'
   
   tr.header-shares
     td Day
-    td Funding
+    td $
     - @channel_ids.each do |channel_id|
       td #
-      td Share
-      td Award
+      td %
+      td $
   
   - date_style = "font-weight: normal; padding-left: 0.3em; white-space: nowrap"
   - date_format = "%Y-%m-%d"
@@ -21,10 +21,9 @@ table.history[cellspacing="0"]
   - group_index = 0
   - size = @past_standings.size
   - until group_index >= size
-    tr[class=cycle('list-line-odd', 'list-line-even')]
+    tr.data-row
       td.leftborder[style=date_style] = @past_standings[group_index].tallied_at.strftime(date_format)
       td.green.rightborder
-        -# strong= '$' + number_with_precision(@past_standings[group_index].funds, :precision => 0)
         strong= '$' + number_with_precision(0, :precision => 0)
       - @channel_ids.each do |channel_id|
         - index = group_index
@@ -35,7 +34,6 @@ table.history[cellspacing="0"]
             td = @past_standings[index].rank
             td.share
               = number_with_precision(@past_standings[index].share, :precision => share_precision) + '%'
-            -# td.cell-right.history-award.rightborder= '$' + number_with_precision(@past_standings[index].award, :precision => 2)
             td.award= '$' + number_with_precision(0, :precision => 2)
             - break
           - index += 1

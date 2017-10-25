@@ -1,0 +1,6 @@
+tr.header-channels
+  td[colspan="2", style='text-align:right'] TOTAL
+  - @channel_ids.each do |channel_id|
+    td[colspan="3"]
+      - if channel = Channel.where("id = ?", channel_id).first
+        = truncate(channel.name, :length => 55, :omission => "...")

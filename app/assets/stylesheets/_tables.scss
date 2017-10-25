@@ -154,3 +154,54 @@ table.centering {
     border: 0;
   }
 }
+
+// PAST SHARES:
+
+table.past-shares {
+  table-layout: auto;
+  margin: auto;
+  text-align: center;
+  td {padding: 0.3em 0.4em 0.3em 0.4em}
+
+  .header-channels {
+    font-size: 1.2rem;
+    font-weight: bold;
+    white-space: nowrap;
+    background: #555;
+    td {
+      padding-top: 0.9rem;
+      padding-bottom: 0.9rem;
+      border: 2px #555;
+      border-style: none solid none solid;
+      color: white;
+    }
+  }
+
+  .header-shares {
+    font-weight: bold;
+    background: #fa0;
+    td {border: 2px solid #fa0;}
+  }
+
+  tr.data-row:nth-child(odd) {
+    background-color: #fff;
+  }
+  tr.data-row:nth-child(even) {
+    background-color: $gray-lightest;
+  }
+  
+  .leftborder  {border-left:  2px solid #fa0}
+  .rightborder {border-right: 2px solid #fa0}
+
+  .share {
+    font-weight: bold;
+    color: $blue;
+  }
+
+  .award {
+    text-align: right;
+    color: green;
+    border-right: 2px solid #fa0;
+  }
+
+}
