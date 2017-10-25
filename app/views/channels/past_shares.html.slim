@@ -1,0 +1,53 @@
+- provide :title, 'History of Channel Shares'
+
+h2.center History of Channel Shares
+
+table.history[cellspacing="0"]
+
+  = render partial: 'header_channels'
+  
+  tr.header-shares
+    td Day
+    td Funding
+    - @channel_ids.each do |channel_id|
+      td #
+      td Share
+      td Award
+  
+  - date_style = "font-weight: normal; padding-left: 0.3em; white-space: nowrap"
+  - date_format = "%Y-%m-%d"
+  - share_precision = 0
+  - index = 0
+  - group_index = 0
+  - size = @past_standings.size
+  - until group_index >= size
+    tr[class=cycle('list-line-odd', 'list-line-even')]
+      td.leftborder[style=date_style] = @past_standings[group_index].tallied_at.strftime(date_format)
+      td.green.rightborder
+        -# strong= '$' + number_with_precision(@past_standings[group_index].funds, :precision => 0)
+        strong= '$' + number_with_precision(0, :precision => 0)
+      - @channel_ids.each do |channel_id|
+        - index = group_index
+        - found_flag = 0
+        - while @past_standings[index].tallied_at == @past_standings[group_index].tallied_at
+          - if found_flag == 0 && @past_standings[index].channel_id == channel_id
+            - found_flag = 1
+            td = @past_standings[index].rank
+            td.share
+              = number_with_precision(@past_standings[index].share, :precision => share_precision) + '%'
+            -# td.cell-right.history-award.rightborder= '$' + number_with_precision(@past_standings[index].award, :precision => 2)
+            td.award= '$' + number_with_precision(0, :precision => 2)
+            - break
+          - index += 1
+          - break if index >= size
+        - if found_flag == 0
+          td
+          td
+          td.rightborder
+    - break if group_index+1 >= size
+    - while @past_standings[group_index].tallied_at == @past_standings[group_index+1].tallied_at
+      - group_index += 1
+      - break if group_index+1 >= size
+    - group_index += 1
+
+  = render :partial => 'header_channels'

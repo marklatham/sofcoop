@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   
   ### VANITY SLUGS: ##################
   
+  get    '/past-shares',           to: 'channels#past_shares',         as: :past_shares
   get    '/:vanity_slug',          to: 'posts#show',                   as: :vanity
   get    '/:vanity_slug/markdown', to: 'posts#markdown'
   

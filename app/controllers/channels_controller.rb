@@ -8,6 +8,12 @@ class ChannelsController < ApplicationController
     @standings = Kaminari.paginate_array(@standings).page(params[:page])
     @ballot = find_ballot
   end
+
+  # History of award shares & rankings
+  def past_shares
+    @past_standings = PastStanding.all.order("tallied_at DESC, rank ASC")
+    @channel_ids = @past_standings.map(&:channel_id).uniq
+  end
   
   # GET /channels
   def index

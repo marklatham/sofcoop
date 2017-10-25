@@ -43,4 +43,6 @@ table.ballot
       | Page:
       = paginate @standings
       span.divider | 
-      = link_to 'FAQ on voting', '/@@admin/@mark/faq-voting', target: '_blank'
+      = link_to 'FAQ', '/@@admin/@mark/faq-voting', target: '_blank'
+      span.divider | 
+      = link_to 'Past Shares', past_shares_path
