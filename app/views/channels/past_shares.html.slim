@@ -23,7 +23,7 @@ table.past-shares[cellspacing="0"]
   - until group_index >= size
     tr.data-row
       td.leftborder[style=date_style] = @past_standings[group_index].tallied_at.strftime(date_format)
-      td.green.rightborder
+      td.rightborder
         strong= '$' + number_with_precision(0, :precision => 0)
       - @channel_ids.each do |channel_id|
         - index = group_index
@@ -32,7 +32,7 @@ table.past-shares[cellspacing="0"]
           - if found_flag == 0 && @past_standings[index].channel_id == channel_id
             - found_flag = 1
             td = @past_standings[index].rank
-            td.share
+            td.share style='color:#{@past_standings[index].channel.color}'
               = number_with_precision(@past_standings[index].share, :precision => share_precision) + '%'
             td.award= '$' + number_with_precision(0, :precision => 2)
             - break
