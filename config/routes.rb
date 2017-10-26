@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get       '/@@:channel_slug',               to: 'channels#show',          as: :channel
   get       '/@@:channel_slug/posts',         to: 'channels#posts',         as: :channel_posts
   post      'votes/vote_for_channel',         to: 'votes#vote_for_channel', as: :vote_for_channel
+  get       '/past-shares',                   to: 'channels#past_shares',   as: :past_shares
+  get       '/@@:channel_slug/past-shares',   to: 'channels#past_shares1',  as: :past_shares1
   resources :channels, except: [:show]
   
   ### IMAGES: ######################
@@ -69,7 +71,6 @@ Rails.application.routes.draw do
   
   ### VANITY SLUGS: ##################
   
-  get    '/past-shares',           to: 'channels#past_shares',         as: :past_shares
   get    '/:vanity_slug',          to: 'posts#show',                   as: :vanity
   get    '/:vanity_slug/markdown', to: 'posts#markdown'
   

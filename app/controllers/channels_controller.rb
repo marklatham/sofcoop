@@ -1,5 +1,5 @@
 class ChannelsController < ApplicationController
-  before_action :set_channel, only: [:show, :posts, :edit, :update, :destroy]
+  before_action :set_channel, only: [:past_shares1, :show, :posts, :edit, :update, :destroy]
 
   # Website Home Page
   def home
@@ -10,9 +10,14 @@ class ChannelsController < ApplicationController
   end
 
   # History of award shares & rankings
+  # For all channels:
   def past_shares
     @past_standings = PastStanding.all.order("tallied_at DESC, rank ASC")
     @channel_ids = @past_standings.map(&:channel_id).uniq
+  end
+  # For one channel:
+  def past_shares1
+    @past_standings = @channel.past_standings.order("tallied_at DESC")
   end
   
   # GET /channels
