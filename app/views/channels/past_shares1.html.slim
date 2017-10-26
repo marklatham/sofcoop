@@ -1,51 +1,38 @@
-- provide :title, 'Past Award Shares'
+- provide :title, 'Past Award Shares: ' + @channel.name
 
-h2.center Past Award Shares
+h2 style='text-align: center'
+  | Past Award Shares: 
+  span.past-shares1-header = link_to @channel.name, channel_path(@channel.slug),
+                 style: 'color: ' +  @channel.color
 
-table.past-shares[cellspacing="0"]
+table.past-shares.past-shares1[cellspacing='0', style='border-color:#{@channel.color}']
 
-  = render partial: 'header_channels'
-  
-  tr.header-shares
+  tr.header-shares[style='background:#{@channel.color}']
     td Day
-    td $
-    - @channel_ids.each do |channel_id|
-      td #
-      td %
-      td $
+    td Rank
+    td Share
+    td of Funding
+    td
+      | = Award
   
   - date_style = "font-weight: normal; padding-left: 0.3em; white-space: nowrap"
   - date_format = "%Y-%m-%d"
   - share_precision = 0
-  - index = 0
-  - group_index = 0
-  - size = @past_standings.size
-  - until group_index >= size
+  - for past_standing in @past_standings
     tr.data-row
-      td.leftborder[style=date_style] = @past_standings[group_index].tallied_at.strftime(date_format)
-      td.rightborder
+      td[style=date_style] = past_standing.tallied_at.strftime(date_format)
+      td = '#' + past_standing.rank.to_s
+      td.share style='color:#{@channel.color}'
+        = number_with_precision(past_standing.share, :precision => share_precision) + '%'
+      td
         strong= '$' + number_with_precision(0, :precision => 0)
-      - @channel_ids.each do |channel_id|
-        - index = group_index
-        - found_flag = 0
-        - while @past_standings[index].tallied_at == @past_standings[group_index].tallied_at
-          - if found_flag == 0 && @past_standings[index].channel_id == channel_id
-            - found_flag = 1
-            td = @past_standings[index].rank
-            td.share style='color:#{@past_standings[index].channel.color}'
-              = number_with_precision(@past_standings[index].share, :precision => share_precision) + '%'
-            td.award= '$' + number_with_precision(0, :precision => 2)
-            - break
-          - index += 1
-          - break if index >= size
-        - if found_flag == 0
-          td
-          td
-          td.rightborder
-    - break if group_index+1 >= size
-    - while @past_standings[group_index].tallied_at == @past_standings[group_index+1].tallied_at
-      - group_index += 1
-      - break if group_index+1 >= size
-    - group_index += 1
+      td.award= '$' + number_with_precision(0, :precision => 2)
 
-  = render :partial => 'header_channels'
+  tr.header-shares[style='background:#{@channel.color}']
+    td Day
+    td Rank
+    td Share
+    td of Funding
+    td
+      | = Award
+  

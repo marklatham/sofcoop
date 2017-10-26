@@ -3,6 +3,6 @@ tr.header-channels
   - @channel_ids.each do |channel_id|
     - if channel = Channel.where("id = ?", channel_id).first
       td[colspan='3', style='background-color:#{channel.color}']
-        = truncate(channel.name, :length => 55, :omission => "...")
+        = link_to truncate(channel.name, :length => 55, :omission => "..."), past_shares1_path(channel.slug), title: 'Click for 1-channel table'
     - else
       td[colspan='3']

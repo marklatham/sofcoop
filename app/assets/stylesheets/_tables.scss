@@ -175,6 +175,13 @@ table.past-shares {
       padding-bottom: 0.5rem;
       border-bottom-style: none;
       color: #fff;
+      a:link, a:visited {
+        color: #fff;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -182,7 +189,6 @@ table.past-shares {
     font-weight: bold;
     background: #555;
     td {
-      //border: 2px solid #555;
       color: #fff;
     }
   }
@@ -206,4 +212,19 @@ table.past-shares {
     border-right: 2px solid #555;
   }
 
+}
+
+// PAST SHARES FOR 1 CHANNEL "table.past-shares.past-shares1":
+
+span.past-shares1-header {
+  a:link, a:visited {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+table.past-shares.past-shares1 {
+  width: auto;
 }
