@@ -1,7 +1,7 @@
 table.ballot
   tr
     th #
-    th style='padding-right: 0;' Share
+    th style='padding-right: 0' Share
     th Your Votes
     th
     th style='text-align: left; padding-left: 0' Channel
@@ -20,13 +20,13 @@ table.ballot
             - voted_share = session_vote.share
     tr
       td = standing.rank
-      td style='color: #{channel.color}; font-weight: bold; font-size: 1.2rem'
+      td style='color:#{channel.color}; font-weight:bold; font-size:1.2rem'
         = number_with_precision(standing.share, precision: 0) + '%'
       td.vote
         - menu_style = ''
         - heading = 'Vote:'
         - if voted_flag
-          - menu_style = 'font-size: 0.8rem; font-weight: normal'
+          - menu_style = 'font-size:0.8rem; font-weight:normal'
           - heading = 'Change:'
           | You voted 
           span style='color: #{channel.color}; font-weight: bold'
@@ -40,9 +40,8 @@ table.ballot
 
   tr.last
     td[colspan='5']
-      | Page:
-      = paginate @standings
-      span.divider | 
-      = link_to 'FAQ', '/@@admin/@mark/faq-voting', target: '_blank'
-      span.divider | 
-      = link_to 'Past Shares', past_shares_path
+      table.last-table
+        tr
+          td Page: #{paginate @standings}
+          td.faq = link_to 'FAQ', '/@@admin/@mark/faq-voting', target: '_blank'
+          td = link_to 'Past Shares', past_shares_path

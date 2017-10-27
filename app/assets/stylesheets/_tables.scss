@@ -1,3 +1,34 @@
+// OVERRIDE BITTERS GEM CSS:
+
+table {
+  table-layout: auto;
+  width: auto;
+  margin: 0;
+}
+
+// But if you prefer Bitters css:
+table.bitters {
+  border-collapse: collapse;
+  margin: $small-spacing 0;
+  table-layout: fixed;
+  width: 100%;
+  th {
+    border-bottom: 1px solid shade($base-border-color, 25%);
+    font-weight: 600;
+    padding: $small-spacing 0;
+    text-align: left;
+  }
+  td {
+    border-bottom: $base-border;
+    padding: $small-spacing 0;
+  }
+  tr,
+  td,
+  th {
+    vertical-align: middle;
+  }
+}
+
 // DATA TABLES:
 
 table.data {
@@ -77,6 +108,10 @@ table.ballot {
   border: 2px solid $theme-color2;
   border-bottom: 5px solid $theme-color2;
   border-collapse: collapse;
+  
+  tbody {
+    line-height: 0.8rem;
+  }
 
   th {
     padding: 0.2rem 0.5rem 0.3rem 0.5rem;
@@ -130,16 +165,29 @@ table.ballot {
     }
   }
   
-  tr.last td {
-    background-color: #e5e5e5;
-    text-align: left;
-    font-size: 0.8rem;
-    nav {
-      display: inline;
-    }
-    span.divider {
-      padding-left: 0.3rem;
-      font-size: 1.2rem;
+  tr.last {
+    td {
+      background-color: #e5e5e5;
+      margin: 0;
+      padding: 0;
+      font-size: 0.8rem;
+      nav {
+        display: inline;
+      }
+      table.last-table {
+        table-layout: auto;
+        width: 100%;
+        td {
+          line-height: 0.8rem;
+          border-bottom: none;
+          padding: 0.5rem 0.2rem;
+          text-align: center;
+        }
+        td.faq {
+          border: solid $theme-color2;
+          border-width: 0 1px;
+        }
+      }
     }
   }
   

@@ -21,6 +21,7 @@ footer {
 }
 
 footer table {
+  width: 100%;
   border-width: 0;
   margin: 0;
   table-layout: auto;
@@ -223,6 +224,7 @@ td.login {
 ////// CHANNELS NAV MENU BAR:
 
 header table.channels-menu {
+  width: 100%;
   table-layout: fixed;
   margin: 0;
   border-width: 0;
