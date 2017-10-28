@@ -4,7 +4,7 @@ h2 style='text-align:center' Past Award Shares
 
 table.past-shares[cellspacing="0"]
 
-  = render partial: 'header_channels'
+  = render partial: 'past_shares_channels'
   
   tr.header-shares
     td Day
@@ -48,4 +48,4 @@ table.past-shares[cellspacing="0"]
       - break if group_index+1 >= size
     - group_index += 1
 
-  = render :partial => 'header_channels'
+  = render :partial => 'past_shares_channels'
