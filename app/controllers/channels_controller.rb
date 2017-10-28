@@ -18,6 +18,7 @@ class ChannelsController < ApplicationController
   # For one channel:
   def past_shares1
     @past_standings = @channel.past_standings.order("tallied_at DESC")
+    @past_standings = Kaminari.paginate_array(@past_standings).page(params[:page]).per(20)
   end
   
   # GET /channels

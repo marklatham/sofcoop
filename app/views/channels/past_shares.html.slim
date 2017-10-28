@@ -9,7 +9,7 @@ table.past-shares[cellspacing="0"]
   tr.header-shares
     td Day
     td $
-    - @channel_ids.each do |channel_id|
+    - @channel_ids.each do
       td #
       td %
       td $
@@ -25,7 +25,7 @@ table.past-shares[cellspacing="0"]
       td.leftborder[style=date_style] = @past_standings[group_index].tallied_at.strftime(date_format)
       td.rightborder
         strong= '$' + number_with_precision(0, :precision => 0)
-      - @channel_ids.each do |channel_id|
+      - for channel_id in @channel_ids
         - index = group_index
         - found_flag = 0
         - while @past_standings[index].tallied_at == @past_standings[group_index].tallied_at

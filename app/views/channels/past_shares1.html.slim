@@ -29,7 +29,7 @@ table.past-shares.past-shares1[cellspacing='0', style='border-color:#{@channel.c
       td.award= '$' + number_with_precision(0, :precision => 2)
 
   tr.header-shares[style='background:#{@channel.color}']
-    td Day
+    td style='font-weight:normal' = paginate @past_standings
     td Rank
     td Share
     td of Funding
