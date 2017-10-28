@@ -13,7 +13,13 @@ class ChannelsController < ApplicationController
   # For all channels:
   def past_shares
     @past_standings = PastStanding.all.order("tallied_at DESC, rank ASC")
-    @channel_ids = @past_standings.map(&:channel_id).uniq
+    finalists = []
+    for past_standing in @past_standings
+      finalists << past_standing
+      break if finalists.size > 5 and past_standing.share < 0.00001
+      break if past_standing.tallied_at < @past_standings[0].tallied_at
+    end
+    @channel_ids = finalists.map(&:channel_id).uniq
   end
   # For one channel:
   def past_shares1

@@ -253,16 +253,15 @@ table.past-shares {
     background-color: $gray-lightest;
   }
   
-  .leftborder  {border-left:  2px solid #555}
-  .rightborder {border-right: 2px solid #555}
+  .leftborder {border-left: 2px solid #555}
 
   .share {
     font-weight: bold;
+    font-size:115%
   }
 
   .award {
     text-align: right;
-    border-right: 2px solid #555;
   }
 
 }
@@ -280,4 +279,12 @@ span.past-shares1-header {
 
 table.past-shares.past-shares1 {
   width: auto;
+
+  tr.data-row:nth-child(odd) {
+    background-color: $gray-lightest;
+  }
+  tr.data-row:nth-child(even) {
+    background-color: #fff;
+  }
+  
 }

@@ -22,8 +22,8 @@ table.past-shares[cellspacing="0"]
   - size = @past_standings.size
   - until group_index >= size
     tr.data-row
-      td.leftborder[style=date_style] = @past_standings[group_index].tallied_at.strftime(date_format)
-      td.rightborder
+      td[style=date_style] = @past_standings[group_index].tallied_at.strftime(date_format)
+      td
         strong= '$' + number_with_precision(0, :precision => 0)
       - for channel_id in @channel_ids
         - index = group_index
@@ -31,7 +31,7 @@ table.past-shares[cellspacing="0"]
         - while @past_standings[index].tallied_at == @past_standings[group_index].tallied_at
           - if found_flag == 0 && @past_standings[index].channel_id == channel_id
             - found_flag = 1
-            td = @past_standings[index].rank
+            td.leftborder = @past_standings[index].rank
             td.share style='color:#{@past_standings[index].channel.color}'
               = number_with_precision(@past_standings[index].share, :precision => share_precision) + '%'
             td.award= '$' + number_with_precision(0, :precision => 2)
@@ -39,9 +39,9 @@ table.past-shares[cellspacing="0"]
           - index += 1
           - break if index >= size
         - if found_flag == 0
+          td.leftborder
           td
           td
-          td.rightborder
     - break if group_index+1 >= size
     - while @past_standings[group_index].tallied_at == @past_standings[group_index+1].tallied_at
       - group_index += 1
