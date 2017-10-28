@@ -20,8 +20,7 @@ table.ballot
             - voted_share = session_vote.share
     tr
       td = standing.rank
-      td style='color:#{channel.color}; font-weight:bold; font-size:1.2rem'
-        = number_with_precision(standing.share, precision: 0) + '%'
+      td.channel = link_to number_with_precision(standing.share, precision: 0)+'%', past_shares1_path(channel.slug), style: 'color:'+channel.color
       td.vote
         - menu_style = ''
         - heading = 'Vote:'
@@ -30,13 +29,12 @@ table.ballot
           - heading = 'Change:'
           | You voted 
           span style='color: #{channel.color}; font-weight: bold'
-            = number_with_precision(voted_share, :precision => 0) + '%'
+            = number_with_precision(voted_share, :precision => 0)+'%'
         = form_tag vote_for_channel_path do
-          = select_tag :share, options_for_select([[heading, ''], ['5%', '5'], ['10%', '10'], ['20%', '20'], ['30%', '30'], ['40%', '40'], ['0%', '0']]), class: 'vote_menu', style: menu_style, onchange: 'this.form.submit()'
+          = select_tag :share, options_for_select([[heading,''], ['5%','5'], ['10%','10'], ['20%','20'], ['30%','30'], ['40%','40'], ['0%','0']]), class: 'vote_menu', style: menu_style, onchange: 'this.form.submit()'
           = hidden_field_tag :channel_id, channel.id
       td.avatar = avatar_for_channel(channel)
-      td.channel = link_to channel.name, channel_path(channel.slug),
-                 style: 'color: ' +  channel.color
+      td.channel.name = link_to channel.name, channel_path(channel.slug), style: 'color:'+channel.color
 
   tr.last
     td[colspan='5']

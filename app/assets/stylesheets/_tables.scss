@@ -147,14 +147,12 @@ table.ballot {
     }
   }
   
-  .avatar img {
+  td.avatar img {
     float: left;
     width: 32px;
   }
   
-  .channel {
-    padding-left: 0;
-    text-align: left;
+  td.channel {
     font-weight: bold;
     font-size: 1.2rem;
     a:link, a:visited {
@@ -163,6 +161,11 @@ table.ballot {
     a:hover {
       text-decoration: underline;
     }
+  }
+  
+  td.channel.name {
+    padding-left: 0;
+    text-align: left;
   }
   
   tr.last {
