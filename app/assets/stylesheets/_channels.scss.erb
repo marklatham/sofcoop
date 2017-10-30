@@ -1,0 +1,15 @@
+// CHANNEL LINK COLORS:
+
+<% channels = Channel.all %>
+
+a:link, a:visited {
+  
+  <% for channel in channels %>
+  
+    &.color-<%= channel.slug %> {
+      color: <%= channel.color %>;
+    }
+  
+  <% end %>
+  
+}
