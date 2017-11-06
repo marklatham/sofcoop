@@ -62,12 +62,22 @@ class PostsController < ApplicationController
   def create
     @post = current_user.posts.build(post_params)
     authorize @post
-    @post.body = process_images(@post.body, @post.body)
+    body_before = ''
+    body_before << @post.body
+    body_array = @post.body.split("\n")
+    puts "BODY_ARRAY:"
+    puts body_array
+    post_body = process_images(@post.body, body_array)
+    body_array = post_body.split("\n")
+    @post.body, admin_email = process_channel_links(post_body, body_array)
     @post.main_image = first_image(@post.body)
     if @post.save
       AdminMailer.new_post(@post, the_post_url(@post)).deliver  # notify admin
       if @post.channel
         AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
+      end
+      if admin_email.present?
+        AdminMailer.post_process(admin_email, @post, the_post_url(@post), body_before, @post.body, 'created').deliver
       end
       if params[:commit] == 'Save & edit more'
         redirect_to edit_post_path(@post.author.username, @post.slug) and return
@@ -82,11 +92,26 @@ class PostsController < ApplicationController
   def update
     @post = Post.find(params[:id])
     authorize @post
-    new_lines = ''
-    Diffy::Diff.new(@post.body, post_params[:body]).each do |line|
-      new_lines << line if /^\+/.match(line)
+    body_before = ''
+    body_before << post_params[:body]   # Don't know why, but body_before = post_params[:body] fails.
+    new_lines = []
+    for line in Diffy::Diff.new(@post.body, post_params[:body])
+      new_lines << line.from(1) if /^\+/.match(line)
     end
-    params[:post][:body] = process_images(post_params[:body], new_lines)
+    puts "NL FOR IMAGES:"
+    puts new_lines
+    post_body = process_images(post_params[:body], new_lines)
+    new_lines = []
+    for line in Diffy::Diff.new(@post.body, post_body)
+      new_lines << line.from(1) if /^\+/.match(line)
+    end
+    puts "NL FOR CHLINKS:"
+    puts new_lines
+    body_after, admin_email = process_channel_links(post_body, new_lines)
+    if admin_email.present?
+      AdminMailer.post_process(admin_email, @post, the_post_url(@post), body_before, body_after, 'edited').deliver
+    end
+    params[:post][:body] = body_after
     params[:post][:main_image] = first_image(params[:post][:body])
     old_channel = @post.channel if @post.channel
     if @post.update(post_params)
@@ -151,48 +176,53 @@ class PostsController < ApplicationController
   end
 
   def process_images(input_body, new_lines)
-    processed_body = input_body
-    remainder = new_lines
     flash[:process] = []
-    while remainder.size > 0 do
-      substrings = remainder.partition('![')                # Find next old_image_string.
-      return processed_body unless substrings[2].present?
+    processed_body = input_body
+    for new_line in new_lines
+      puts "NEW LINE: " + new_line
+      remainder = new_line
+      while remainder.size > 0 do
+        substrings = remainder.partition('![')        # Find next old_image_string.
+        break unless substrings[2].present?           # No more image(s) in this line.
       
-      old_image_string = ''
-      old_image_string << '[' if substrings[0].last == '['  # Does it have a web link?
-      old_image_string << '!['
+        remainder = substrings[2]    # If all checks below fail, resume processing here.
+      
+        old_image_string = ''
+        old_image_string << '[' if substrings[0].last == '['  # Does it have a web link?
+        old_image_string << '!['
         
-      substrings = substrings[2].partition('](')
-      unless substrings[2].present?
-        flash[:process] << "Strange: couldn't find image link after " +
-                           old_image_string + substrings[0]
-        return processed_body
-      end
-      title = substrings[0]
-      old_image_string << substrings[0] + ']('
-      
-      if old_image_string.first == '['                      # Does it have a web link?
-        substrings = substrings[2].partition(')](')
+        substrings = substrings[2].partition('](')
         unless substrings[2].present?
-          flash[:process] << "Strange: couldn't find image web link after " +
+          flash[:process] << "Strange: couldn't find image link after " +
                              old_image_string + substrings[0]
-          return processed_body
+          break                                       # No more image(s) in this line.
         end
-        old_image_string << substrings[0] + ')]('
-      end
+        title = substrings[0]
+        old_image_string << substrings[0] + ']('
       
-      substrings = substrings[2].partition(')')
-      unless substrings[1].present?
-        flash[:process] << "Strange: couldn't find ) after image string " +
-                           old_image_string + substrings[0]
-        return processed_body
-      end
-      old_image_string << substrings[0] + ')'
+        if old_image_string.first == '['                      # Does it have a web link?
+          substrings = substrings[2].partition(')](')
+          unless substrings[2].present?
+            flash[:process] << "Strange: couldn't find image web link after " +
+                               old_image_string + substrings[0]
+            next
+          end
+          old_image_string << substrings[0] + ')]('
+        end
       
-      remainder = substrings[2]
-      new_image_string = process_an_image(old_image_string, title)
-      if new_image_string != old_image_string
-        processed_body.gsub!(old_image_string, new_image_string)
+        substrings = substrings[2].partition(')')
+        unless substrings[1].present?
+          flash[:process] << "Strange: couldn't find ) after image string " +
+                             old_image_string + substrings[0]
+          next
+        end
+        old_image_string << substrings[0] + ')'
+      
+        remainder = substrings[2]
+        new_image_string = process_an_image(old_image_string, title)
+        if new_image_string != old_image_string
+          processed_body.gsub!(old_image_string, new_image_string)
+        end
       end
     end
     return processed_body
@@ -302,4 +332,91 @@ class PostsController < ApplicationController
     end
   end
 
+  # Append channel-color CSS style to links leading to channel:
+  def process_channel_links(input_body, new_lines)
+    flash[:process] = []
+    admin_email = []
+    admin_email << 'NEW LINES:'
+    for new_line in new_lines
+      admin_email << new_line
+    end
+    
+    processed_body = input_body
+    for new_line in new_lines
+      remainder = new_line
+      while remainder.size > 0 do
+        substrings = remainder.partition('/@@')          # Find next channel link?
+        break unless substrings[2].present?
+        remainder = substrings[2]
+        new_channel_link = '](/@@'
+        if substrings[0].end_with? ']('
+          old_channel_link = '](/@@'
+        elsif substrings[0].end_with? '](https://sofcoop.org'
+          old_channel_link = '](https://sofcoop.org/@@'
+        elsif substrings[0].end_with? '](http://sofcoop.org'
+          old_channel_link = '](http://sofcoop.org/@@'
+        elsif substrings[0].end_with? '](http://localhost:3000'
+          old_channel_link = '](http://localhost:3000/@@'
+        else
+          admin_email << 'Warning: Strange string at: ' + substrings[0].last(6) + '/@@'
+          next                                           # Not a channel link.
+        end
+      
+        substrings = remainder.partition('/')            # Find end of channel slug??
+        break unless substrings[2].present?
+        remainder = substrings[2]
+        if channel = Channel.find_by(slug: substrings[0]) rescue nil
+          # continue
+        else
+          admin_email << 'Warning: No channel found for @@' + substrings[0]
+          next
+        end
+        admin_email << 'CHANNEL: ' + channel.slug
+        
+        old_channel_link << substrings[0] + '/'
+        new_channel_link << substrings[0] + '/'
+      
+        substrings = remainder.partition(')')            # Find end of channel link??
+        break unless substrings[1].present?
+        remainder = substrings[2]
+        old_channel_link << substrings[0] + ')'
+        new_channel_link << substrings[0] + ')'
+      
+        tag = '{: .color-' + channel.slug + '}'
+        admin_email << 'REMAINDER AFTER LINK: '
+        admin_email << remainder
+        next if remainder.start_with? tag            # Already tagged.
+        new_channel_link << tag                      # Else tag it.
+      
+        identifier = remainder.first(tag.size).partition("\n")[0]
+        puts "IDENTIFIER: "
+        puts identifier
+        p identifier
+      
+        if remainder.start_with? '{: .color-'        # Wrong color tag?
+          substrings = remainder.partition('}')      # Investigate...
+          admin_email << 'substrings[0]: '
+          admin_email << substrings[0]
+          if substrings[1].present?
+            old_channel_link << substrings[0] + substrings[1]  # Replace erroneous tag.
+            admin_email << 'Warning: Replacing erroneous tag in: ' + old_channel_link
+            identifier = ''
+          else
+            admin_email << 'Warning: Leaving strange string after: ' + new_channel_link
+            admin_email << 'That strange string is: {' + substrings[0].partition("\n")[0]
+          end
+        end
+        old_channel_link = old_channel_link + identifier # So gsub won't double-tag other links.
+        new_channel_link = new_channel_link + identifier
+        admin_email << 'IDENTIFIER: ' + identifier
+        admin_email << 'OLD LINK: ' + old_channel_link
+        admin_email << 'NEW LINK: ' + new_channel_link
+        if new_channel_link != old_channel_link
+          processed_body.gsub!(old_channel_link, new_channel_link)
+        end
+      end
+    end
+    return [processed_body, admin_email]
+  end
+  
 end

@@ -92,7 +92,7 @@ class ChannelsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   
   def set_channel
-    if @channel = Channel.find_by_slug(params[:channel_slug])
+    if @channel = Channel.find_by_slug(params[:channel_slug]) rescue nil
     else
       @channel = Channel.find(params[:id])
     end

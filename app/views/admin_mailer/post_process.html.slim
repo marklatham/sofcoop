@@ -1,0 +1,24 @@
+p Hello Sofcoop Admin --
+
+p
+  | The following messages were generated while processing the new links in 
+  | just-#{@event} post 
+  = link_to @post.title, @post_url
+
+- for newline in @admin_email
+  pre = newline
+
+p Sincerely, Sofcoop Website
+
+h3 Post Body Before Processing:
+
+pre = @body_before
+
+h3 Post Body After Processing:
+
+pre = @body_after
+
+h3 Before- vs After-Processing Differences:
+
+- for newline in Diffy::Diff.new(@body_before, @body_after)
+  pre = newline
