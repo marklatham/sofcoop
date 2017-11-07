@@ -1,10 +1,7 @@
 - provide :title, '@'+@user.username
 
 h2 User Profile: @#{@user.username}
-div.column
-  table.table
-    tbody
-      tr = render @user
-  - if @posts.any?
-    h3 Posts created:
-    = render 'posts/table', author: @user
+div.avatar = link_to avatar_for_user(@user), user_path(@user.username)
+- if @posts.any?
+  h3 Posts created:
+  = render 'posts/table', author: @user

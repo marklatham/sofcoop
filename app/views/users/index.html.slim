@@ -1,12 +1,8 @@
 - provide :title, 'Users'
 
-div.container
-  div.row
-    h3 Users
-    div.column
-      table.table
-        tbody
-          - @users.each do |user|
-            tr = render user
+h3 Users
+table.bitters
+  tbody
+    = render @users
 
 = paginate @users
