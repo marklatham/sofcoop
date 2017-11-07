@@ -179,7 +179,7 @@ class PostsController < ApplicationController
     flash[:process] = []
     processed_body = input_body
     for new_line in new_lines
-      puts "NEW LINE: " + new_line
+      # puts "NEW LINE: " + new_line
       remainder = new_line
       while remainder.size > 0 do
         substrings = remainder.partition('![')        # Find next old_image_string.
@@ -336,10 +336,10 @@ class PostsController < ApplicationController
   def process_channel_links(input_body, new_lines)
     flash[:process] = []
     admin_email = []
-    admin_email << 'NEW LINES:'
-    for new_line in new_lines
-      admin_email << new_line
-    end
+    # admin_email << 'NEW LINES:'
+    # for new_line in new_lines
+    #   admin_email << new_line
+    # end
     
     processed_body = input_body
     for new_line in new_lines
@@ -371,7 +371,7 @@ class PostsController < ApplicationController
           admin_email << 'Warning: No channel found for @@' + substrings[0]
           next
         end
-        admin_email << 'CHANNEL: ' + channel.slug
+        # admin_email << 'CHANNEL: ' + channel.slug
         
         old_channel_link << substrings[0] + '/'
         new_channel_link << substrings[0] + '/'
@@ -383,20 +383,20 @@ class PostsController < ApplicationController
         new_channel_link << substrings[0] + ')'
       
         tag = '{: .color-' + channel.slug + '}'
-        admin_email << 'REMAINDER AFTER LINK: '
-        admin_email << remainder
+        # admin_email << 'REMAINDER AFTER LINK: '
+        # admin_email << remainder
         next if remainder.start_with? tag            # Already tagged.
         new_channel_link << tag                      # Else tag it.
       
         identifier = remainder.first(tag.size).partition("\n")[0]
-        puts "IDENTIFIER: "
-        puts identifier
-        p identifier
+        # puts "IDENTIFIER: "
+        # puts identifier
+        # p identifier
       
         if remainder.start_with? '{: .color-'        # Wrong color tag?
           substrings = remainder.partition('}')      # Investigate...
-          admin_email << 'substrings[0]: '
-          admin_email << substrings[0]
+        #   admin_email << 'substrings[0]: '
+        #   admin_email << substrings[0]
           if substrings[1].present?
             old_channel_link << substrings[0] + substrings[1]  # Replace erroneous tag.
             admin_email << 'Warning: Replacing erroneous tag in: ' + old_channel_link
@@ -408,9 +408,9 @@ class PostsController < ApplicationController
         end
         old_channel_link = old_channel_link + identifier # So gsub won't double-tag other links.
         new_channel_link = new_channel_link + identifier
-        admin_email << 'IDENTIFIER: ' + identifier
-        admin_email << 'OLD LINK: ' + old_channel_link
-        admin_email << 'NEW LINK: ' + new_channel_link
+        # admin_email << 'IDENTIFIER: ' + identifier
+        # admin_email << 'OLD LINK: ' + old_channel_link
+        # admin_email << 'NEW LINK: ' + new_channel_link
         if new_channel_link != old_channel_link
           processed_body.gsub!(old_channel_link, new_channel_link)
         end
