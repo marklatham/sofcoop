@@ -1,8 +1,9 @@
 - provide :title, @post.title
+- channel_style = "color: #{@post.channel.color}" if @post.channel
 
 .post
 
-  h1 = @post.title
+  h1 style=channel_style = @post.title
 
   / The logic below works together with other logic in post_policy > show.
   / Both should be reviewed/revised when sofcoop has paying members.
@@ -27,21 +28,28 @@
       
     hr style='height: 2px; margin-bottom: 1rem'
     
-    b style='float: left; margin-right: 1rem' Tags:
-    ul.tags = render @post.tags
-  
-  hr style='margin-bottom: 1rem; background: #aaa'
+    - if @post.tags.any?
+      b style='float: left; margin: 0 1rem 1rem 0' Tags:
+      ul.tags = render @post.tags
+      hr style='margin: 0.5rem 0 0.5rem 0; background: #aaa'
 
-  .avatar = link_to avatar_for_user(@post.author), user_path(@post.author.username)
+  table
+    tr
+      - if @post.channel
+        td.avatar = image_tag(@post.channel.avatar_url.to_s, alt: '@@'+@post.channel.slug)
+        td.channel style=channel_style #{@post.channel.name}
+        td &nbsp; &nbsp;
 
-  span.timestamp
-    |  Posted by #{link_to '@'+@post.author.username, user_path(@post.author.username)}
-    |  #{time_ago_in_words(@post.created_at)} ago.
-    - if @post.updated_at > @post.created_at
-      |  Updated #{time_ago_in_words(@post.updated_at)} ago.
-  p.timestamp
-    | Content visible to: 
-    = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
+      td.avatar = link_to avatar_for_user(@post.author), user_path(@post.author.username)
+
+      td.timestamp
+        |  Posted by #{link_to '@'+@post.author.username, user_path(@post.author.username)}
+        |  #{time_ago_in_words(@post.created_at)} ago.
+        - if @post.updated_at > @post.created_at
+          |  Updated #{time_ago_in_words(@post.updated_at)} ago.
+        br
+          | Content visible to: 
+          = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
 
   - if  policy(@post).edit?
     p.controls
