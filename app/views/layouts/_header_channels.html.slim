@@ -1,8 +1,10 @@
 table.channels-menu
   tr
     - for channel in nav_channels[0..9]
-      td style='background-color: #{channel.color}'
-        = link_to channel.name.upcase, channel_path(channel.slug)
+      td
+        div.name style='background-color: #{channel.color}'
+          = link_to channel.name.upcase, channel_path(channel.slug)
+        div.avatar = avatar_for_channel(channel)
         div.channels-dropdown style='border: 5px solid #{channel.color}; background-color: #{channel.color_bg}'
           div.body
             - if post = Post.find(channel.dropdown_id) rescue nil
@@ -11,13 +13,16 @@ table.channels-menu
                 = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)
             - else
               p
-              p = link_to channel.name, channel_path(channel.slug)
+              p
+                b = link_to channel.name, channel_path(channel.slug), style: "color: #{channel.color}"
               
     - if nav_channels.size > 10
       td.more
         div.dropdown
-          | more
-          b.down-arrow
+          div.name
+            | more
+            b.down-arrow
+          div.avatar = image_tag("/images/@mark/down-arrow.png")
           ul.droplink
             - for channel in nav_channels[10..-1]
               - if post = Post.find(channel.dropdown_id) rescue nil

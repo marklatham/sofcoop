@@ -166,6 +166,7 @@ ul.droplink {
 
 .search-box {
   width: 70%;
+  min-width: 3rem;
   float: left;
 }
 
@@ -234,24 +235,44 @@ header table.channels-menu {
   tr {
     line-height: 32px;  // = td div top (below)
     td {
-      border-width: 0;
-      padding: 0 0 0 0.2rem;
+      border-style: none;
+      padding: 0;
       white-space: nowrap;
       overflow: hidden;
-      > a {
+      div.name {
+        padding: 0 0 0 0.2rem;
+        > a {
+          display: inline;
+        }
+        > a:link, > a:visited {
+          color: white;
+          text-decoration: none;
+        }
+        > a:hover {
+          text-decoration: underline;
+        }
+      }
+      div.avatar {
+        display: none;
+        line-height: 16px;  // Why does 32px make it too big?? 
+        img {
+          width: 32px;
+        }
+      }
+    }
+    @media only screen and (max-width:700px) {
+      td div.name {
+        display: none;
+      }
+      td div.avatar {
         display: block;
       }
-      > a:link, > a:visited {
-        color: white;
-        text-decoration: none;
-      }
-      > a:hover {
-        text-decoration: underline;
+      td.more {
+        background-color: transparent;
       }
     }
     td div.channels-dropdown {
       z-index: 2;
-      //display: none;
       visibility: hidden;
       transition: visibility 0.2s 0.2s;
       position: absolute;
@@ -266,7 +287,6 @@ header table.channels-menu {
       line-height: 1.5;
       color: black;
       div.body {
-        //display: hidden;
         margin: 0 5% 0 5%;
         white-space: normal;
       }
@@ -277,7 +297,6 @@ header table.channels-menu {
       }
     }
     td:hover div.channels-dropdown {
-      //display: inline;
       visibility: visible;
       max-height: 25vh;
     }
