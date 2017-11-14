@@ -7,7 +7,7 @@ table.channels-menu
         div.avatar = avatar_for_channel(channel)
         div.channels-dropdown style='border: 5px solid #{channel.color}; background-color: #{channel.color_bg}'
           div.body
-            - if post = Post.find(channel.dropdown_id) rescue nil
+            - if post = channel.dropdown
               = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
               - if  policy(post).edit?
                 = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)

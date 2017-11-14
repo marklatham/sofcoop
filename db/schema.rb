@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171114171034) do
+ActiveRecord::Schema.define(version: 20171114225957) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20171114171034) do
     t.string "color_bg", default: "#F2F2F2"
     t.bigint "dropdown_id"
     t.bigint "profile_id"
+    t.index ["dropdown_id"], name: "index_channels_on_dropdown_id"
     t.index ["manager_id"], name: "index_channels_on_manager_id"
     t.index ["profile_id"], name: "index_channels_on_profile_id"
     t.index ["slug"], name: "index_channels_on_slug", unique: true
@@ -219,6 +220,7 @@ ActiveRecord::Schema.define(version: 20171114171034) do
     t.index ["user_id"], name: "index_votes_on_user_id"
   end
 
+  add_foreign_key "channels", "posts", column: "dropdown_id"
   add_foreign_key "channels", "posts", column: "profile_id"
   add_foreign_key "channels", "users", column: "manager_id"
   add_foreign_key "comments", "posts"

@@ -1,7 +1,8 @@
 class Channel < ApplicationRecord
   
-  belongs_to :manager, class_name: 'User'
-  belongs_to :profile, class_name: 'Post'
+  belongs_to :manager, class_name: 'User', optional: true
+  belongs_to :profile, class_name: 'Post', optional: true
+  belongs_to :dropdown, class_name: 'Post', optional: true
   has_many :posts
   has_many :votes
   has_one :standing
