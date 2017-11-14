@@ -4,6 +4,12 @@ h1 style='color: #{@channel.color}' = @channel.name
 
 p#notice = notice
 
+- if post = @channel.profile
+  div.body
+    = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
+    - if  policy(post).edit?
+      = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)
+                
 p
   b Manager: 
   .avatar = link_to avatar_for_user(@channel.manager), user_path(@channel.manager.username)
