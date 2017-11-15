@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   def index
     authorize Post
     #@search = Post.ransack(params[:q]) # moved to ApplicationController
-    @posts = @search.result(distinct: true).select{|post| policy(post).show?}.
+    @posts = @search.result(distinct: true).select{|post| policy(post).show? && post.category=="post"}.
              sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
@@ -17,7 +17,8 @@ class PostsController < ApplicationController
   def user_posts
     authorize Post
     @user = User.friendly.find(params[:username])
-    @posts = @user.posts.order('updated_at DESC')
+    @posts = @user.posts.where(category:"post").select{|post| policy(post).show?}.
+                                                sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
     if request.path != user_posts_path(@user.username)
       if params[:username].downcase != @user.username.downcase
@@ -172,7 +173,8 @@ class PostsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
     params.require(:post).permit(:author_id, :visible, :title, :slug, :body,
-        :main_image, :main_image_cache, :remote_main_image_url, :tag_list, :channel_id)
+        :main_image, :main_image_cache, :remote_main_image_url, :tag_list,
+        :channel_id, :category)
   end
 
   def process_images(input_body, new_lines)

@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     # "fallback" to find-by-id
     @user = User.find(params[:id]) unless @user
     authorize @user
-    @posts = @user.posts.order('updated_at DESC')
+    @posts = @user.posts.where(category:"post").order('updated_at DESC')
     unless current_user == @user || current_user.is_admin?
       @posts = @posts.select{|post| post.visible > 1}.sort_by{|post| post.updated_at}.reverse!
     end
