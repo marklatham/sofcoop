@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171114225957) do
+ActiveRecord::Schema.define(version: 20171115001954) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -192,8 +192,10 @@ ActiveRecord::Schema.define(version: 20171114225957) do
     t.string "provider"
     t.string "uid"
     t.boolean "is_member", default: false, null: false
+    t.bigint "profile_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["profile_id"], name: "index_users_on_profile_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
@@ -231,6 +233,7 @@ ActiveRecord::Schema.define(version: 20171114225957) do
   add_foreign_key "posts", "channels"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "standings", "channels"
+  add_foreign_key "users", "posts", column: "profile_id"
   add_foreign_key "votes", "channels"
   add_foreign_key "votes", "users"
 end

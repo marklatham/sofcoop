@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-  
+
+  belongs_to :profile, class_name: 'Post', optional: true
   has_many :posts, foreign_key: 'author_id'
   has_many :comments, foreign_key: 'author_id'
   has_many :images
