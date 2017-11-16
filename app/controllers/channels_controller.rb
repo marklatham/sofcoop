@@ -3,7 +3,7 @@ class ChannelsController < ApplicationController
 
   # Website Home Page
   def home
-    @post = Post.find(30) rescue nil
+    @post = Post.where(category: "home_page").first rescue nil
     @standings = Standing.all.order('rank ASC')
     @standings = Kaminari.paginate_array(@standings).page(params[:page])
     @ballot = find_ballot

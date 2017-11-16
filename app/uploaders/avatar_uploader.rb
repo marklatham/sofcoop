@@ -11,10 +11,14 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    if file.extension == "jpeg"
-      "#{model.username}.jpg"
+    if file
+      if file.extension == "jpeg"
+        "#{model.username}.jpg"
+      else
+        "#{model.username}.#{file.extension}"
+      end
     else
-      "#{model.username}.#{file.extension}"
+      nil
     end
   end
 

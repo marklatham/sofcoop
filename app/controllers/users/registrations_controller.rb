@@ -22,6 +22,7 @@ class Users::RegistrationsController < DeviseController
     resource.username = 'user' + resource.id.to_s
     resource.save
     AdminMailer.new_registration(resource).deliver  # notify admin
+    create_profile_post(resource)
     if resource.persisted?
       if resource.active_for_authentication?
         set_flash_message! :notice, :signed_up
@@ -221,6 +222,17 @@ class Users::RegistrationsController < DeviseController
 
   def translation_scope
     'devise.registrations'
+  end
+  
+  def create_profile_post(user)
+    post = Post.new
+    post.author_id = user.id
+    post.visible = 0
+    post.title = "My Profile"
+    post.category = "user_profile"
+    post.save
+    user.profile_id = post.id
+    user.save
   end
   
 end
