@@ -63,6 +63,7 @@ class ChannelsController < ApplicationController
   def create
     @channel = Channel.new(channel_params)
     authorize @channel
+    @channel.manager_id ||= current_user.id
     if @channel.save
       redirect_to channel_path(@channel.slug), notice: 'Channel was successfully created.'
     else
@@ -74,6 +75,10 @@ class ChannelsController < ApplicationController
   def update
     authorize @channel
     if @channel.update(channel_params)
+      unless @channel.manager_id
+        @channel.manager_id = current_user.id
+        @channel.save
+      end
       redirect_to channel_path(@channel.slug), notice: 'Channel was successfully updated.'
     else
       render :edit

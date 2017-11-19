@@ -9,14 +9,19 @@ module UsersHelper
   end
   
   def avatar_for_user(user)
-    if user.avatar_url.present?
+    if user && user.avatar_url.present?
       substrings = user.avatar_url.partition('?').first.partition('/avatars/')
       avatar_url = substrings[1] + '@' + substrings[2]
-    else
+      alt = "@"+user.username
+    elsif user && user.email.present?
       gravatar_id = Digest::MD5::hexdigest(user.email.downcase)
       avatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=60"
+      alt = "@"+user.username
+    else
+      avatar_url = "https://s3-us-west-2.amazonaws.com/sofcoop/avatars/anon.png"
+      alt = ""
     end
-    image_tag(avatar_url.to_s, alt: '@'+user.username)
+    image_tag(avatar_url, alt: alt)
   end
 
   # Returns false if gravatar_for is just the default image:
