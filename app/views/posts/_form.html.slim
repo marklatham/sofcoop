@@ -29,4 +29,4 @@
 
   .field
     = f.label nil, 'Assign this post to a channel: [usually leave as None]'
-    = f.select :channel_id, options_for_select(channels_array, selected: f.object.channel_id)
+    = f.select :channel_id, options_for_select(assignee_channels, selected: f.object.channel_id)

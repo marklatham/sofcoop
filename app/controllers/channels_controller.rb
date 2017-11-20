@@ -65,6 +65,8 @@ class ChannelsController < ApplicationController
     authorize @channel
     @channel.manager_id ||= current_user.id
     if @channel.save
+      create_standing(@channel)
+      create_profile_posts(@channel)
       redirect_to channel_path(@channel.slug), notice: 'Channel was successfully created.'
     else
       render :new
@@ -102,7 +104,37 @@ class ChannelsController < ApplicationController
       @channel = Channel.find(params[:id])
     end
   end
-
+  
+  def create_standing(channel)
+    last = Standing.all.order("rank ASC").last
+    standing = Standing.new
+    standing.channel_id = channel.id
+    standing.rank = last.rank + 1
+    standing.share = 0
+    standing.count0 = 0
+    standing.count1 = 0
+    standing.tallied_at = last.tallied_at
+    standing.save
+  end
+  
+  def create_profile_posts(channel)
+    post = Post.new
+    post.author_id = channel.manager.id
+    post.visible = 0
+    post.title = "Channel #{channel.name} Profile"
+    post.category = "channel_profile"
+    post.save
+    channel.profile_id = post.id
+    post = Post.new
+    post.author_id = channel.manager.id
+    post.visible = 0
+    post.title = "Channel #{channel.name} Dropdown"
+    post.category = "channel_dropdown"
+    post.save
+    channel.dropdown_id = post.id
+    channel.save
+  end
+  
   # Only allow a trusted parameter "white list" through.
   def channel_params
     params.require(:channel).permit(:manager_id, :name, :slug, :color, :avatar,
