@@ -30,7 +30,7 @@ table.data.posts
         td.left.title
           - if post.title.present?
             = link_to post.title, the_post_path(post)
-          - else
+          - elsif post.body.present?
             = link_to post.body.markdown2html.strip_tags.truncate(50, separator: ' '),
                       the_post_path(post)
         td.channel

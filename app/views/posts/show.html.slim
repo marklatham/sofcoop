@@ -20,8 +20,8 @@
       |  if you don't have one yet.)
 
   - else
-  
-    .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
+    - if @post.body.present?
+      .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
     
     - if  policy(@post).edit?
       = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(@post.author.username, @post.slug)

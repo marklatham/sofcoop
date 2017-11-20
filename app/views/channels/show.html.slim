@@ -6,7 +6,8 @@ p#notice = notice
 
 - if post = @channel.profile
   div.body
-    = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
+    - if post.body.present?
+      = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
     - if  policy(post).edit?
       = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)
                 
@@ -22,7 +23,7 @@ p
 = link_to 'Edit', edit_channel_path(@channel) if policy(@channel).edit?
 - if policy(@channel).destroy?
   |  | 
-  = link_to 'Delete', channels_path
+  = link_to 'Delete', "/channels/#{@channel.id}", data: {confirm: "Are you sure?"}, method: :delete
 
 p style='margin-top: 1rem'
   b = link_to 'Posts in ' + @channel.name, channel_posts_path(@channel.slug)

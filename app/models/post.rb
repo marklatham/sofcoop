@@ -15,7 +15,7 @@ class Post < ApplicationRecord
       ["#{title}", '3'],
       ["#{title}", '4'],
       ["#{title}", '5']]
-    else
+    elsif self.body.present?
       "#{self.body.markdown2html.strip_tags.truncate(60, separator: ' ', omission: '').gsub('_', '-')}"
     end
   end
