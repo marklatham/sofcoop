@@ -18,7 +18,7 @@ p
 
 p
   b Avatar:
-  .avatar = image_tag(@channel.avatar_url.to_s, alt: '@@'+@channel.slug)
+  .avatar = avatar_for_channel(@channel)
 
 = link_to 'Edit', edit_channel_path(@channel) if policy(@channel).edit?
 - if policy(@channel).destroy?

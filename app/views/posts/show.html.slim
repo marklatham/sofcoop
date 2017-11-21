@@ -36,7 +36,7 @@
   table
     tr
       - if @post.channel
-        td.avatar = image_tag(@post.channel.avatar_url.to_s, alt: '@@'+@post.channel.slug)
+        td.avatar = avatar_for_channel(@post.channel)
         td.channel style=channel_style #{@post.channel.name}
         td &nbsp; &nbsp;
 

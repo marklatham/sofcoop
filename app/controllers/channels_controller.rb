@@ -121,14 +121,16 @@ class ChannelsController < ApplicationController
     post = Post.new
     post.author_id = channel.manager.id
     post.visible = 0
-    post.title = "Channel #{channel.name} Profile"
+    post.title = "#{channel.name} Channel Profile"
+    post.channel_id = channel.id
     post.category = "channel_profile"
     post.save
     channel.profile_id = post.id
     post = Post.new
     post.author_id = channel.manager.id
     post.visible = 0
-    post.title = "Channel #{channel.name} Dropdown"
+    post.title = "#{channel.name} Channel Dropdown"
+    post.channel_id = channel.id
     post.category = "channel_dropdown"
     post.save
     channel.dropdown_id = post.id
