@@ -1,29 +1,37 @@
 - provide :title, @channel.name
 
-h1 style='color: #{@channel.color}' = @channel.name
-
 p#notice = notice
 
-- if post = @channel.profile
-  div.body
-    - if post.body.present?
-      = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
-    - if  policy(post).edit?
-      = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)
-                
-p
-  b Manager: 
-  .avatar = link_to avatar_for_user(@channel.manager), user_path(@channel.manager.username)
-  = '@' + @channel.manager.username
+h1 style='color: #{@channel.color}' = @channel.name
 
-p
-  b Avatar:
-  .avatar = avatar_for_channel(@channel)
+div.channel-profile
 
-= link_to 'Edit', edit_channel_path(@channel) if policy(@channel).edit?
-- if policy(@channel).destroy?
-  |  | 
-  = link_to 'Delete', "/channels/#{@channel.id}", data: {confirm: "Are you sure?"}, method: :delete
+  - profile_present = false
+  - if post = @channel.profile
+    div.body
+      - if post.body.present?
+        - profile_present = true
+        = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
+      - if  policy(post).edit?
+        = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)
+  - if profile_present == false
+    - if dropdown = @channel.dropdown
+      - if dropdown.body.present?
+        = Loofah.scrub_fragment(dropdown.body.markdown2html, :prune).to_s.html_safe
+  
+  p
+    b Manager: 
+    .avatar = link_to avatar_for_user(@channel.manager), user_path(@channel.manager.username)
+    = '@' + @channel.manager.username
 
-p style='margin-top: 1rem'
-  b = link_to 'Posts in ' + @channel.name, channel_posts_path(@channel.slug)
+  p
+    b Avatar:
+    .avatar = avatar_for_channel(@channel)
+
+  = link_to 'Edit', edit_channel_path(@channel) if policy(@channel).edit?
+  - if policy(@channel).destroy?
+    |  | 
+    = link_to 'Delete', "/channels/#{@channel.id}", data: {confirm: "Are you sure?"}, method: :delete
+
+  p style='margin-top: 1rem'
+    b = link_to 'Posts in ' + @channel.name, channel_posts_path(@channel.slug)

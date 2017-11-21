@@ -279,6 +279,7 @@ header table.channels-menu {
       top: 32px;       // = tr line-height (above)
       left: 0px;
       width: 100%;
+      min-height: 2rem;
       max-height: 25vh;
       overflow-y: scroll;
       overflow-x: hidden;
@@ -291,9 +292,9 @@ header table.channels-menu {
         white-space: normal;
       }
       i.fa-pencil-square-o {
-        position: absolute;
-        top: 5px;
-        left: 8px;
+        position: fixed;
+        top: 90px;
+        right: 15px;
       }
     }
     td:hover div.channels-dropdown {

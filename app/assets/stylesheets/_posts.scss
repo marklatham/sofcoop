@@ -22,6 +22,17 @@
   position: relative;
 }
 
+.user-profile, .channel-profile {
+  .body {
+    position: relative;
+  }
+  i.fa-pencil-square-o {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+}
+
 .post .channel {
   padding-left: 0.5rem;
   font-weight: bold;

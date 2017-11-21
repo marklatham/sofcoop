@@ -4,18 +4,26 @@ table.channels-menu
       td
         div.name style='background-color: #{channel.color}'
           = link_to channel.name.upcase, channel_path(channel.slug)
-        div.avatar = avatar_for_channel(channel)
+        div.avatar = link_to avatar_for_channel(channel), channel_path(channel.slug)
         div.channels-dropdown style='border: 5px solid #{channel.color}; background-color: #{channel.color_bg}'
           div.body
-            - if post = channel.dropdown
-              - if post.body.present?
-                = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
-              - if  policy(post).edit?
-                = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)
-            - else
-              p
-              p
-                b = link_to channel.name, channel_path(channel.slug), style: "color: #{channel.color}"
+            - dropdown_present = false
+            - if dropdown = channel.dropdown
+              - if dropdown.body.present?
+                - dropdown_present = true
+                = Loofah.scrub_fragment(dropdown.body.markdown2html, :prune).to_s.html_safe
+              - if  policy(dropdown).edit?
+                = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(dropdown.author.username, dropdown.slug)
+            - if dropdown_present == false
+              - profile_present = false
+              - if profile = channel.profile
+                - if profile.body.present?
+                  - profile_present = true
+                  = Loofah.scrub_fragment(profile.body.markdown2html, :prune).to_s.html_safe
+              - if profile_present == false
+                  p
+                  p
+                    b = link_to channel.name, channel_path(channel.slug), style: "color: #{channel.color}"
               
     - if nav_channels.size > 10
       td.more
@@ -26,9 +34,5 @@ table.channels-menu
           div.avatar = image_tag("/images/@mark/down-arrow.png")
           ul.droplink
             - for channel in nav_channels[10..-1]
-              - if post = Post.find(channel.dropdown_id) rescue nil
-                - path = the_post_path(post)
-              - else
-                - path = channel_path(channel.slug)
               li style='background-color: #{channel.color}'
-                = link_to channel.name.upcase, path
+                = link_to channel.name.upcase, channel_path(channel.slug)
