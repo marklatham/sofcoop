@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   
-  before_action :authenticate_user!
-  after_action :verify_authorized
+  # before_action :authenticate_user!  # devise gem
+  after_action :verify_authorized  # pundit gem
 
   def index
     @users = User.all.page(params[:page])

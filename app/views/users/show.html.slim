@@ -7,7 +7,7 @@ div.user-profile
 
   - if post = @user.profile
     div.body
-      - if post.body.present?
+      - if post.body.present? && policy(post).show?
         = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
       - if  policy(post).edit?
         = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)

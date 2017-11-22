@@ -5,33 +5,18 @@
 
   h1 style=channel_style = @post.title
 
-  / The logic below works together with other logic in post_policy > show.
-  / Both should be reviewed/revised when sofcoop has paying members.
-
-  /- if  is_author_or_admin?(current_user, @post) || @post.visible == 4
-  /  .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
+  - if @post.body.present?
+    .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
   
-  - if @post.visible == 3 && !current_user
-    .flashy
-      | Only logged-in users can see this post's content. Please 
-      = link_to 'log in', new_user_session_path
-      | . ( 
-      = link_to 'Create a free login', new_user_registration_path
-      |  if you don't have one yet.)
-
-  - else
-    - if @post.body.present?
-      .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
+  - if  policy(@post).edit?
+    = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(@post.author.username, @post.slug)
     
-    - if  policy(@post).edit?
-      = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(@post.author.username, @post.slug)
-      
-    hr style='height: 2px; margin-bottom: 1rem'
-    
-    - if @post.tags.any?
-      b style='float: left; margin: 0 1rem 1rem 0' Tags:
-      ul.tags = render @post.tags
-      hr style='margin: 0.5rem 0 0.5rem 0; background: #aaa'
+  hr style='height: 2px; margin-bottom: 1rem'
+  
+  - if @post.tags.any?
+    b style='float: left; margin: 0 1rem 1rem 0' Tags:
+    ul.tags = render @post.tags
+    hr style='margin: 0.5rem 0 0.5rem 0; background: #aaa'
 
   table
     tr

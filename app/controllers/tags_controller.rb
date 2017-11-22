@@ -5,7 +5,7 @@ class TagsController < ApplicationController
 
   def show
     @tag =  ActsAsTaggableOn::Tag.find(params[:id])
-    @posts = Post.tagged_with(@tag.name).select{|post| policy(post).show?}.
+    @posts = Post.tagged_with(@tag.name).select{|post| policy(post).list?}.
              sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end

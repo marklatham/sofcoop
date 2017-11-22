@@ -21,10 +21,24 @@ class PostPolicy < ApplicationPolicy
     true
   end
   
+  def list?  # Should this post's title etc (not body) appear in lists?
+    record.category == "post" && ( record.visible > 1 || user_is_author_or_admin_or_manager? )
+    # Before changing this, better find & check all "policy(post).list?"
+  end
+  
   def show?
-    record.visible > 1 || user_is_author_or_admin_or_manager?
-    # More granular restrictions (hiding post.body) are coded in the view
-    # to give more granular "unauthorized" messages.
+    if record.category != "post"
+      user.is_admin?
+    elsif record.visible == 4
+      true
+    elsif record.visible == 3
+      user
+    elsif record.visible == 2
+      user && user.is_member?
+    elsif record.visible == 0
+      user_is_author_or_admin_or_manager?
+    end
+    # Before changing this, better find & check all "policy(post).show?"
   end
   
   def markdown?

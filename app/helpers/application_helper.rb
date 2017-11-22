@@ -1,7 +1,7 @@
 module ApplicationHelper
   
   def visible_options
-    [['Author & Admin', '0'], ['Logged-in Users', '3'], ['The World', '4']]
+    [['Author & Admin', '0'], ['Logged-in Members', '2'], ['Logged-in Users', '3'], ['The World', '4']]
   end
   
   def nav_channels

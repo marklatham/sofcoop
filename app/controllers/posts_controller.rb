@@ -4,8 +4,8 @@ class PostsController < ApplicationController
   def index
     authorize Post
     #@search = Post.ransack(params[:q]) # moved to ApplicationController
-    @posts = @search.result(distinct: true).select{|post| policy(post).show? && post.category=="post"}.
-             sort_by{|post| post.updated_at}.reverse!
+    @posts = @search.result(distinct: true).select{|post| policy(post).list?}.
+                                            sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
 
@@ -17,7 +17,7 @@ class PostsController < ApplicationController
   def user_posts
     authorize Post
     @user = User.friendly.find(params[:username])
-    @posts = @user.posts.where(category:"post").select{|post| policy(post).show?}.
+    @posts = @user.posts.where(category:"post").select{|post| policy(post).list?}.
                                                 sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
     if request.path != user_posts_path(@user.username)

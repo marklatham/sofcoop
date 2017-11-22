@@ -41,7 +41,7 @@ class ChannelsController < ApplicationController
   # GET /@@channel_slug/posts
   def posts
     authorize @channel
-    @posts = @channel.posts.select{|post| policy(post).show? && post.category=="post"}.
+    @posts = @channel.posts.select{|post| policy(post).list?}.
              sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
