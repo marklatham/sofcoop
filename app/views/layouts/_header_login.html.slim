@@ -1,11 +1,13 @@
 div.dropdown
+
   - if user_signed_in?
     - if avatar?(current_user)
       .avatar = link_to avatar_for_user(current_user), user_path(current_user.username)
       b.down-arrow.avatar-arrow
     - else
-      .textlink = link_to '@'+current_user.username, user_path(current_user.username)
-      b.down-arrow.text-arrow
+      .textlink
+        = link_to '@'+current_user.username, user_path(current_user.username)
+        b.down-arrow.text-arrow
     ul.droplink
       li = link_to 'Create new post', new_post_path
       li = link_to 'Upload new image', new_image_path
@@ -15,7 +17,6 @@ div.dropdown
       - if policy(Channel).create?
         li = link_to 'Create Channel', new_channel_path
       li = link_to 'Log out', destroy_user_session_path, method: :delete
-          
         
   - else  # User not signed in:
     .textlink = link_to 'Log in', new_user_session_path

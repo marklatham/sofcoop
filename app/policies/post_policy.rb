@@ -23,7 +23,6 @@ class PostPolicy < ApplicationPolicy
   
   def list?  # Should this post's title etc (not body) appear in lists?
     record.category == "post" && ( record.visible > 1 || user_is_author_or_admin_or_manager? )
-    # Before changing this, better find & check all "policy(post).list?"
   end
   
   def show?
@@ -38,7 +37,6 @@ class PostPolicy < ApplicationPolicy
     elsif record.visible == 0
       user_is_author_or_admin_or_manager?
     end
-    # Before changing this, better find & check all "policy(post).show?"
   end
   
   def markdown?

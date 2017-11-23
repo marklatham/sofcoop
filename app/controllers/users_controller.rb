@@ -4,19 +4,29 @@ class UsersController < ApplicationController
   after_action :verify_authorized  # pundit gem
 
   def index
-    @users = User.all.page(params[:page])
     authorize User
+    @users = User.all.select{|user| policy(user).show?}.sort_by{|user| user.username}
+    @users = Kaminari.paginate_array(@users).page(params[:page])
+    if current_user
+      if current_user.is_admin?
+        @viewers = "admin (i.e. all users!)"
+      elsif current_user.is_member?
+        @viewers = "members (also your own profile)"
+      else
+        @viewers = "people logged in (also your own profile)"
+      end
+    else
+      @viewers = "everyone including those not logged in"
+    end
   end
 
   def show
     @user = User.friendly.find(params[:username]) if params[:username]
-    # "fallback" to find-by-id
+    # fallback - find-by-id:
     @user = User.find(params[:id]) unless @user
     authorize @user
-    @posts = @user.posts.where(category:"post").order('updated_at DESC')
-    unless current_user == @user || current_user.is_admin?
-      @posts = @posts.select{|post| post.visible > 1}.sort_by{|post| post.updated_at}.reverse!
-    end
+    @posts = @user.posts.select{|post| policy(post).list?}.
+             sort_by{|post| post.updated_at}.reverse!
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
     if request.path != user_path(@user.username)
       if params[:username].downcase != @user.username.downcase

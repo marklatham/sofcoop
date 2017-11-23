@@ -12,7 +12,7 @@ nav
             li = link_to 'Channels', channels_path
             - if current_user
               li = link_to 'Images', images_path
-              li = link_to 'Users', users_path
+            li = link_to 'Users', users_path
                   
       td.search = render 'posts/search'
       td.login = render 'layouts/header_login'
