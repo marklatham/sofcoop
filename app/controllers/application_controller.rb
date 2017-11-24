@@ -34,6 +34,16 @@ class ApplicationController < ActionController::Base
   def the_post_path(post)
     if vanity_slug = vanity_slugs[post.id]
       vanity_path(vanity_slug)
+    elsif post.category != "post"
+      if post.category == "user_profile"
+        user_path(post.author.username)
+      elsif post.category == "channel_profile"
+        channel_path(post.channel.slug)
+      elsif post.category == "channel_dropdown"
+        channel_path(post.channel.slug) # Not very relevant but no better idea.
+      else
+        post_path(post.author.username, post.slug)
+      end
     elsif post.channel
       channel_post_path(post.channel.slug, post.author.username, post.slug)
     else

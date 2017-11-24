@@ -15,11 +15,7 @@ class PostsController < ApplicationController
   end
 
   def user_posts
-    authorize Post
     @user = User.friendly.find(params[:username])
-    @posts = @user.posts.where(category:"post").select{|post| policy(post).list?}.
-                                                sort_by{|post| post.updated_at}.reverse!
-    @posts = Kaminari.paginate_array(@posts).page(params[:page])
     if request.path != user_posts_path(@user.username)
       if params[:username].downcase != @user.username.downcase
         flash[:notice] = 'Username @' + params[:username] +
@@ -27,11 +23,13 @@ class PostsController < ApplicationController
       end
       return redirect_to user_posts_path(@user.username)
     end
+    authorize Post
+    @posts = @user.posts.where(category:"post").select{|post| policy(post).list?}.
+                                                sort_by{|post| post.updated_at}.reverse!
+    @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
   
   def show
-    authorize @post
-    @comment = Comment.new(post: @post)
     if params[:username] && request.path != the_post_path(@post)
       if params[:username].downcase != @post.author.username.downcase
         flash[:notice] = 'Username @' + params[:username] +
@@ -43,6 +41,8 @@ class PostsController < ApplicationController
       end
       return redirect_to the_post_path(@post)
     end
+    authorize @post
+    @comment = Comment.new(post: @post)
   end
   
   def markdown
@@ -133,7 +133,7 @@ class PostsController < ApplicationController
       end
       if params[:commit] == 'Save & edit more'
         redirect_to edit_post_path(@post.author.username, @post.slug) and return
-      else # Should be the only other case: params[:commit] == 'Save & see post'
+      else # Should be the only other cases: params[:commit] == 'Save & see post/profile'
         redirect_to the_post_path(@post) and return
       end
     else

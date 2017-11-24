@@ -7,26 +7,43 @@
           li = message
 
   .field
-    = f.label 'Who can see this post:'
+    - case @post.category
+    - when "post"
+      = f.label 'Who can see this post:'
+    - when "user_profile"
+      = f.label 'Who can see this profile (and @username in Users list):'
+    - when "channel_profile"
+      = f.label 'Who can see this profile (normally The World):'
+    - when "channel_dropdown"
+      = f.label 'Who can see this dropdown (normally The World):'
+    - else
+      = f.label 'Who can see this post:'
     = f.select :visible, options_for_select(visible_options, selected: f.object.visible)
-  .field
-    = f.label 'Title:'
-    = f.text_field :title
+    
+  - if @post.category == "post"
+    .field
+      = f.label 'Title:'
+      = f.text_field :title
   .field
     = f.label 'Body:'
     = f.text_area :body, rows: '15'
-  .field
-    = f.label 'Tags:'
-    = f.text_field :tag_list, value: f.object.tag_list.to_s
+  - if @post.category == "post"
+    .field
+      = f.label 'Tags:'
+      = f.text_field :tag_list, value: f.object.tag_list.to_s
   .actions
     = f.submit 'Save & edit more'
     |  &nbsp; &nbsp; 
-    = f.submit 'Save & see post'
+    - if @post.category == "post"
+      = f.submit 'Save & see post'
+    - else
+      = f.submit 'Save & see profile'
     |  &nbsp; &nbsp; 
     = link_to 'How to format', '/markdown', target: '_blank', type: 'button'
     |  &nbsp; &nbsp; 
     = link_to 'Add an image', new_image_path, target: '_blank', type: 'button'
 
-  .field
-    = f.label nil, 'Assign this post to a channel: [usually leave as None]'
-    = f.select :channel_id, options_for_select(assignee_channels, selected: f.object.channel_id)
+  - if @post.category == "post"
+    .field
+      = f.label nil, 'Assign this post to a channel: [usually leave as None]'
+      = f.select :channel_id, options_for_select(assignee_channels, selected: f.object.channel_id)

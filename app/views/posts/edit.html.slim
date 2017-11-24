@@ -3,6 +3,16 @@
 - else
   - provide :title, 'Edit Post'
 
-h2 Edit Post
+- case @post.category
+- when "post"
+  h2 Edit Post
+- when "user_profile"
+  h2 Edit Profile for @#{@post.author.username}
+- when "channel_profile"
+  h2 Edit Profile for @@#{@post.channel.slug}
+- when "channel_dropdown"
+  h2 Edit Dropdown for @@#{@post.channel.slug}
+- else
+  h2 Edit Post
 
 == render 'form'

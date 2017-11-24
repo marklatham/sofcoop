@@ -1,7 +1,5 @@
 - provide :title, @channel.name
 
-p#notice = notice
-
 h1 style='color: #{@channel.color}' = @channel.name
 
 div.channel-profile
@@ -29,9 +27,6 @@ div.channel-profile
     .avatar = avatar_for_channel(@channel)
 
   = link_to 'Edit', edit_channel_path(@channel) if policy(@channel).edit?
-  - if policy(@channel).destroy?
-    |  | 
-    = link_to 'Delete', "/channels/#{@channel.id}", data: {confirm: "Are you sure?"}, method: :delete
 
   p style='margin-top: 1rem'
     b = link_to 'Posts in ' + @channel.name, channel_posts_path(@channel.slug)

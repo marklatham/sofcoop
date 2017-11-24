@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   
-  # before_action :authenticate_user!  # devise gem
   after_action :verify_authorized  # pundit gem
 
   def index
