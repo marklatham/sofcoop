@@ -23,7 +23,8 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def vanity_slugs  # Should be unique in both columns:
+  def vanity_slugs
+    # Should be unique in both columns. See rails routes for words already in use.
     {
     26 => "terms",
     28 => "privacy",

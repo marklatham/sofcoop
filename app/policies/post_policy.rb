@@ -22,20 +22,20 @@ class PostPolicy < ApplicationPolicy
   end
   
   def list?  # Should this post's title etc (not body) appear in lists?
-    record.category == "post" && ( record.visible > 1 || user_is_author_or_admin_or_manager? )
+    ( record.category=="post" || record.category=="channel_profile") &&
+    ( record.visible>1 || user_is_author_or_admin_or_manager? )
   end
   
   def show?
-    if record.category != "post"
+    if record.category == "post"
+      case record.visible
+        when 4 then true
+        when 3 then user
+        when 2 then user && user.is_member?
+        when 0 then user_is_author_or_admin_or_manager?
+      end
+    else
       user.is_admin?
-    elsif record.visible == 4
-      true
-    elsif record.visible == 3
-      user
-    elsif record.visible == 2
-      user && user.is_member?
-    elsif record.visible == 0
-      user_is_author_or_admin_or_manager?
     end
   end
   
