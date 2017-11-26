@@ -29,9 +29,7 @@ gem 'fog-aws'
 gem 'figaro'
 gem 'httparty'
 gem 'diffy'
-# TO DO: remove github link once new stable version > 4.0 is released
-# https://github.com/mbleigh/acts-as-taggable-on/issues/808
-gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'
+gem 'acts-as-taggable-on'
 gem 'ransack', github: 'activerecord-hackery/ransack'  # = master branch, recommended
 gem 'font-awesome-rails'
 gem 'activerecord-session_store'
