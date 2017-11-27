@@ -1,1 +1,4 @@
-li.tag = link_to tag.name, tag_path(tag)
+li.tag
+  = link_to tag.name, tag_path(tag)
+  | &nbsp;&nbsp;
+  = tag.taggings_count

@@ -1,5 +1,7 @@
 - provide :title, "Posts - @" + @user.username
 
-h2 Posts by @#{@user.username}:
+h2
+  = @posts_count
+  |  posts by @#{@user.username}:
 
 = render 'table'

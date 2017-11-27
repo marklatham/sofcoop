@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   def index
     authorize User
     @users = User.all.select{|user| policy(user).show?}.sort_by{|user| user.username}
+    @users_count = @users.size
     @users = Kaminari.paginate_array(@users).page(params[:page])
     if current_user
       if current_user.is_admin?

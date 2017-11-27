@@ -29,7 +29,7 @@
     = f.text_area :body, rows: '15'
   - if @post.category == "post"
     .field
-      = f.label 'Tags (comma-separated):'
+      = f.label 'Tags (comma-separated, lower case):'
       = f.text_field :tag_list, value: f.object.tag_list.to_s
   .actions
     = f.submit 'Save & edit more'

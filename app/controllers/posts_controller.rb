@@ -6,6 +6,7 @@ class PostsController < ApplicationController
     #@search = Post.ransack(params[:q]) # moved to ApplicationController
     @posts = @search.result(distinct: true).select{|post| policy(post).list?}.
                                             sort_by{|post| post.updated_at}.reverse!
+    @posts_count = @posts.size
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
 
@@ -26,6 +27,7 @@ class PostsController < ApplicationController
     authorize Post
     @posts = @user.posts.where(category:"post").select{|post| policy(post).list?}.
                                                 sort_by{|post| post.updated_at}.reverse!
+    @posts_count = @posts.size
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
   
