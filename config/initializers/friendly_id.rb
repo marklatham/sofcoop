@@ -18,7 +18,7 @@ FriendlyId.defaults do |config|
 
   config.reserved_words = %w(new edit index session login logout users admin
     stylesheets assets javascripts images profile timeline posts sofcoop
-    username slug)
+    username slug tags)
 
   #  ## Friendly Finders
   #

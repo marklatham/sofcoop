@@ -2,6 +2,11 @@ Rails.application.routes.draw do
 
   root 'channels#home'
   
+  ### TAGS: ########################
+
+  resources :tags,     only: :index
+  get    '/tags/:slug',                 to: 'tags#show',       as: :tag
+  
   ### CHANNELS: ####################
   
   get       '/@@:channel_slug',               to: 'channels#show',          as: :channel
@@ -44,7 +49,6 @@ Rails.application.routes.draw do
     end
   end
   resources :comments, only:   [:create, :update, :destroy]
-  resources :tags,     only:   [:index, :show]
   
   ### USERS: #######################
   
