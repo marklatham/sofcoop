@@ -1,7 +1,7 @@
 - provide :title, "Posts tagged: " + @tag.name
 
 h2
-  = @tag.taggings_count
+  = @posts_count
   |  posts tagged: 
   = @tag.name
 div = render 'posts/table'

@@ -16,9 +16,8 @@ FriendlyId.defaults do |config|
   # undesirable to allow as slugs. Edit this list as needed for your app.
   config.use :reserved
 
-  config.reserved_words = %w(new edit index session login logout users admin
-    stylesheets assets javascripts images profile timeline posts sofcoop
-    username slug tags)
+  config.reserved_words = %w(new edit index session login logout users
+    stylesheets assets javascripts images timeline posts slug tags)
 
   #  ## Friendly Finders
   #

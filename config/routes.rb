@@ -5,15 +5,17 @@ Rails.application.routes.draw do
   ### TAGS: ########################
 
   resources :tags,     only: :index
-  get    '/tags/:slug',                 to: 'tags#show',       as: :tag
+  get    '/tags/:slug',                     to: 'tags#show',                as: :tag
+  get    '/@@:channel_slug/tags/:slug', to: 'tags#channel_tag',         as: :channel_tag
+  get    '/@:username/tags/:slug',      to: 'tags#author_tag',          as: :author_tag
   
   ### CHANNELS: ####################
   
-  get       '/@@:channel_slug',               to: 'channels#show',          as: :channel
-  get       '/@@:channel_slug/posts',         to: 'channels#posts',         as: :channel_posts
-  post      'votes/vote_for_channel',         to: 'votes#vote_for_channel', as: :vote_for_channel
-  get       '/past-shares',                   to: 'channels#past_shares',   as: :past_shares
-  get       '/@@:channel_slug/past-shares',   to: 'channels#past_shares1',  as: :past_shares1
+  get       '/@@:channel_slug',             to: 'channels#show',            as: :channel
+  get       '/@@:channel_slug/posts',       to: 'channels#posts',           as: :channel_posts
+  post      'votes/vote_for_channel',       to: 'votes#vote_for_channel',   as: :vote_for_channel
+  get       '/past-shares',                 to: 'channels#past_shares',     as: :past_shares
+  get       '/@@:channel_slug/past-shares', to: 'channels#past_shares1',    as: :past_shares1
   resources :channels, except: [:show]
   
   ### IMAGES: ######################

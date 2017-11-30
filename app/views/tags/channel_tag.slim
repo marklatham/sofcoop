@@ -1,0 +1,9 @@
+- provide :title, "Posts in @@" + @channel.slug + " tagged: " + @tag.name
+
+h2
+  = @posts_count
+  |  posts in @@
+  = @channel.slug
+  |  tagged: 
+  = @tag.name
+div = render 'posts/table'
