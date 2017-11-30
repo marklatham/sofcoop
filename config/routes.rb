@@ -6,8 +6,9 @@ Rails.application.routes.draw do
 
   resources :tags,     only: :index
   get    '/tags/:slug',                     to: 'tags#show',                as: :tag
-  get    '/@@:channel_slug/tags/:slug', to: 'tags#channel_tag',         as: :channel_tag
-  get    '/@:username/tags/:slug',      to: 'tags#author_tag',          as: :author_tag
+  get    '/@@:channel_slug/tags/:slug',     to: 'tags#show',                as: :channel_tag
+  get    '/@:username/tags/:slug',          to: 'tags#show',                as: :author_tag
+  get    '/@@:channel_slug/@:username/tags/:slug', to: 'tags#show', as: :channel_author_tag
   
   ### CHANNELS: ####################
   

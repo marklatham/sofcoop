@@ -1,9 +1,0 @@
-- provide :title, "Posts by @" + @author.username + " tagged: " + @tag.name
-
-h2
-  = @posts_count
-  |  posts by @
-  = @author.username
-  |  tagged: 
-  = @tag.name
-div = render 'posts/table'

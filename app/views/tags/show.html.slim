@@ -1,7 +1,14 @@
-- provide :title, "Posts tagged: " + @tag.name
+- title =  'Posts'
+- title << ' in @@'    + @channel.slug if @channel
+- title << ' by @'     + @author.slug if @author
+- title << ' tagged "' + @tag.name + '"'
+- provide :title, title
 
 h2
-  = @posts_count
-  |  posts tagged: 
-  = @tag.name
+  - if @posts_count > 1
+    = @posts_count.to_s + ' '
+    = title.downcase
+  - else
+    = title
+
 div = render 'posts/table'
