@@ -29,6 +29,17 @@ table.bitters {
   }
 }
 
+// TABLE TITLES:
+
+table.title {
+  width: 100%;
+  select {
+    width: auto;
+    margin: 0;
+    float: right;
+  }
+}
+
 // DATA TABLES:
 
 table.data {

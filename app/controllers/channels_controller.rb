@@ -43,6 +43,10 @@ class ChannelsController < ApplicationController
     authorize @channel
     @posts = @channel.posts.select{|post| policy(post).list?}.
              sort_by{|post| post.updated_at}.reverse!
+    @tag_options = [['With Tag:','']]
+    for tag, count in tags_tally(@posts)
+      @tag_options << [tag.name+" ("+count.to_s+")", channel_tag_path(@channel.slug,tag.slug)]
+    end
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
 

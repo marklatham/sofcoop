@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   helper_method :is_author_or_admin?
   helper_method :the_post_path
   helper_method :the_post_url
+  helper_method :tags_tally
   
   require 'httparty'
 
@@ -61,7 +62,18 @@ class ApplicationController < ActionController::Base
       post_url(post.author.username, post.slug)
     end
   end
-
+  
+  def tags_tally(posts)
+    tags = []
+    for post in posts
+      for tag in post.tags
+        tags << tag
+      end
+    end
+    tallies = tags.group_by{|tag| tag}.map{|k,v| [k,v.length]}.
+                   sort{|a,b| [b[1],a[0]] <=> [a[1],b[0]]}
+  end
+  
   protected
   
   def render_404
