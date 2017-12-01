@@ -75,6 +75,9 @@ class PostsController < ApplicationController
     @post.body, admin_email = process_channel_links(post_body, body_array)
     @post.main_image = first_image(@post.body)
     if @post.save
+      tags_after = @post.tag_list
+      visible_after = ( @post.visible > 1 )
+      adjust_taggings_visible([], tags_after, false, visible_after)
       AdminMailer.new_post(@post, the_post_url(@post)).deliver  # notify admin
       if @post.channel
         AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
@@ -95,21 +98,23 @@ class PostsController < ApplicationController
   def update
     @post = Post.find(params[:id])
     authorize @post
+    tags_before = @post.tag_list
+    visible_before = ( @post.visible > 1 )
     body_before = ''
     body_before << post_params[:body]   # Don't know why, but body_before = post_params[:body] fails.
     new_lines = []
     for line in Diffy::Diff.new(@post.body, post_params[:body])
       new_lines << line.from(1) if /^\+/.match(line)
     end
-    puts "NL FOR IMAGES:"
-    puts new_lines
+    # puts "NL FOR IMAGES:"
+    # puts new_lines
     post_body = process_images(post_params[:body], new_lines)
     new_lines = []
     for line in Diffy::Diff.new(@post.body, post_body)
       new_lines << line.from(1) if /^\+/.match(line)
     end
-    puts "NL FOR CHLINKS:"
-    puts new_lines
+    # puts "NL FOR CHLINKS:"
+    # puts new_lines
     body_after, admin_email = process_channel_links(post_body, new_lines)
     if admin_email.present?
       AdminMailer.post_process(admin_email, @post, the_post_url(@post), body_before, body_after, 'edited').deliver
@@ -119,6 +124,9 @@ class PostsController < ApplicationController
     old_channel = @post.channel if @post.channel
     if @post.update(post_params)
       flash[:notice] = 'Post saved.'
+      tags_after = @post.tag_list
+      visible_after = ( @post.visible > 1 )
+      adjust_taggings_visible(tags_before, tags_after, visible_before, visible_after)
       unless old_channel && @post.channel == old_channel
         if @post.channel
           unless @post.channel.manager == current_user && @post.author == current_user
@@ -145,6 +153,9 @@ class PostsController < ApplicationController
 
   def destroy
     authorize @post
+    tags_before = @post.tag_list
+    visible_before = ( @post.visible > 1 )
+    adjust_taggings_visible(tags_before, [], visible_before, false)
     @post.destroy
     flash[:notice] = 'Post was successfully destroyed.'
     from_path = Rails.application.routes.recognize_path(request.referrer)
@@ -421,6 +432,42 @@ class PostsController < ApplicationController
       end
     end
     return [processed_body, admin_email]
+  end
+  
+  def adjust_taggings_visible(tags_before, tags_after, visible_before, visible_after)
+    if visible_before == visible_after
+      if tags_before == tags_after || !visible_after
+        return
+      else # tags changed and visible before and after
+        # run through tags_before & tags_after, check if other array contains(), then adjust counts accordingly
+        for name in tags_before
+          unless name.in?(tags_after)
+            tag = ActsAsTaggableOn::Tag.friendly.find_by_name(name)
+            tag.taggings_visible -= 1
+            tag.save
+          end
+        end
+        for name in tags_after
+          unless name.in?(tags_before)
+            tag = ActsAsTaggableOn::Tag.friendly.find_by_name(name)
+            tag.taggings_visible += 1
+            tag.save
+          end
+        end
+      end
+    elsif visible_before # tags became hidden, so decrement counts of tags_before
+      for name in tags_before
+        tag = ActsAsTaggableOn::Tag.friendly.find_by_name(name)
+        tag.taggings_visible -= 1
+        tag.save
+      end
+    else # tags became visible, so increment counts of tags_after
+      for name in tags_after
+        tag = ActsAsTaggableOn::Tag.friendly.find_by_name(name)
+        tag.taggings_visible += 1
+        tag.save
+      end
+    end
   end
   
 end

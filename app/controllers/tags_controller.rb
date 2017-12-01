@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
   
   def index
-    @tags = ActsAsTaggableOn::Tag.where("taggings_count>0").sort_by{|tag| tag.taggings_count}.reverse!
+    @tags = ActsAsTaggableOn::Tag.where("taggings_visible>0").order("taggings_count DESC, name")
   end
 
   def show

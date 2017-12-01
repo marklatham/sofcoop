@@ -15,7 +15,7 @@
   
   - if @post.tags.any?
     b style='float: left; margin: 0 1rem 1rem 0' Tags:
-    ul.tags = render @post.tags
+    ul.tags = render @post.tags, show_count: false
     hr style='margin: 0.5rem 0 0.5rem 0; background: #aaa'
 
   table
