@@ -13,5 +13,5 @@ div.user-profile
         = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)
     
   - if @posts.any?
-    h3 Posts created:
-    = render 'posts/table', author: @user
+    p style='margin-top: 1rem'
+      b = link_to @posts.size.to_s + ' posts by @' + @user.username, user_posts_path(@user)

@@ -4,6 +4,11 @@ module ApplicationHelper
     [['Author & Admin', '0'], ['Logged-in Members', '2'], ['Logged-in Users', '3'], ['The World', '4']]
   end
   
+  def my_private_posts
+    current_user && current_user.posts.where(category:"post").select{|post| policy(post).list_private?}.
+                                                              sort_by{|post| post.updated_at}.reverse!
+  end
+  
   def nav_channels
     response = []
     for standing in Standing.all.order('rank ASC')

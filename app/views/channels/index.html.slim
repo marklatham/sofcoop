@@ -3,9 +3,10 @@
 table.channels-index
   thead
     tr
-      th style='width: 5rem'
-      th style='font-size: 1.5rem' Channel
-      th style='font-size: 1.5rem' Manager
+      th
+      th Channel
+      th Manager
+      th Posts
 
   tbody
     - for channel in nav_channels
@@ -16,5 +17,7 @@ table.channels-index
           strong = link_to channel.name, channel_path(channel.slug),
                    style: 'color: ' +  channel.color + '; font-size: 1.25rem'
         td.author
-          .avatar = link_to avatar_for_user(channel.manager), user_path(channel.manager.username)
-          .username = link_to '@' + channel.manager.username, user_path(channel.manager.username)
+          .avatar = link_to avatar_for_user(channel.manager), user_path(channel.manager)
+          .username = link_to '@' + channel.manager.username, user_path(channel.manager)
+        td.posts = link_to "posts", channel_posts_path(channel.slug),
+                   style: 'color: ' +  channel.color

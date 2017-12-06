@@ -2,6 +2,8 @@
 
 h2
   = @posts_count
+  - if params[:private]
+    |  private
   |  posts by @#{@user.username}:
 
 = render 'table'

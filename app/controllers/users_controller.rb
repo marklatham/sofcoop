@@ -25,9 +25,9 @@ class UsersController < ApplicationController
     # fallback - find-by-id:
     @user = User.find(params[:id]) unless @user
     authorize @user
-    @posts = @user.posts.select{|post| policy(post).list?}.
-             sort_by{|post| post.updated_at}.reverse!
-    @posts = Kaminari.paginate_array(@posts).page(params[:page])
+      @posts = @user.posts.where(category:"post").
+                           select{|post| policy(post).list?}.
+                           sort_by{|post| post.updated_at}.reverse!
     if request.path != user_path(@user.username)
       if params[:username].downcase != @user.username.downcase
         flash[:notice] = 'Username @' + params[:username] +

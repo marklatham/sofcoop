@@ -121,8 +121,13 @@ table.posts {
 // CHANNELS-INDEX:
 
 table.channels-index {
+  th {
+    padding: 0.5rem;
+    font-size: 1.5rem;
+  }
   td {
     padding: 0.5rem;
+    font-size: 1.25rem;
   }
 }
 

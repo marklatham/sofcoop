@@ -9,8 +9,12 @@ class UserPolicy < ApplicationPolicy
       when 4 then true
       when 3 then user
       when 2 then user && user.is_member?
-      when 0 then user == record || ( user && user.is_admin? )
+      when 0 then user && ( user == record || user.is_admin? )
     end
+  end
+  
+  def user_posts?
+    user && ( user == record || user.is_admin? )
   end
   
 end
