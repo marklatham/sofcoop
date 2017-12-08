@@ -1,9 +1,10 @@
-- provide :title, "@" + @author.username + " posts in @@" + @channel.slug
+- title = "@" + @author.username + " posts in @@" + @channel.slug
+- provide :title, title
 
 table.title
   tr
     td
-      h2 = :title
+      h2 = title
     td
       = select_tag :tag, options_for_select(@tag_options), class: 'vote_menu',
              onchange: "window.location.href = $(this).val()"

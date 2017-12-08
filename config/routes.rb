@@ -5,10 +5,6 @@ Rails.application.routes.draw do
   ### TAGS: ########################
 
   resources :tags,     only: :index
-  get    '/tags/:slug',                                to: 'tags#show',        as: :tag
-  get    '/@@:channel_slug/@:username/tags/:slug',     to: 'tags#show',        as: :channel_author_tag
-  get    '/@@:channel_slug/tags/:slug',                to: 'tags#show',        as: :channel_tag
-  get    '/@:username/tags/:slug',                     to: 'tags#show',        as: :author_tag
   
   ### CHANNELS: ####################
   
@@ -35,7 +31,11 @@ Rails.application.routes.draw do
   resources :images, except: [:show, :edit, :destroy]
   
   ### POST LISTINGS: ###############
-  
+
+  get    '/tags/:slug',                            to: 'post_listings#tag_posts',          as: :tag
+  get    '/@@:channel_slug/@:username/tags/:slug', to: 'post_listings#tag_posts',          as: :channel_author_tag
+  get    '/@@:channel_slug/tags/:slug',            to: 'post_listings#tag_posts',          as: :channel_tag
+  get    '/@:username/tags/:slug',                 to: 'post_listings#tag_posts',          as: :author_tag
   get    '/posts',                                 to: 'post_listings#index',              as: :posts
   get    '/@@:channel_slug/posts',                 to: 'post_listings#channel_posts',      as: :channel_posts
   get    '/@:username/posts',                      to: 'post_listings#author_posts',       as: :author_posts

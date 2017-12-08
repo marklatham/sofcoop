@@ -1,9 +1,9 @@
-- provide :title, "Posts - @" + @user.username
+- provide :title, "Posts - @" + @author.username
 
 h2
   = @posts_count
   - if params[:private]
     |  private
-  |  posts by @#{@user.username}:
+  |  posts by @#{@author.username}:
 
 = render 'table'
