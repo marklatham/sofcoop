@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   ### CHANNELS: ####################
   
   get    '/@@:channel_slug',                     to: 'channels#show',          as: :channel
-  get    '/@@:channel_slug/posts',               to: 'channels#posts',         as: :channel_posts
   post   'votes/vote_for_channel',               to: 'votes#vote_for_channel', as: :vote_for_channel
   get    '/past-shares',                         to: 'channels#past_shares',   as: :past_shares
   get    '/@@:channel_slug/past-shares',         to: 'channels#past_shares1',  as: :past_shares1
@@ -37,8 +36,10 @@ Rails.application.routes.draw do
   
   ### POST LISTINGS: ###############
   
-  get    '/posts',                             to: 'post_listings#index',      as: :posts
-  get    '/@:username/posts',                  to: 'post_listings#author_posts', as: :author_posts
+  get    '/posts',                                 to: 'post_listings#index',              as: :posts
+  get    '/@@:channel_slug/posts',                 to: 'post_listings#channel_posts',      as: :channel_posts
+  get    '/@:username/posts',                      to: 'post_listings#author_posts',       as: :author_posts
+  get    '/@@:channel_slug/@:username',            to: 'post_listings#channel_author',     as: :channel_author
   
   ### POSTS: #######################
   

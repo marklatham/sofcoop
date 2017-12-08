@@ -1,5 +1,5 @@
 class ChannelsController < ApplicationController
-  before_action :set_channel, only: [:past_shares1, :show, :posts, :edit, :update, :destroy]
+  before_action :set_channel, only: [:past_shares1, :show, :edit, :update, :destroy]
 
   # Website Home Page
   def home
@@ -36,18 +36,6 @@ class ChannelsController < ApplicationController
   # GET /@@channel_slug
   def show
     authorize @channel
-  end
-
-  # GET /@@channel_slug/posts
-  def posts
-    authorize @channel
-    @posts = @channel.posts.select{|post| policy(post).list?}.
-             sort_by{|post| post.updated_at}.reverse!
-    @tag_options = [['With Tag:','']]
-    for tag, count in tags_tally(@posts)
-      @tag_options << [tag.name+" ("+count.to_s+")", channel_tag_path(@channel.slug,tag.slug)]
-    end
-    @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
 
   # GET /channels/new

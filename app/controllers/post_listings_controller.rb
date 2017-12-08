@@ -18,6 +18,19 @@ class PostListingsController < ApplicationController
     render :index
   end
 
+  # GET /@@channel_slug/posts
+  def channel_posts
+    @channel = Channel.find_by_slug(params[:channel_slug])
+    authorize @channel
+    @posts = @channel.posts.select{|post| policy(post).list?}.
+             sort_by{|post| post.updated_at}.reverse!
+    @tag_options = [['With Tag:','']]
+    for tag, count in tags_tally(@posts)
+      @tag_options << [tag.name+" ("+count.to_s+")", channel_tag_path(@channel.slug,tag.slug)]
+    end
+    @posts = Kaminari.paginate_array(@posts).page(params[:page])
+  end
+  
   def author_posts
     @user = User.friendly.find(params[:username])
     if params[:private]
@@ -41,6 +54,21 @@ class PostListingsController < ApplicationController
                            sort_by{|post| post.updated_at}.reverse!
     end
     @posts_count = @posts.size
+    @posts = Kaminari.paginate_array(@posts).page(params[:page])
+  end
+
+  # GET /@@channel_slug/posts
+  def channel_author
+    @channel = Channel.find_by_slug(params[:channel_slug])
+    @author = User.friendly.find(params[:username])
+    authorize @channel
+    authorize @author
+    @posts = @channel.posts.select{|post| post.author == @author && policy(post).list?}.
+             sort_by{|post| post.updated_at}.reverse!
+    @tag_options = [['With Tag:','']]
+    for tag, count in tags_tally(@posts)
+      @tag_options << [tag.name+" ("+count.to_s+")", channel_tag_path(@channel.slug,tag.slug)]
+    end
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
   

@@ -17,7 +17,11 @@ class ChannelPolicy < ApplicationPolicy
     true
   end
 
-  def posts?
+  def channel_posts?
+    true
+  end
+
+  def channel_author?
     true
   end
 

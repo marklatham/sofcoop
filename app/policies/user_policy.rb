@@ -13,8 +13,12 @@ class UserPolicy < ApplicationPolicy
     end
   end
   
-  def author_posts?
+  def author_posts? # Only checked for private listing.
     user && ( user == record || user.is_admin? )
+  end
+
+  def channel_author?
+    true
   end
   
 end
