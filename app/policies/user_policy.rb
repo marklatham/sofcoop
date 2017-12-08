@@ -13,7 +13,7 @@ class UserPolicy < ApplicationPolicy
     end
   end
   
-  def user_posts?
+  def author_posts?
     user && ( user == record || user.is_admin? )
   end
   

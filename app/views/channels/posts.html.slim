@@ -8,4 +8,4 @@ table.title
       = select_tag :tag, options_for_select(@tag_options), class: 'vote_menu',
              onchange: "window.location.href = $(this).val()"
 
-= render 'posts/table'
+= render 'post_listings/table'

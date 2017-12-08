@@ -14,4 +14,4 @@ div.user-profile
     
   - if @posts.any?
     p style='margin-top: 1rem'
-      b = link_to @posts.size.to_s + ' posts by @' + @user.username, user_posts_path(@user)
+      b = link_to @posts.size.to_s + ' posts by @' + @user.username, author_posts_path(@user)

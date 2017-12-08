@@ -35,6 +35,11 @@ Rails.application.routes.draw do
   
   resources :images, except: [:show, :edit, :destroy]
   
+  ### POST LISTINGS: ###############
+  
+  get    '/posts',                             to: 'post_listings#index',      as: :posts
+  get    '/@:username/posts',                  to: 'post_listings#author_posts', as: :author_posts
+  
   ### POSTS: #######################
   
   get    '/@@:channel_slug/@:username/:slug',          to: 'posts#show',       as: :channel_post
@@ -43,12 +48,11 @@ Rails.application.routes.draw do
   get    '/@@:channel_slug/@:username/:slug/markdown', to: 'posts#markdown'
   get    '/@:username/:slug/edit',                     to: 'posts#edit',       as: :edit_post
   delete '/@:username/:slug/delete',                   to: 'posts#destroy',    as: :delete_post
-  get    '/posts/@:username',                          to: 'posts#user_posts', as: :user_posts
 
-  resources :posts,    except: [:show, :edit, :destroy]
+  resources :posts,    except: [:index, :show, :edit, :destroy]
   resources :posts do
     collection do
-      match 'search' =>                'posts#search', via: [:get, :post],     as: :search
+      match 'search' => 'post_listings#search',       via: [:get, :post],      as: :search
     end
   end
   resources :comments, only:   [:create, :update, :destroy]

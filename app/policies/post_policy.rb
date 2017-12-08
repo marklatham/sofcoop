@@ -17,7 +17,7 @@ class PostPolicy < ApplicationPolicy
     true
   end
 
-  def user_posts?
+  def author_posts?
     true
   end
   

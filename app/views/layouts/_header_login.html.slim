@@ -10,9 +10,9 @@ div.dropdown
         b.down-arrow.text-arrow
     ul.droplink
       li = link_to 'Create new post', new_post_path
-      li = link_to 'My Posts', user_posts_path(current_user.username)
+      li = link_to 'My Posts', author_posts_path(current_user.username)
       - if my_private_posts.any?
-        li = link_to 'My Private Posts', user_posts_path(current_user.username, private: true)
+        li = link_to 'My Private Posts', author_posts_path(current_user.username, private: true)
       li = link_to 'Upload new image', new_image_path
       li = link_to 'My Images', user_images_path(current_user.username)
       li = link_to 'Edit account', edit_user_registration_path
