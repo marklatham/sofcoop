@@ -112,7 +112,7 @@ class ImagesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_image
       if user = User.friendly.find(params[:username])
-        @image = Image.where(user_id: user.id).friendly.find(params[:slug])
+        @image = Image.where(user_id: user.id).friendly.find(params[:image_slug])
       else
         @image = Image.find(params[:id])
       end

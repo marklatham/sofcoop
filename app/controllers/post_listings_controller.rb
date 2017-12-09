@@ -8,7 +8,7 @@ class PostListingsController < ApplicationController
     @posts_count = @posts.size
     @tag_options = [['With Tag:','']]
     for tag, count in tags_tally(@posts)
-      @tag_options << [tag.name+" ("+count.to_s+")", tag_path(tag.slug)]
+      @tag_options << [tag.name+" ("+count.to_s+")", tag_path(tag)]
     end
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
@@ -26,7 +26,7 @@ class PostListingsController < ApplicationController
              sort_by{|post| post.updated_at}.reverse!
     @tag_options = [['With Tag:','']]
     for tag, count in tags_tally(@posts)
-      @tag_options << [tag.name+" ("+count.to_s+")", channel_tag_path(@channel.slug,tag.slug)]
+      @tag_options << [tag.name+" ("+count.to_s+")", channel_tag_path(@channel,tag)]
     end
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
@@ -72,7 +72,7 @@ class PostListingsController < ApplicationController
   end
 
   def tag_posts
-    @tag   = ActsAsTaggableOn::Tag.friendly.find(params[:slug])
+    @tag   = ActsAsTaggableOn::Tag.friendly.find(params[:tag_slug])
     @posts = Post.tagged_with(@tag.name).select{|post| policy(post).list?}
     if params[:channel_slug] && @channel = Channel.find_by_slug(params[:channel_slug])
       @posts = @posts.select{|post| post.channel && post.channel == @channel}

@@ -6,7 +6,7 @@ class PostsController < ApplicationController
       if params[:username].downcase != @post.author.username.downcase
         flash[:notice] = 'Username @' + params[:username] +
                          ' has changed to @' + @post.author.username
-      elsif params[:slug].downcase != @post.slug.downcase
+      elsif params[:post_slug].downcase != @post.slug.downcase
         flash[:notice] = 'That post has changed its title and URL.'
       else
         flash[:notice] = 'That post is now at this URL.'
@@ -141,7 +141,7 @@ class PostsController < ApplicationController
   def set_post
     if params[:username]
       user = User.friendly.find(params[:username])
-      @post = Post.where(author_id: user.id).friendly.find(params[:slug])
+      @post = Post.where(author_id: user.id).friendly.find(params[:post_slug])
     elsif params[:id]
       @post = Post.find(params[:id])
     elsif params[:vanity_slug]
