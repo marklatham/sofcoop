@@ -3,15 +3,15 @@
 h2 User Profile: @#{@user.username}
 
 div.user-profile
-  div.avatar = link_to avatar_for_user(@user), user_path(@user.username)
+  div.avatar = link_to avatar_for_user(@user), user_path(@user)
 
   - if post = @user.profile
     div.body
       - if post.body.present?
         = Loofah.scrub_fragment(post.body.markdown2html, :prune).to_s.html_safe
       - if  policy(post).edit?
-        = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author.username, post.slug)
+        = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(post.author, post)
     
   - if @posts.any?
     p style='margin-top: 1rem'
-      b = link_to @posts.size.to_s + ' posts by @' + @user.username, author_posts_path(@user)
+      b = link_to @posts.size.to_s + ' posts by @' + @user.username, posts_path(nil, @user)

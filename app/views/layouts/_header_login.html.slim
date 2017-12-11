@@ -2,19 +2,19 @@ div.dropdown
 
   - if user_signed_in?
     - if avatar?(current_user)
-      .avatar = link_to avatar_for_user(current_user), user_path(current_user.username)
+      .avatar = link_to avatar_for_user(current_user), user_path(current_user)
       b.down-arrow.avatar-arrow
     - else
       .textlink
-        = link_to '@'+current_user.username, user_path(current_user.username)
+        = link_to '@'+current_user.username, user_path(current_user)
         b.down-arrow.text-arrow
     ul.droplink
       li = link_to 'Create new post', new_post_path
-      li = link_to 'My Posts', author_posts_path(current_user.username)
+      li = link_to 'My Posts', posts_path(nil, current_user)
       - if my_private_posts.any?
-        li = link_to 'My Private Posts', author_posts_path(current_user.username, private: true)
+        li = link_to 'My Private Posts', posts_path(nil, current_user, private: true)
       li = link_to 'Upload new image', new_image_path
-      li = link_to 'My Images', user_images_path(current_user.username)
+      li = link_to 'My Images', user_images_path(current_user)
       li = link_to 'Edit account', edit_user_registration_path
       - if policy(Channel).create?
         li = link_to 'Create Channel', new_channel_path

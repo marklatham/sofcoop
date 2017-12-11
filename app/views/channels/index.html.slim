@@ -19,5 +19,5 @@ table.channels-index
         td.author
           .avatar = link_to avatar_for_user(channel.manager), user_path(channel.manager)
           .username = link_to '@' + channel.manager.username, user_path(channel.manager)
-        td.posts = link_to "posts", channel_posts_path(channel.slug),
+        td.posts = link_to "posts", posts_path(channel.slug),
                    style: 'color: ' +  channel.color

@@ -29,4 +29,4 @@ div.channel-profile
   = link_to 'Edit', edit_channel_path(@channel) if policy(@channel).edit?
 
   p style='margin-top: 1rem'
-    b = link_to 'Posts in ' + @channel.name, channel_posts_path(@channel.slug)
+    b = link_to 'Posts in ' + @channel.name, posts_path(@channel.slug)

@@ -8,7 +8,7 @@ nav
             b.down-arrow
           ul.droplink
             li = link_to 'Posts', posts_path
-            li = link_to 'Questions', tag_path("questions")
+            li = link_to 'Questions', posts_path(nil, nil, "questions")
             li = link_to 'Tags', tags_path
             li = link_to 'Channels', channels_path
             - if current_user

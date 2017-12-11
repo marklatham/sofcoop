@@ -1,5 +1,5 @@
 tr
   td.avatar = link_to avatar_for_user(user), user_path(user)
   td = link_to '@'+user.username, user_path(user)
-  td = link_to "Posts", author_posts_path(user)
+  td = link_to "Posts", posts_path(nil, user)
   

@@ -1,5 +1,5 @@
 li.tag
-  = link_to tag.name, tag_path(tag)
+  = link_to tag.name, posts_path(nil, nil, tag)
   - if show_count
     | &nbsp;&nbsp;
     = tag.taggings_visible

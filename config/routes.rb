@@ -32,14 +32,7 @@ Rails.application.routes.draw do
   
   ### POST LISTINGS: ###############
 
-  get    '/tags/:tag_slug',                                to: 'post_listings#index',as: :tag
-  get    '/@@:channel_slug/@:username/tags/:tag_slug',     to: 'post_listings#index',as: :channel_author_tag
-  get    '/@@:channel_slug/tags/:tag_slug',                to: 'post_listings#index',as: :channel_tag
-  get    '/@:username/tags/:tag_slug',                     to: 'post_listings#index',as: :author_tag
-  get    '/posts',                                         to: 'post_listings#index',as: :posts
-  get    '/@@:channel_slug/posts',                         to: 'post_listings#index',as: :channel_posts
-  get    '/@:username/posts',                              to: 'post_listings#index',as: :author_posts
-  get    '/@@:channel_slug/@:username',                    to: 'post_listings#index',as: :channel_author
+  get    '(/@@:channel_slug)(/@:username)(/tags/:tag_slug)/posts', to: 'post_listings#index', as: :posts
   
   ### POSTS: #######################
   
