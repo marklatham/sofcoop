@@ -1,9 +1,9 @@
-- provide :title, "Posts - All Sources"
+- provide :title, @title
 
 table.title
   tr
     td
-      h2 Posts:
+      h2 = @title
     td
       = select_tag :tag, options_for_select(@tag_options), class: 'vote_menu',
              onchange: "window.location.href = $(this).val()"

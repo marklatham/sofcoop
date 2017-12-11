@@ -32,28 +32,28 @@ Rails.application.routes.draw do
   
   ### POST LISTINGS: ###############
 
-  get    '/tags/:tag_slug',                            to: 'post_listings#tag_posts',      as: :tag
-  get    '/@@:channel_slug/@:username/tags/:tag_slug', to: 'post_listings#tag_posts',      as: :channel_author_tag
-  get    '/@@:channel_slug/tags/:tag_slug',            to: 'post_listings#tag_posts',      as: :channel_tag
-  get    '/@:username/tags/:tag_slug',                 to: 'post_listings#tag_posts',      as: :author_tag
-  get    '/posts',                                     to: 'post_listings#index',          as: :posts
-  get    '/@@:channel_slug/posts',                     to: 'post_listings#channel_posts',  as: :channel_posts
-  get    '/@:username/posts',                          to: 'post_listings#author_posts',   as: :author_posts
-  get    '/@@:channel_slug/@:username',                to: 'post_listings#channel_author', as: :channel_author
+  get    '/tags/:tag_slug',                                to: 'post_listings#index',as: :tag
+  get    '/@@:channel_slug/@:username/tags/:tag_slug',     to: 'post_listings#index',as: :channel_author_tag
+  get    '/@@:channel_slug/tags/:tag_slug',                to: 'post_listings#index',as: :channel_tag
+  get    '/@:username/tags/:tag_slug',                     to: 'post_listings#index',as: :author_tag
+  get    '/posts',                                         to: 'post_listings#index',as: :posts
+  get    '/@@:channel_slug/posts',                         to: 'post_listings#index',as: :channel_posts
+  get    '/@:username/posts',                              to: 'post_listings#index',as: :author_posts
+  get    '/@@:channel_slug/@:username',                    to: 'post_listings#index',as: :channel_author
   
   ### POSTS: #######################
   
-  get    '/@@:channel_slug/@:username/:post_slug',          to: 'posts#show',              as: :channel_post
-  get    '/@:username/:post_slug',                          to: 'posts#show',              as: :post
-  get    '/@:username/:post_slug/markdown',                 to: 'posts#markdown'
-  get    '/@@:channel_slug/@:username/:post_slug/markdown', to: 'posts#markdown'
-  get    '/@:username/:post_slug/edit',                     to: 'posts#edit',              as: :edit_post
-  delete '/@:username/:post_slug/delete',                   to: 'posts#destroy',           as: :delete_post
+  get    '/@@:channel_slug/@:username/:post_slug',         to: 'posts#show',         as: :channel_post
+  get    '/@:username/:post_slug',                         to: 'posts#show',         as: :post
+  get    '/@:username/:post_slug/markdown',                to: 'posts#markdown'
+  get    '/@@:channel_slug/@:username/:post_slug/markdown',to: 'posts#markdown'
+  get    '/@:username/:post_slug/edit',                    to: 'posts#edit',         as: :edit_post
+  delete '/@:username/:post_slug/delete',                  to: 'posts#destroy',      as: :delete_post
 
   resources :posts,    except: [:index, :show, :edit, :destroy]
   resources :posts do
     collection do
-      match 'search' => 'post_listings#search',            via: [:get, :post],             as: :search
+      match 'search' => 'post_listings#search',            via: [:get, :post],        as: :search
     end
   end
   resources :comments, only:   [:create, :update, :destroy]
@@ -76,14 +76,14 @@ Rails.application.routes.draw do
                       omniauth_callbacks: 'users/omniauth_callbacks' }
 
   devise_scope :user do
-    get '/cancel_account',            to: 'users/registrations#cancel_account',  as: :cancel_account
-    get '/change_password',           to: 'users/registrations#change_password', as: :change_password
-    get '/delete_avatar',             to: 'users/registrations#delete_avatar',   as: :delete_avatar
+    get '/cancel_account',            to: 'users/registrations#cancel_account',      as: :cancel_account
+    get '/change_password',           to: 'users/registrations#change_password',     as: :change_password
+    get '/delete_avatar',             to: 'users/registrations#delete_avatar',       as: :delete_avatar
   end
   
   ### VANITY SLUGS: ##################
   
-  get    '/:vanity_slug',             to: 'posts#show',                          as: :vanity
+  get    '/:vanity_slug',             to: 'posts#show',                              as: :vanity
   get    '/:vanity_slug/markdown',    to: 'posts#markdown'
   
 end
