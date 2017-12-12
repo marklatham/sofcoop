@@ -22,8 +22,8 @@ class PostListingsController < ApplicationController
       @title = " posts" + @title
     end
 
-    @tag_options = [['With Tag:','']]
     channel_slug = @channel.slug if @channel
+    @tag_options = [["any/none (#{@posts.size})", posts_path(channel_slug, @author)]]
     for tag, count in tags_tally(@posts)
       @tag_options << [tag.name+" ("+count.to_s+")", posts_path(channel_slug, @author, tag)]
     end
@@ -31,14 +31,16 @@ class PostListingsController < ApplicationController
     if params[:q] && params[:q][:title_or_body_cont]
       @title = @title + ' from search "' + params[:q][:title_or_body_cont] + '"'
     end
+    @tag_option_selected = ''
     if params[:tag_slug] && @tag = ActsAsTaggableOn::Tag.friendly.find(params[:tag_slug])
       @posts = @posts.select{|post| post.tag_list.include?(@tag.name)}
-      @title = @title + " with tag: " + @tag.name
+      @tag_option_selected = posts_path(channel_slug, @author, @tag)
     end
 
     @posts = @posts.sort_by{|post| post.updated_at}.reverse!
     @posts_count = @posts.size
     @title = @posts_count.to_s + @title
+    @title.sub!("posts", "post") if @posts_count == 1
     @posts = Kaminari.paginate_array(@posts).page(params[:page])
   end
 
@@ -57,7 +59,7 @@ class PostListingsController < ApplicationController
       end
     end
     tallies = tags.group_by{|tag| tag}.map{|k,v| [k,v.length]}.
-                   sort{|a,b| [b[1],a[0]] <=> [a[1],b[0]]}
+                   sort{|a,b| [b[1],a[0].name] <=> [a[1],b[0].name]}
   end
   
 end
