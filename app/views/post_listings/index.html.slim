@@ -5,6 +5,9 @@ table.title
     td.heading
       h2 = @title
     td style='padding-left: 1.5rem'
+      div In Channel:
+      div = select_tag :tag, options_for_select(@channel_options, @channel_option_selected), class: 'vote_menu', onchange: "window.location.href = $(this).val()"
+    td style='padding-left: 1.5rem'
       div With Tag:
       div = select_tag :tag, options_for_select(@tag_options, @tag_option_selected), class: 'vote_menu', onchange: "window.location.href = $(this).val()"
 

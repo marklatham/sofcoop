@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   helper_method :is_author_or_admin?
   helper_method :the_post_path
   helper_method :the_post_url
+  helper_method :nav_channels
   
   require 'httparty'
 
@@ -60,6 +61,14 @@ class ApplicationController < ActionController::Base
     else
       post_url(post.author.username, post.slug)
     end
+  end
+  
+  def nav_channels
+    response = []
+    for standing in Standing.all.order('rank ASC')
+      response << standing.channel
+    end
+    response << Channel.where(slug: 'admin').first  # If this code changes, also change post_listings#channels_tally.
   end
   
   protected

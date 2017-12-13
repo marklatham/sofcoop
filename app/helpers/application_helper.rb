@@ -9,14 +9,6 @@ module ApplicationHelper
                                                               sort_by{|post| post.updated_at}.reverse!
   end
   
-  def nav_channels
-    response = []
-    for standing in Standing.all.order('rank ASC')
-      response << standing.channel
-    end
-    response << Channel.where(slug: 'admin').first
-  end
-  
   def assignee_channels
     array = [['None', nil]]
     for channel in nav_channels
