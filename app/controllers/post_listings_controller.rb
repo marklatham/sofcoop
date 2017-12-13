@@ -16,33 +16,42 @@ class PostListingsController < ApplicationController
       @posts = @posts.select{|post| post.author && post.author == @author}
       @title = @title + " by @" + params[:username]
     end
+    title_or_body_cont = nil
     if params[:q] && params[:q][:title_or_body_cont]
+      title_or_body_cont = params[:q][:title_or_body_cont]
       @title = @title + ' from search "' + params[:q][:title_or_body_cont] + '"'
     end
     
-    channels_tally, posts_count_prechannel = channels_tally(@posts, params[:tag_slug]) # name duplication OK?
+    channels_tally, posts_count_prechannel = channels_tally(@posts, params[:tag_slug])
 
     if params[:channel_slug] && @channel = Channel.find_by_slug(params[:channel_slug])
       @posts = @posts.select{|post| post.channel && post.channel == @channel}
-      @channel_option_selected = posts_path(params[:channel_slug], @author, @tag)
+      @channel_option_selected =
+                    list_posts_path(params[:channel_slug], @author, @tag, title_or_body_cont)
     end
     
     channel_slug = @channel.slug if @channel
-    @tag_options = [["any/none (#{@posts.size})", posts_path(channel_slug, @author)]]
-    for tag, count in tags_tally(@posts)
-      @tag_options << [tag.name+" ("+count.to_s+")", posts_path(channel_slug, @author, tag)]
+    @tag_options = [["any/none (#{@posts.size})",
+                     list_posts_path(channel_slug, @author, nil, title_or_body_cont)]]
+    tags_tally = tags_tally(@posts)
+    tags_tally = tags_tally[0..19]
+    for tag, count in tags_tally
+      @tag_options << [tag.name+" ("+count.to_s+")",
+                       list_posts_path(channel_slug, @author, tag, title_or_body_cont)]
     end
     
     @tag_option_selected = ""
     if params[:tag_slug] && @tag = ActsAsTaggableOn::Tag.friendly.find(params[:tag_slug])
       @posts = @posts.select{|post| post.tag_list.include?(@tag.name)}
-      @tag_option_selected = posts_path(channel_slug, @author, @tag)
+      @tag_option_selected = list_posts_path(channel_slug, @author, @tag, title_or_body_cont)
     end
 
-    @channel_options = [["any/none (#{posts_count_prechannel})", posts_path(nil, @author, @tag)]]
+    @channel_options = [["any/none (#{posts_count_prechannel})",
+                         list_posts_path(nil, @author, @tag, title_or_body_cont)]]
     for channel, count in channels_tally
       count = 0 unless count
-      @channel_options << [channel.name+" ("+count.to_s+")", posts_path(channel.slug, @author, @tag)]
+      @channel_options << [channel.name+" ("+count.to_s+")",
+                           list_posts_path(channel.slug, @author, @tag, title_or_body_cont)]
     end
     
     @posts = @posts.sort_by{|post| post.updated_at}.reverse!
@@ -57,6 +66,15 @@ class PostListingsController < ApplicationController
   end
 
   private
+  
+  def list_posts_path(channel_slug, author, tag, title_or_body_cont)
+    path = posts_path(channel_slug, author, tag)
+    if title_or_body_cont.present?
+      path + "/search?q[title_or_body_cont]=" + title_or_body_cont
+    else
+      path
+    end
+  end
   
   def tags_tally(posts)
     tags = []
