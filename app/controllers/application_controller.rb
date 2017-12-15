@@ -65,10 +65,15 @@ class ApplicationController < ActionController::Base
   
   def nav_channels
     response = []
-    for standing in Standing.all.order('rank ASC')
+    standings = Standing.all.order('rank ASC')
+    for standing in standings[0..8]
       response << standing.channel
     end
-    response << Channel.where(slug: 'admin').first  # If this code changes, also change post_listings#channels_tally.
+    response << Channel.where(slug: 'admin').first # Insert admin channel.
+    for standing in standings[9..-1]
+      response << standing.channel
+    end
+    return response
   end
   
   protected

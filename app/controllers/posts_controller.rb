@@ -130,7 +130,7 @@ class PostsController < ApplicationController
     flash[:notice] = 'Post was successfully destroyed.'
     from_path = Rails.application.routes.recognize_path(request.referrer)
     if from_path[:controller] == 'posts' && from_path[:action] == 'show'
-      redirect_to user_path(from_path[:username])
+      redirect_to posts_path(nil, from_path[:username])
     else
       redirect_back(fallback_location: root_path)
     end

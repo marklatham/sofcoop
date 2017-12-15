@@ -96,8 +96,7 @@ class PostListingsController < ApplicationController
     if nav_channels.size < 21
       channels = nav_channels
     else
-      channels = nav_channels[0..18]
-      channels << nav_channels.last  # Should be admin channel.
+      channels = nav_channels[0..19]
     end
     
     tally = []

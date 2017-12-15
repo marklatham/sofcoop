@@ -49,8 +49,8 @@ ol {
   margin-bottom: 1rem;
 }
 li {
-  margin-top: $small-spacing / 2;
-  margin-bottom: $small-spacing / 2;
+  margin-top: 0.7*$small-spacing;
+  margin-bottom: 0.7*$small-spacing;
   line-height: 0.9*$base-line-height;
 }
 ul ul {
