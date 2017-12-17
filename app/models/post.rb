@@ -5,6 +5,7 @@ class Post < ApplicationRecord
   belongs_to :author, class_name: 'User'
   belongs_to :channel, optional: true
   has_many :comments
+  has_paper_trail
   friendly_id :slug_candidates, use: [:slugged, :scoped, :history], scope: :author
   
   def slug_candidates

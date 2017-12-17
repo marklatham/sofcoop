@@ -33,6 +33,7 @@ gem 'acts-as-taggable-on'
 gem 'ransack', github: 'activerecord-hackery/ransack'  # = master branch, recommended
 gem 'font-awesome-rails'
 gem 'activerecord-session_store'
+gem 'paper_trail'
 
 group :development, :test do
   gem 'byebug', platform: :mri
