@@ -1,7 +1,34 @@
 namespace :votes do
 
+  desc "Run tally up to today."
+  task catchup: :environment do
+    
+    Time.zone = "Pacific Time (US & Canada)"
+    time_now = Time.now
+    puts "TIME NOW: = " + time_now.inspect
+    
+    tallied_times = 0
+    while tallied_times < 100
+      standing_tallied_at = Standing.maximum(:tallied_at) if Standing.any?
+      puts "STANDING TALLIED AT: " + standing_tallied_at.to_s
+      if standing_tallied_at < 1.day.ago
+        tally
+      else
+        break
+      end
+      tallied_times += 1
+    end
+    puts "TALLIED " + tallied_times.to_s + " TIMES"
+    
+  end
+  
+  
   desc "Tally votes for the next day."
   task tally: :environment do
+    tally
+  end
+  
+  def tally
     
     # Tally cutoff_time is the next midnight after the last tally cutoff time,
     # which should be the same in both current and archived standings tables.

@@ -30,7 +30,8 @@ class ApplicationController < ActionController::Base
     {
     26 => "terms",
     28 => "privacy",
-    29 => "markdown"
+    29 => "markdown",
+    84 => "about"
     }
   end
   

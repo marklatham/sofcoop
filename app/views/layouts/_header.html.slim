@@ -7,6 +7,7 @@ nav
             | Sofcoop
             b.down-arrow
           ul.droplink
+            li = link_to 'About', vanity_path('about')
             li = link_to 'Posts', posts_path
             li = link_to 'Questions', posts_path(nil, nil, "questions")
             li = link_to 'Tags', tags_path
