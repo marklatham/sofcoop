@@ -21,4 +21,16 @@ class UserPolicy < ApplicationPolicy
     true
   end
   
+  def permitted_attributes
+    common_params = [:username, :avatar, :avatar_cache, :remove_avatar,
+                     :remote_avatar_url, :profile_id]
+    if user.is_admin?
+      common_params + [:mod, :is_member]
+    elsif user.is_moderator?
+      common_params + [:mod]
+    else
+      common_params
+    end
+  end
+  
 end
