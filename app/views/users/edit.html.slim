@@ -1,0 +1,6 @@
+h1 Editing user
+
+== render 'form'
+
+- if policy(@user).destroy?
+  = link_to 'Delete', "/users/#{@user.id}", data: {confirm: "Are you sure??!"}, method: :delete

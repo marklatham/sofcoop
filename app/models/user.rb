@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :comments, foreign_key: 'author_id'
   has_many :images
   has_many :votes
+  has_paper_trail
   
   attr_accessor :delete_content
   

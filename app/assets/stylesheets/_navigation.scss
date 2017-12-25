@@ -89,6 +89,10 @@ td.navbar-brand {
   padding: 0;
   display: table;
   margin: 0;
+  li.heading {
+    text-align: left;
+    font-weight: bold;
+  }
 }
 
 div.dropdown ul {

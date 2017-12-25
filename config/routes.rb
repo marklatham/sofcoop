@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   ### USERS: #######################
   
   get    '/@:username',               to: 'users#show',     as: :user
-  get    '/users',                    to: 'users#index',    as: :users
+  resources :users, except: [:show]   # Admin interface for user management.
 
   devise_for :users, path: '',
              path_names:  {      sign_up: 'register',

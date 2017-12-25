@@ -16,9 +16,15 @@ div.dropdown
       li = link_to 'Upload new image', new_image_path
       li = link_to 'My Images', user_images_path(current_user)
       li = link_to 'Edit account', edit_user_registration_path
+      li = link_to 'Log out', destroy_user_session_path, method: :delete
+      - if current_user.is_admin?
+        li.heading Admin:
+      - elsif current_user.is_moderator?
+        - # li.heading Moderator:
       - if policy(Channel).create?
         li = link_to 'Create Channel', new_channel_path
-      li = link_to 'Log out', destroy_user_session_path, method: :delete
+      - if current_user.is_admin? || current_user.is_moderator?
+        - # Could link to a moderation page?
         
   - else  # User not signed in:
     .textlink = link_to 'Log in', new_user_session_path

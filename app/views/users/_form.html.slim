@@ -1,0 +1,36 @@
+= form_for @user, url: '/users/'+@user.id.to_s do |f|
+  - if @user.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+      ul
+        - @user.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label 'Moderated'
+    = f.text_field :mod
+  
+  - if current_user.is_admin?
+    .field
+      = f.label 'Email'
+      = f.text_field :email
+    .field
+      = f.label :username
+      = f.text_field :username
+    .field
+      = f.label :is_member
+      = f.text_field :is_member
+    .field
+      = f.label 'Profile ID'
+      = f.text_field :profile_id
+    .field
+      = f.label 'Avatar:'
+      - if @user.avatar_url.present?
+        .avatar = link_to image_tag(@user.avatar_url.to_s, alt: '@'+@user.username),
+                          user_path(@user.slug)
+      = f.hidden_field :avatar_cache
+      table style='width: auto'
+        tr
+          td.formtext Replace with new avatar: &nbsp;
+          td = f.file_field :avatar, accept: 'image/png,image/gif,image/jpeg,image/jpg,image/tif,image/tiff,image/bmp'
+  .actions = f.submit
