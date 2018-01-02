@@ -36,32 +36,34 @@ class ApplicationController < ActionController::Base
   end
   
   def the_post_path(post)
+    channel_slug = nil
+    channel_slug = post.channel.slug if post.channel
     if vanity_slug = vanity_slugs[post.id]
       vanity_path(vanity_slug)
-    elsif post.category != "post"
-      if post.category == "user_profile"
-        user_path(post.author.username)
-      elsif post.category == "channel_profile"
-        channel_path(post.channel.slug)
-      elsif post.category == "channel_dropdown"
-        channel_path(post.channel.slug) # Not very relevant but no better idea.
-      else
-        post_path(post.author.username, post.slug)
-      end
-    elsif post.channel
-      channel_post_path(post.channel.slug, post.author.username, post.slug)
     else
-      post_path(post.author.username, post.slug)
+      case post.category
+        when "post" then post_path(channel_slug, post.author.username, post.slug)
+        when "channel_dropdown" then channel_path(channel_slug) # Not very relevant but no better idea.
+        when "channel_profile" then channel_path(channel_slug)
+        when "user_profile" then user_path(post.author.username)
+        else post_path(channel_slug, post.author.username, post.slug)
+      end
     end
   end
   
   def the_post_url(post)
+    channel_slug = nil
+    channel_slug = post.channel.slug if post.channel
     if vanity_slug = vanity_slugs[post.id]
       vanity_url(vanity_slug)
-    elsif post.channel
-      channel_post_url(post.channel.slug, post.author.username, post.slug)
     else
-      post_url(post.author.username, post.slug)
+      case post.category
+        when "post" then post_url(channel_slug, post.author.username, post.slug)
+        when "channel_dropdown" then channel_url(channel_slug) # Not very relevant but no better idea.
+        when "channel_profile" then channel_url(channel_slug)
+        when "user_profile" then user_url(post.author.username)
+        else post_url(channel_slug, post.author.username, post.slug)
+      end
     end
   end
   

@@ -38,12 +38,10 @@ Rails.application.routes.draw do
   
   ### POSTS: #######################
 
-  get    '/@@:channel_slug/@:username/:post_slug',         to: 'posts#show',         as: :channel_post
-  get    '/@:username/:post_slug',                         to: 'posts#show',         as: :post
-  get    '/@:username/:post_slug/markdown',                to: 'posts#markdown'
-  get    '/@@:channel_slug/@:username/:post_slug/markdown',to: 'posts#markdown'
-  get    '/@:username/:post_slug/edit',                    to: 'posts#edit',         as: :edit_post
-  delete '/@:username/:post_slug/delete',                  to: 'posts#destroy',      as: :delete_post
+  get    '(/@@:channel_slug)/@:username/:post_slug',          to: 'posts#show',         as: :post
+  get    '/@:username/:post_slug/edit',                       to: 'posts#edit',         as: :edit_post
+  delete '/@:username/:post_slug/delete',                     to: 'posts#destroy',      as: :delete_post
+  get    '(/@@:channel_slug)/@:username/:post_slug/markdown', to: 'posts#markdown'
 
   resources :posts,    except: [:index, :show, :edit, :destroy]
   resources :comments, only:   [:create, :update, :destroy]

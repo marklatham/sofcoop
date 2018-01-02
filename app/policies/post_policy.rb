@@ -45,7 +45,7 @@ class PostPolicy < ApplicationPolicy
   end
   
   def markdown?
-    record.visible > 2 && create?
+    show?
   end
 
   def edit?
