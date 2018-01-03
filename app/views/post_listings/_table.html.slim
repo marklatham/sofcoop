@@ -14,25 +14,35 @@ table.data.posts
       th Words
       th Comments
       th style='width: 7rem' Visible To
-      th style='width: 6rem' Created
+      - unless local_assigns[:history]
+        th style='width: 6rem' Created
       th style='width: 6rem' Updated
       - if manage
         th Edit
         th Delete
 
   tbody
-    - @posts.each do |post|
+    - for post in @posts
+      - unless local_assigns[:history]
+        - the_post_path = the_post_path(post)
+      - else
+        / Unpacking from posts_controller#history :
+        - the_post_path = the_post_path(post[0])
+        - the_post_path = the_post_path+"/history/"+post[1].id.to_s if post[1]
+        - create = nil
+        - create = true unless post[1]
+        - post = post[0]
       tr
         td
           - if post.main_image
             = link_to image_tag(post.main_image, width: 150),
-                      the_post_path(post)
+                      the_post_path
         td.left.title
           - if post.title.present?
-            = link_to post.title, the_post_path(post)
+            = link_to post.title, the_post_path
           - elsif post.body.present?
             = link_to post.body.markdown2html.strip_tags.truncate(50, separator: ' '),
-                      the_post_path(post)
+                      the_post_path
         td.channel
           - if post.channel.present?
             .avatar = link_to avatar_for_channel(post.channel), channel_path(post.channel.slug)
@@ -44,12 +54,16 @@ table.data.posts
         td = post.body.split.size
         td = post.comments.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
-        td title=conditional_strftime(post.created_at, 3)
-          = time_ago_in_words(post.created_at) + ' ago'
+        - unless local_assigns[:history]
+          td title=conditional_strftime(post.created_at, 3)
+            = time_ago_in_words(post.created_at) + ' ago'
         td title=conditional_strftime(post.updated_at, 3)
-          - if post.updated_at == post.created_at
+          - unless local_assigns[:history] || post.updated_at > post.created_at
             | －
           - else
+            - if create
+              | (Created)
+              br
             = time_ago_in_words(post.updated_at) + ' ago'
         - if manage
           td = link_to 'Edit', edit_post_path(post.author.username, post.slug)

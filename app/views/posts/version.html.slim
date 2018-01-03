@@ -1,0 +1,32 @@
+- provide :title, @post.title
+- channel_style = "color: #{@post.channel.color}" if @post.channel
+
+.post
+
+  h1 style=channel_style = @post.title
+
+  - if @post.body.present?
+    .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
+    
+  hr style='height: 2px; margin-bottom: 1rem'
+
+  table
+    tr
+      - if @post.channel
+        td.avatar = avatar_for_channel(@post.channel)
+        td.channel style=channel_style #{@post.channel.name}
+        td &nbsp; &nbsp;
+
+      td.avatar = link_to avatar_for_user(@post.author), user_path(@post.author.username)
+
+      td.timestamp
+        |  Posted by #{link_to '@'+@post.author.username, user_path(@post.author.username)}
+        |  #{time_ago_in_words(@post.created_at)} ago.
+        - if @post.updated_at > @post.created_at
+          |  Updated #{time_ago_in_words(@post.updated_at)} ago.
+        br
+          | Content visible to: 
+          = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
+          | . 
+          = link_to "See edit history", the_post_path(@post)+"/history"
+          | .

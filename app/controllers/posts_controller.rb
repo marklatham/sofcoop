@@ -20,7 +20,12 @@ class PostsController < ApplicationController
   def markdown
     authorize @post
   end
-
+  
+  def version
+    @version = PaperTrail::Version.find(params[:version_id])
+    @post = @version.reify
+  end
+  
   def new
     @post = Post.new
     authorize @post

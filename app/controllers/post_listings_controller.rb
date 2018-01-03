@@ -64,6 +64,25 @@ class PostListingsController < ApplicationController
     index
     render :index
   end
+  
+  def history
+    set_post
+    authorize @post
+    @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", @post.id).order("created_at DESC")
+    @posts = [[@post, nil]]
+    for version in @versions
+      unless version.event == "create"
+        post = version.reify
+        @posts << [post, version]  # Later unpack post in view.
+      end
+    end
+    @title = "HISTORY: #{@post.title}"
+    puts "POSTS:"
+    p @posts
+    @posts = Kaminari.paginate_array(@posts).page(params[:page])
+    puts "PAGINATED:"
+    p @posts
+  end
 
   private
   
@@ -116,6 +135,21 @@ class PostListingsController < ApplicationController
     end
     
     return [tally, posts.size]
+  end
+
+  def set_post  # Copied from posts_controller. TO DO: DRY.
+    if params[:username]
+      user = User.friendly.find(params[:username])
+      @post = Post.where(author_id: user.id).friendly.find(params[:post_slug])
+    elsif params[:id]
+      @post = Post.find(params[:id])
+    elsif params[:vanity_slug]
+      if post_id = vanity_slugs.key(params[:vanity_slug])
+        @post = Post.find(post_id)
+      else
+        @post = Post.find(27)  # "Page Not Found"
+      end
+    end
   end
   
 end

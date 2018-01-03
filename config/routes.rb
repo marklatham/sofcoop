@@ -32,16 +32,18 @@ Rails.application.routes.draw do
   
   ### POST LISTINGS: ###############
 
-  get    '(/@@:channel_slug)(/@:username)(/tags/:tag_slug)/posts', to: 'post_listings#index', as: :posts
+  get    '(/@@:channel_slug)(/@:username)(/tags/:tag_slug)/posts', to: 'post_listings#index',   as: :posts
   match  '(/@@:channel_slug)(/@:username)(/tags/:tag_slug)/posts/search' => 'post_listings#search',
-                                                                  via: [:get, :post],  as: :search_posts
+                                                                  via: [:get, :post],           as: :search_posts
+  get    '(/@@:channel_slug)/@:username/:post_slug/history',       to: 'post_listings#history'
   
   ### POSTS: #######################
 
-  get    '(/@@:channel_slug)/@:username/:post_slug',          to: 'posts#show',         as: :post
-  get    '/@:username/:post_slug/edit',                       to: 'posts#edit',         as: :edit_post
-  delete '/@:username/:post_slug/delete',                     to: 'posts#destroy',      as: :delete_post
-  get    '(/@@:channel_slug)/@:username/:post_slug/markdown', to: 'posts#markdown'
+  get    '(/@@:channel_slug)/@:username/:post_slug',               to: 'posts#show',            as: :post
+  get    '/@:username/:post_slug/edit',                            to: 'posts#edit',            as: :edit_post
+  delete '/@:username/:post_slug/delete',                          to: 'posts#destroy',         as: :delete_post
+  get    '(/@@:channel_slug)/@:username/:post_slug/markdown',      to: 'posts#markdown'
+  get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id', to: 'posts#version'
 
   resources :posts,    except: [:index, :show, :edit, :destroy]
   resources :comments, only:   [:create, :update, :destroy]

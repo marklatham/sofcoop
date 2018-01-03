@@ -36,7 +36,7 @@ class PostPolicy < ApplicationPolicy
       case record.visible
         when 4 then true
         when 3 then user
-        when 2 then user && user.is_member?
+        when 2 then user && (user.is_member? || user == record.author)
         when 0 then user_is_author_or_admin_or_manager?
       end
     else
@@ -46,6 +46,10 @@ class PostPolicy < ApplicationPolicy
   
   def markdown?
     show?
+  end
+  
+  def history?
+    list?
   end
 
   def edit?

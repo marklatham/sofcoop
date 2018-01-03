@@ -35,6 +35,9 @@
         br
           | Content visible to: 
           = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
+          | . 
+          = link_to "See edit history", the_post_path(@post)+"/history"
+          | .
 
   - if  policy(@post).edit?
     p.controls
