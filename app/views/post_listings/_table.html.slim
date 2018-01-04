@@ -10,7 +10,10 @@ table.data.posts
       th.left style='width: 20rem' Title
       th Channel
       - unless local_assigns[:author]
-        th Author
+        - unless local_assigns[:history]
+          th Author
+        - else
+          th Updater
       th Words
       - unless local_assigns[:history]
         th Comments
@@ -34,8 +37,7 @@ table.data.posts
       tr
         td
           - if post.main_image
-            = link_to image_tag(post.main_image, width: 150),
-                      the_post_path
+            = link_to image_tag(post.main_image, width: 150), the_post_path
         td.left.title
           - if post.title.present?
             = link_to post.title, the_post_path
