@@ -26,7 +26,7 @@ Rails.application.routes.draw do
          redirect('https://sofcoop.s3-us-west-2.amazonaws.com/avatars/%{username}.%{ext}')
   
   get    '/channels/@@:channel_slug.:ext',                 to:
-          redirect('https://sofcoop.s3-us-west-2.amazonaws.com/channels/%{channel_slug}.%{ext}')
+         redirect('https://sofcoop.s3-us-west-2.amazonaws.com/channels/%{channel_slug}.%{ext}')
   
   resources :images, except: [:show, :edit, :destroy]
   
@@ -43,7 +43,8 @@ Rails.application.routes.draw do
   get    '/@:username/:post_slug/edit',                            to: 'posts#edit',            as: :edit_post
   delete '/@:username/:post_slug/delete',                          to: 'posts#destroy',         as: :delete_post
   get    '(/@@:channel_slug)/@:username/:post_slug/markdown',      to: 'posts#markdown'
-  get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id', to: 'posts#version'
+  get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id',          to: 'posts#version'
+  get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id/markdown', to: 'posts#version_markdown'
 
   resources :posts,    except: [:index, :show, :edit, :destroy]
   resources :comments, only:   [:create, :update, :destroy]

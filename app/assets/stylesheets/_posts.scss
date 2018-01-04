@@ -46,6 +46,15 @@
   padding-left: 0.5rem;
 }
 
+.versions-nav {
+  margin-top: 1rem; 
+  color: $gray-medium; 
+  font-style: italic;
+  a:link, a:visited {
+    color: $gray-medium;
+  }
+}
+
 .comments {
   .timestamp {
     

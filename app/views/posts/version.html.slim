@@ -1,7 +1,19 @@
-- provide :title, @post.title
+- provide :title, "VERSION: #{@post.title}"
 - channel_style = "color: #{@post.channel.color}" if @post.channel
 
 .post
+  p.versions-nav
+    | VERSION AS OF 
+    = @post.updated_at.strftime("%Y-%m-%d %H:%M:%S") + " UTC. "
+    - if @previous_version_path
+      = link_to "<< PREVIOUS", @previous_version_path
+    |  &nbsp; 
+    - if @next_version_path
+      = link_to "NEXT >>", @next_version_path
+    - else
+      = link_to "CURRENT >>", the_post_path(@post)
+    |  &nbsp; 
+    = link_to "HISTORY", the_post_path(@post)+"/history"
 
   h1 style=channel_style = @post.title
 
@@ -27,9 +39,11 @@
         br
           | Content visible to: 
           = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
-          | . 
-          = link_to "See edit history", the_post_path(@post)+"/history"
           | .
+          <br>
+          = link_to "See edit history", the_post_path(@post)+"/history"
+          |  | 
+          = link_to "Markdown", @this_version_path+"/markdown"
   
   hr style='height: 2px; margin-bottom: 1rem'
   
