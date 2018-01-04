@@ -30,3 +30,18 @@
           | . 
           = link_to "See edit history", the_post_path(@post)+"/history"
           | .
+  
+  hr style='height: 2px; margin-bottom: 1rem'
+  
+  - if @tags.any?
+    b style='float: left; margin: 0 1rem 1rem 0' Tags:
+    ul.tags = render @tags, show_count: false
+    hr style='margin: 0.5rem 0 0.5rem 0; background: #aaa'
+
+  - unless @post.visible == 3 && !current_user
+    .comments
+
+      h2 Comments:
+
+      == render @comments
+      

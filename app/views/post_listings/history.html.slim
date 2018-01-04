@@ -1,8 +1,7 @@
 - provide :title, @title
 
-table.title
-  tr
-    td
-      h2 = @title
+h2 = @title
+
+p List starts with current version, then goes back in time. To see a version, click its title.
       
 = render 'table', history: true

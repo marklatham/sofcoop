@@ -12,7 +12,8 @@ table.data.posts
       - unless local_assigns[:author]
         th Author
       th Words
-      th Comments
+      - unless local_assigns[:history]
+        th Comments
       th style='width: 7rem' Visible To
       - unless local_assigns[:history]
         th style='width: 6rem' Created
@@ -29,8 +30,6 @@ table.data.posts
         / Unpacking from posts_controller#history :
         - the_post_path = the_post_path(post[0])
         - the_post_path = the_post_path+"/history/"+post[1].id.to_s if post[1]
-        - create = nil
-        - create = true unless post[1]
         - post = post[0]
       tr
         td
@@ -52,7 +51,8 @@ table.data.posts
             .avatar = link_to avatar_for_user(post.author), user_path(post.author.username)
             .username = link_to '@'+post.author.username, user_path(post.author.username)
         td = post.body.split.size
-        td = post.comments.size
+        - unless local_assigns[:history]
+          td = post.comments.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
         - unless local_assigns[:history]
           td title=conditional_strftime(post.created_at, 3)
@@ -61,9 +61,6 @@ table.data.posts
           - unless local_assigns[:history] || post.updated_at > post.created_at
             | －
           - else
-            - if create
-              | (Created)
-              br
             = time_ago_in_words(post.updated_at) + ' ago'
         - if manage
           td = link_to 'Edit', edit_post_path(post.author.username, post.slug)

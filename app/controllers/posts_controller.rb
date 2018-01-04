@@ -24,6 +24,10 @@ class PostsController < ApplicationController
   def version
     @version = PaperTrail::Version.find(params[:version_id])
     @post = @version.reify
+    @comments = Comment.where("post_id = ? and created_at < ?", @post.id, @post.updated_at).order("created_at")
+    taggings = ActsAsTaggableOn::Tagging.where("taggable_type = ? and taggable_id = ? and created_at < ?",
+                                               "Post", @post.id, @post.updated_at).order("created_at")
+    @tags = taggings.map(&:tag)
   end
   
   def new
