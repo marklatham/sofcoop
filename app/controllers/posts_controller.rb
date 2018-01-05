@@ -53,11 +53,6 @@ class PostsController < ApplicationController
     @body_class = 'grayback'
   end
 
-  def edit
-    authorize @post
-    @body_class = 'grayback'
-  end
-
   def create
     @post = current_user.posts.build(post_params)
     authorize @post
@@ -89,6 +84,11 @@ class PostsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def edit
+    authorize @post
+    @body_class = 'grayback'
   end
 
   def update

@@ -21,16 +21,12 @@ class ImagePolicy < ApplicationPolicy
     user
   end
 
-  def edit?
-    user_is_uploader_or_admin?
-  end
-
   def create?
     user
   end
   
   def update?
-    edit?
+    user_is_uploader_or_admin?
   end
 
   def destroy?

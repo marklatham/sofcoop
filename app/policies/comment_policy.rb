@@ -23,16 +23,12 @@ class CommentPolicy < ApplicationPolicy
     policy(record.post).show?
   end
 
-  def edit?
-    user_is_author_or_admin?
-  end
-
   def create?
     user
   end
   
   def update?
-    edit?
+    user_is_author_or_admin?
   end
 
   def destroy?

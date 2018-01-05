@@ -31,6 +31,10 @@ class PostPolicy < ApplicationPolicy
       record.visible<2 && user_is_author_or_admin_or_manager?
   end
   
+  def history?
+    list?
+  end
+  
   def show?
     if record.category == "post"
       case record.visible
@@ -56,20 +60,12 @@ class PostPolicy < ApplicationPolicy
     show?
   end
   
-  def history?
-    list?
-  end
-
-  def edit?
-    user_is_author_or_admin_or_manager?
-  end
-
   def create?
     user
   end
   
   def update?
-    edit?
+    user_is_author_or_admin_or_manager?
   end
 
   def destroy?

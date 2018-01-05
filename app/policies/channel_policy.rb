@@ -25,16 +25,12 @@ class ChannelPolicy < ApplicationPolicy
     true
   end
 
-  def edit?
-    user && user.is_admin?
-  end
-
   def create?
     user && user.is_admin?
   end
   
   def update?
-    edit?
+    user && user.is_admin?
   end
 
   def destroy?

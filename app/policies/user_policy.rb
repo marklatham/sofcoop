@@ -13,20 +13,12 @@ class UserPolicy < ApplicationPolicy
     end
   end
   
-  def new?
+  def create?
     user && user.is_admin?
   end
   
-  def create?
-    new?
-  end
-  
-  def edit?
-    user && ( user.is_admin? || user.is_moderator? )
-  end
-  
   def update?
-    edit?
+    user && ( user.is_admin? || user.is_moderator? )
   end
 
   def destroy?
