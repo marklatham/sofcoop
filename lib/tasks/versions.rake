@@ -1,12 +1,37 @@
 namespace :versions do
 
+  desc "Hide versions with duplicated item_id."
+  # Defends against MySQL bug that will be gone in cluster version 8.0.0.
+  # See https://stackoverflow.com/a/46628734/7356045
+  task hide_dupes: :environment do
+    versions = PaperTrail::Version.where("(event = ? OR event = ?) AND item_id > 0", "create", "destroy").order(:item_type, :item_id, :created_at)
+    item_id = nil
+    for version in versions
+      if item_id && version.item_id == item_id && version.event == "create"
+        hide_old_versions(version)
+      else
+        item_id = nil
+      end
+      if version.event == "destroy"
+        item_id = version.item_id
+      end
+    end
+  end
+  
+  def hide_old_versions(version)
+    old_versions = PaperTrail::Version.where("item_type = ? AND item_id = ? AND created_at < ?", version.item_type, version.item_id, version.created_at)
+    for old_version in old_versions
+      old_version.item_id = 0  # Tried nil but not allowed.
+      old_version.save
+    end
+    AdminMailer.hid_dupes(version).deliver
+  end
+  
   desc "Reduce clutter of incremental post edits."
   task compress_posts: :environment do
-    
     Time.zone = "UTC"
     time_now = Time.now
 #    puts "COMPRESS POSTS. TIME NOW: = " + time_now.inspect
-    
 #    latest = PaperTrail::Version.where("item_type = ? and records_merged IS NOT NULL", "Post").
 #                                 order("created_at ASC").last
 #    if latest
@@ -16,7 +41,6 @@ namespace :versions do
 #    else
       versions = PaperTrail::Version.where("item_type = ?", "Post").order(:item_id, :created_at)
 #    end
-    
 #    puts "PROCESSING #{versions.size.to_s} POSTS"
     updates = []
     for version in versions
@@ -42,7 +66,6 @@ namespace :versions do
       end
     end
     compress(updates) if updates.size > 1
-    
   end
   
   def compress(updates)
@@ -52,7 +75,7 @@ namespace :versions do
     for update in updates[1..-1]
       update_first_created = update.first_created_at || update.created_at
       previous_first_created = previous.first_created_at || previous.created_at
-      merge(previous, update) if update_first_created < 1.hour.since(previous.created_at) &&
+      merge(previous, update) if update_first_created < 1.second.since(previous.created_at) &&
                                  update.created_at < 10.hours.since(previous_first_created)
       previous = update
 #      puts "PREVIOUS:"

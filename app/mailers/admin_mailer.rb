@@ -21,6 +21,12 @@ class AdminMailer < ApplicationMailer
       subject: "Filenames Update"
   end
   
+  def hid_dupes(version)
+    @version = version
+    mail   to: Sofcoop::Application.secrets.admin_email,
+      subject: "Hid Dupe Versions"
+  end
+  
   def new_post(post, post_url)
     @post = post
     @post_url = post_url
