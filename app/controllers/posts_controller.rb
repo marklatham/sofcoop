@@ -24,6 +24,7 @@ class PostsController < ApplicationController
   def version
     @version = PaperTrail::Version.find(params[:version_id])
     @post = @version.reify
+    authorize @post
     @comments = Comment.where("post_id = ? and created_at < ?", @version.item_id, @post.updated_at).order("created_at")
     taggings = ActsAsTaggableOn::Tagging.where("taggable_type = ? and taggable_id = ? and created_at < ?",
                                                "Post", @version.item_id, @post.updated_at).order("created_at")
@@ -38,6 +39,7 @@ class PostsController < ApplicationController
   def version_markdown  # TO DO: DRY
     @version = PaperTrail::Version.find(params[:version_id])
     @post = @version.reify
+    authorize @post
     previous_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id < ? AND object IS NOT NULL", "Post", @version.item_id, params[:version_id]).order("created_at").last
     next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id > ?", "Post", @version.item_id, params[:version_id]).order("created_at").first
     @previous_version_path = the_post_path(@post)+"/history/"+previous_version.id.to_s+"/markdown" if previous_version

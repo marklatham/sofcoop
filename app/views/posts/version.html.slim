@@ -41,7 +41,8 @@
           = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
           | .
           <br>
-          = link_to "See edit history", the_post_path(@post)+"/history"
+          | See: 
+          = link_to "Edit History", the_post_path(@post)+"/history"
           |  | 
           = link_to "Markdown", @this_version_path+"/markdown"
   

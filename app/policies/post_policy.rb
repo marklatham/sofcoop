@@ -48,6 +48,14 @@ class PostPolicy < ApplicationPolicy
     show?
   end
   
+  def version?
+    show?
+  end
+  
+  def version_markdown?
+    show?
+  end
+  
   def history?
     list?
   end

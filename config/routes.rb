@@ -74,7 +74,10 @@ Rails.application.routes.draw do
   
   ### VANITY SLUGS: ##################
   
-  get    '/:vanity_slug',             to: 'posts#show',                              as: :vanity
-  get    '/:vanity_slug/markdown',    to: 'posts#markdown'
+  get    '/:vanity_slug',                              to: 'posts#show',             as: :vanity
+  get    '/:vanity_slug/markdown',                     to: 'posts#markdown'
+  get    '/:vanity_slug/history',                      to: 'post_listings#history'
+  get    '/:vanity_slug/history/:version_id',          to: 'posts#version'
+  get    '/:vanity_slug/history/:version_id/markdown', to: 'posts#version_markdown'
   
 end
