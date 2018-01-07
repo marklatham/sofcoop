@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :markdown, :edit, :destroy]
+  before_action :set_post, only: [:show, :markdown, :approve, :edit, :destroy]
 
   def show
     if params[:username] && request.path != the_post_path(@post)
@@ -93,7 +93,15 @@ class PostsController < ApplicationController
       render :new
     end
   end
-
+  
+  def approve
+    authorize @post
+    @post.category = "post"
+    @post.save
+    flash[:notice] = "Post approved."
+    redirect_to the_post_path(@post)
+  end
+  
   def edit
     authorize @post
     @body_class = 'grayback'

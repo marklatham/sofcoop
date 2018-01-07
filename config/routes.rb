@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   get    '(/@@:channel_slug)/@:username/:post_slug',               to: 'posts#show',            as: :post
   get    '/@:username/:post_slug/edit',                            to: 'posts#edit',            as: :edit_post
   delete '/@:username/:post_slug/delete',                          to: 'posts#destroy',         as: :delete_post
+  get    '(/@@:channel_slug)/@:username/:post_slug/approve',       to: 'posts#approve',         as: :approve_post
   get    '(/@@:channel_slug)/@:username/:post_slug/markdown',      to: 'posts#markdown'
   get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id',          to: 'posts#version'
   get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id/markdown', to: 'posts#version_markdown'

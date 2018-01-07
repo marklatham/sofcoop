@@ -45,8 +45,11 @@
           |  | 
           = link_to "Markdown", the_post_path(@post)+"/markdown"
 
-  - if  policy(@post).edit?
-    p.controls
+  p.controls
+    - if policy(@post).approve?
+      = link_to "Approve Post", the_post_path(@post)+"/approve"
+      |  | 
+    - if policy(@post).edit?
       = link_to 'Edit Post', edit_post_path(@post.author.username, @post.slug)
       - if  policy(@post).destroy?
         |  | 

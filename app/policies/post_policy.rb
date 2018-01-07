@@ -69,6 +69,12 @@ class PostPolicy < ApplicationPolicy
     user
   end
   
+  def approve?
+    if record.category == "post-mod"
+      user.is_admin? || user.is_moderator?
+    end
+  end
+  
   def update?
     if record.category == "post"
       user_is_author_or_admin_or_manager?
