@@ -22,8 +22,11 @@ class PostPolicy < ApplicationPolicy
   end
   
   def list?  # Should this post's title etc (not body) appear in lists?
-    record.category=="post" &&
-    ( record.visible>1 || user_is_author_or_admin_or_manager? )
+    if record.category == "post"
+      record.visible>1 || user_is_author_or_admin_or_manager?
+    elsif record.category == "post-mod"
+      user_is_author_or_admin_or_moderator?
+    end
   end
   
   def list_private?  # Show this post in author's private list?
@@ -43,6 +46,8 @@ class PostPolicy < ApplicationPolicy
         when 2 then user && (user.is_member? || user == record.author)
         when 0 then user_is_author_or_admin_or_manager?
       end
+    elsif record.category == "post-mod"
+      user_is_author_or_admin_or_moderator?
     else
       user && user.is_admin?
     end
@@ -65,7 +70,11 @@ class PostPolicy < ApplicationPolicy
   end
   
   def update?
-    user_is_author_or_admin_or_manager?
+    if record.category == "post"
+      user_is_author_or_admin_or_manager?
+    elsif record.category == "post-mod"
+      user_is_author_or_admin_or_moderator?
+    end
   end
 
   def destroy?
@@ -84,6 +93,12 @@ class PostPolicy < ApplicationPolicy
   def user_is_author_or_admin_or_manager?
     if user
       user == record.author || user.is_admin? || record.channel && user == record.channel.manager
+    end
+  end
+  
+  def user_is_author_or_admin_or_moderator?
+    if user
+      user == record.author || user.is_admin? || user.is_moderator?
     end
   end
   

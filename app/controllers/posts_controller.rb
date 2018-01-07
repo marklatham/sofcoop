@@ -4,8 +4,7 @@ class PostsController < ApplicationController
   def show
     if params[:username] && request.path != the_post_path(@post)
       if params[:username].downcase != @post.author.username.downcase
-        flash[:notice] = 'Username @' + params[:username] +
-                         ' has changed to @' + @post.author.username
+        flash[:notice] = 'Username @' + params[:username] + ' has changed to @' + @post.author.username
       elsif params[:post_slug].downcase != @post.slug.downcase
         flash[:notice] = 'That post has changed its title and URL.'
       else
@@ -29,8 +28,10 @@ class PostsController < ApplicationController
     taggings = ActsAsTaggableOn::Tagging.where("taggable_type = ? and taggable_id = ? and created_at < ?",
                                                "Post", @version.item_id, @post.updated_at).order("created_at")
     @tags = taggings.map(&:tag)
-    previous_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id < ? AND object IS NOT NULL", "Post", @version.item_id, params[:version_id]).order("created_at").last
-    next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id > ?", "Post", @version.item_id, params[:version_id]).order("created_at").first
+    previous_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id < ? AND object IS NOT NULL",
+                                            "Post", @version.item_id, params[:version_id]).order("created_at").last
+    next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id > ?",
+                                            "Post", @version.item_id, params[:version_id]).order("created_at").first
     @previous_version_path = the_post_path(@post)+"/history/"+previous_version.id.to_s if previous_version
     @this_version_path     = the_post_path(@post)+"/history/"+params[:version_id].to_s
     @next_version_path     = the_post_path(@post)+"/history/"+next_version.id.to_s if next_version
@@ -40,11 +41,13 @@ class PostsController < ApplicationController
     @version = PaperTrail::Version.find(params[:version_id])
     @post = @version.reify
     authorize @post
-    previous_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id < ? AND object IS NOT NULL", "Post", @version.item_id, params[:version_id]).order("created_at").last
-    next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id > ?", "Post", @version.item_id, params[:version_id]).order("created_at").first
+    previous_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id < ? AND object IS NOT NULL",
+                                            "Post", @version.item_id, params[:version_id]).order("created_at").last
+    next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id > ?",
+                   "Post", @version.item_id, params[:version_id]).order("created_at").first
     @previous_version_path = the_post_path(@post)+"/history/"+previous_version.id.to_s+"/markdown" if previous_version
     @next_version_path     = the_post_path(@post)+"/history/"+next_version.id.to_s+"/markdown" if next_version
-    @this_version_path     = the_post_path(@post)+"/history/"+params[:version_id].to_s # Non-markdown.
+    @this_version_path     = the_post_path(@post)+"/history/"+params[:version_id].to_s    # Non-markdown.
   end
   
   def new
@@ -65,7 +68,12 @@ class PostsController < ApplicationController
     body_array = post_body.split("\n")
     @post.body, admin_email = process_channel_links(post_body, body_array)
     @post.main_image = first_image(@post.body)
+    @post.category = "post-mod" if current_user.mod == "moderate"
     if @post.save
+      if @post.category == "post-mod"
+        flash[:notice] = "Thank you for posting. 
+        Your post is now pending moderation -- we'll email you when that's done."
+      end
       tags_after = @post.tag_list
       visible_after = ( @post.visible > 1 )
       adjust_taggings_visible([], tags_after, false, visible_after)
