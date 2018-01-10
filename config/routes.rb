@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   get    '(/@@:channel_slug)/@:username/:post_slug/approve',       to: 'posts#approve',         as: :approve_post
   get    '(/@@:channel_slug)/@:username/:post_slug/markdown',      to: 'posts#markdown'
   get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id',          to: 'posts#version'
+  get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id/edit',     to: 'posts#edit'
   get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id/markdown', to: 'posts#version_markdown'
 
   resources :posts,    except: [:index, :show, :edit, :destroy]
@@ -79,6 +80,7 @@ Rails.application.routes.draw do
   get    '/:vanity_slug/markdown',                     to: 'posts#markdown'
   get    '/:vanity_slug/history',                      to: 'post_listings#history'
   get    '/:vanity_slug/history/:version_id',          to: 'posts#version'
+  get    '/:vanity_slug/history/:version_id/edit',     to: 'posts#edit'
   get    '/:vanity_slug/history/:version_id/markdown', to: 'posts#version_markdown'
   
 end

@@ -40,11 +40,10 @@
           = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
           | .
           <br>
-          | See: 
-          = link_to "Edit History", the_post_path(@post)+"/history"
-          |  | 
           = link_to "Markdown", the_post_path(@post)+"/markdown"
-
+          |  | 
+          = link_to "History of versions", the_post_path(@post)+"/history"
+  
   p.controls
     - if policy(@post).approve?
       = link_to "Approve Post", the_post_path(@post)+"/approve"

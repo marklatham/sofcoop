@@ -10,7 +10,7 @@ class PostsController < ApplicationController
       else
         flash[:notice] = 'That post is now at this URL.'
       end
-      return redirect_to the_post_path(@post)
+      redirect_to the_post_path(@post) and return
     end
     authorize @post
     @comment = Comment.new(post: @post)
@@ -35,6 +35,12 @@ class PostsController < ApplicationController
     @previous_version_path = the_post_path(@post)+"/history/"+previous_version.id.to_s if previous_version
     @this_version_path     = the_post_path(@post)+"/history/"+params[:version_id].to_s
     @next_version_path     = the_post_path(@post)+"/history/"+next_version.id.to_s if next_version
+    if @version.event == "update-mod"
+      latest_update_mod = PaperTrail::Version.where("item_type = ? AND item_id = ? AND event = ?", "Post", @version.item_id, "update-mod").order("created_at").last
+      if @version == latest_update_mod
+        @edit_version_path = @this_version_path + "/edit"
+      end
+    end
   end
   
   def version_markdown  # TO DO: DRY
@@ -134,7 +140,25 @@ class PostsController < ApplicationController
     params[:post][:body] = body_after
     params[:post][:main_image] = first_image(params[:post][:body])
     old_channel = @post.channel if @post.channel
-    if @post.update(post_params)
+    
+    if current_user.mod == "moderate" || @post.category == "post-mod"
+      @post.assign_attributes(post_params)
+      @post.category == "post-mod"
+      @post.updated_at = Time.now
+      version = PaperTrail::Version.new
+      version.item = @post
+      version.object = serialize(@post)
+      version.event = "update-mod"
+      version.whodunnit = current_user.id
+      version.save!
+      flash[:notice] = "Post update saved; pending moderation."
+      if params[:commit] == 'Save & edit more'
+        redirect_to edit_post_path(@post.author.username, @post.slug) and return
+      else # Should be the only other cases: params[:commit] == 'Save & see post/profile'
+        redirect_to the_post_path(@post)+"/history/"+version.id.to_s and return
+      end
+    
+    elsif @post.update(post_params)
       flash[:notice] = 'Post saved.'
       tags_after = @post.tag_list
       visible_after = ( @post.visible > 1 )
@@ -181,7 +205,10 @@ class PostsController < ApplicationController
   private
 
   def set_post
-    if params[:username]
+    if params[:version_id]
+      @version = PaperTrail::Version.find(params[:version_id])
+      @post = @version.reify
+    elsif params[:username]
       user = User.friendly.find(params[:username])
       @post = Post.where(author_id: user.id).friendly.find(params[:post_slug])
     elsif params[:id]
@@ -480,6 +507,17 @@ class PostsController < ApplicationController
         tag.save
       end
     end
+  end
+  
+  def serialize(post)
+    existing_format = Time::DATE_FORMATS[:default]
+    Time::DATE_FORMATS[:default] = "%Y-%m-%d %H:%M:%S.000000000 Z"
+    object = "---\n"
+    post.attributes.each do |attr_name, attr_value|
+      object << attr_name + ": " + attr_value.to_s + "\n"
+    end
+    Time::DATE_FORMATS[:default] = existing_format
+    return object
   end
   
 end

@@ -31,7 +31,7 @@ class UsersController < ApplicationController
         flash[:notice] = 'Username @' + params[:username] +
                          ' has changed to @' + @user.username
       end
-      return redirect_to user_path(@user.username)
+      redirect_to user_path(@user.username) and return
     end
   end
 

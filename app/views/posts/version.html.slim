@@ -21,6 +21,11 @@
     .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
     
   hr style='height: 2px; margin-bottom: 1rem'
+  
+  - if @tags.any?
+    b style='float: left; margin: 0 1rem 1rem 0' Tags:
+    ul.tags = render @tags, show_count: false
+    hr style='margin: 0.5rem 0 0.5rem 0; background: #aaa'
 
   table
     tr
@@ -41,18 +46,19 @@
           = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
           | .
           <br>
-          | See: 
-          = link_to "Edit History", the_post_path(@post)+"/history"
-          |  | 
           = link_to "Markdown", @this_version_path+"/markdown"
+          |  | 
+          = link_to "History of versions", the_post_path(@post)+"/history"
+  
+  p.controls
+    - if policy(@post).approve?
+      = link_to "Approve Post", the_post_path(@post)+"/approve"
+      |  | 
+    - if @edit_version_path && policy(@post).edit?
+      = link_to 'Edit Post', @edit_version_path
   
   hr style='height: 2px; margin-bottom: 1rem'
   
-  - if @tags.any?
-    b style='float: left; margin: 0 1rem 1rem 0' Tags:
-    ul.tags = render @tags, show_count: false
-    hr style='margin: 0.5rem 0 0.5rem 0; background: #aaa'
-
   - unless @post.visible == 3 && !current_user
     .comments
 

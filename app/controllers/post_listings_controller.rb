@@ -68,10 +68,12 @@ class PostListingsController < ApplicationController
   def history
     set_post
     authorize @post
-    @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", @post.id).order("created_at DESC")
+    @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?",
+                                          "Post", @post.id).order("created_at DESC")
     @posts = [[@post, nil]]
     for version in @versions
-      @posts[-1][0].author = User.find(version.whodunnit) # PaperTrail whodunnit caused post in (chronologically) next record.
+      # Could have used version.paper_trail_originator except for the current post:
+      @posts[-1][0].author = User.find(version.whodunnit)
       unless version.event == "create"
         post = version.reify
         @posts << [post, version]  # Later unpack post in view.
