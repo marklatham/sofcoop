@@ -17,14 +17,6 @@ class ApplicationController < ActionController::Base
     @search = Post.ransack(params[:q])
   end
   
-  # More specific versions are in [resource]_policy, since handy there.
-  # So far only using this where resource is a post.
-  def is_author_or_admin?(user, resource)
-    if user
-      user == resource.author || user.is_admin?
-    end
-  end
-  
   def vanity_slugs
     # Should be unique in both columns. See rails routes for words already in use.
     {

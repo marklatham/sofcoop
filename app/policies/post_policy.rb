@@ -24,7 +24,7 @@ class PostPolicy < ApplicationPolicy
   def list?  # Should this post's title etc (not body) appear in lists?
     if record.category == "post"
       record.visible>1 || user_is_author_or_admin_or_manager?
-    elsif record.category == "post-mod"
+    elsif record.category == "post_mod"
       user_is_author_or_admin_or_moderator?
     end
   end
@@ -46,7 +46,7 @@ class PostPolicy < ApplicationPolicy
         when 2 then user && (user.is_member? || user == record.author)
         when 0 then user_is_author_or_admin_or_manager?
       end
-    elsif record.category == "post-mod"
+    elsif record.category == "post_mod"
       user_is_author_or_admin_or_moderator?
     else
       user && user.is_admin?
@@ -70,16 +70,26 @@ class PostPolicy < ApplicationPolicy
   end
   
   def approve?
-    if record.category == "post-mod"
+    if record.category == "post_mod"
       user.is_admin? || user.is_moderator?
     end
   end
   
   def update?
-    if record.category == "post"
-      user_is_author_or_admin_or_manager?
-    elsif record.category == "post-mod"
-      user_is_author_or_admin_or_moderator?
+    case record.category
+    when "channel_dropdown" then user_is_author_or_admin_or_manager?
+    when "channel_profile" then user_is_author_or_admin_or_manager?
+    else update_detailed?
+    end
+  end
+  
+  def update_detailed?
+    return false if PaperTrail::Version.where("item_type = ? AND item_id = ? AND created_at > ?",
+                                                   "Post", record.id, record.updated_at).present?
+    case record.category
+    when "post" then user_is_author_or_admin_or_manager?
+    when "post_mod" then user_is_author_or_admin_or_manager?
+    else user_is_author_or_admin?  # user_profile, home_page, any forgotten
     end
   end
 

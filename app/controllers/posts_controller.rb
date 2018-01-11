@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :markdown, :approve, :edit, :destroy]
+  before_action :set_post, only: [:show, :markdown, :approve, :edit, :update, :destroy]
 
   def show
     if params[:username] && request.path != the_post_path(@post)
@@ -74,9 +74,9 @@ class PostsController < ApplicationController
     body_array = post_body.split("\n")
     @post.body, admin_email = process_channel_links(post_body, body_array)
     @post.main_image = first_image(@post.body)
-    @post.category = "post-mod" if current_user.mod == "moderate"
+    @post.category = "post_mod" if current_user.mod == "moderate"
     if @post.save
-      if @post.category == "post-mod"
+      if @post.category == "post_mod"
         flash[:notice] = "Thank you for posting. 
         Your post is now pending moderation -- we'll email you when that's done."
       end
@@ -114,7 +114,6 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = Post.find(params[:id])
     authorize @post
     tags_before = @post.tag_list
     visible_before = ( @post.visible > 1 )
@@ -141,9 +140,9 @@ class PostsController < ApplicationController
     params[:post][:main_image] = first_image(params[:post][:body])
     old_channel = @post.channel if @post.channel
     
-    if current_user.mod == "moderate" || @post.category == "post-mod"
+    if current_user.mod == "moderate" || @post.category == "post_mod"
       @post.assign_attributes(post_params)
-      @post.category == "post-mod"
+      @post.category == "post_mod"
       @post.updated_at = Time.now
       version = PaperTrail::Version.new
       version.item = @post

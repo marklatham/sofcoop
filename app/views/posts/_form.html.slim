@@ -31,10 +31,12 @@
     .field
       = f.label 'Tags (comma-separated, lower case):'
       = f.text_field :tag_list, value: f.object.tag_list.to_s
+      
+  = hidden_field_tag :version_id, @version.id
   .actions
     = f.submit 'Save & edit more'
     |  &nbsp; &nbsp; 
-    - if @post.category == "post" || @post.category == "post-mod"
+    - if @post.category == "post" || @post.category == "post_mod"
       = f.submit 'Save & see post'
     - else
       = f.submit 'Save & see profile'
