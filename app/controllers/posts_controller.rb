@@ -513,7 +513,13 @@ class PostsController < ApplicationController
     Time::DATE_FORMATS[:default] = "%Y-%m-%d %H:%M:%S.000000000 Z"
     object = "---\n"
     post.attributes.each do |attr_name, attr_value|
-      object << attr_name + ": " + attr_value.to_s + "\n"
+      object << attr_name + ": "
+      if post.column_for_attribute(attr_name).type == :text
+        object << attr_value.inspect
+      else
+        object << attr_value.to_s
+      end
+      object << "\n"
     end
     Time::DATE_FORMATS[:default] = existing_format
     return object
