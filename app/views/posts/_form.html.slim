@@ -32,7 +32,8 @@
       = f.label 'Tags (comma-separated, lower case):'
       = f.text_field :tag_list, value: f.object.tag_list.to_s
       
-  = hidden_field_tag :version_id, @version.id
+  - if @version
+    = hidden_field_tag :version_id, @version.id
   .actions
     = f.submit 'Save & edit more'
     |  &nbsp; &nbsp; 

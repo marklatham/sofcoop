@@ -13,7 +13,7 @@ table.channels-menu
                 - dropdown_present = true
                 = Loofah.scrub_fragment(dropdown.body.markdown2html, :prune).to_s.html_safe
               - if policy(dropdown).edit?
-                = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(dropdown.author.username, dropdown.slug)
+                = link_to fa_icon('pencil-square-o', class: 'edit'), the_edit_post_path(dropdown)
             - if dropdown_present == false
               - profile_present = false
               - if profile = channel.profile

@@ -54,8 +54,8 @@
     - if policy(@post).approve?
       = link_to "Approve Post", the_post_path(@post)+"/approve"
       |  | 
-    - if @edit_version_path && policy(@post).edit?
-      = link_to 'Edit Post', @edit_version_path
+    - if policy(@post).edit?
+      = link_to 'Edit Post', the_edit_post_path(@post)
   
   hr style='height: 2px; margin-bottom: 1rem'
   

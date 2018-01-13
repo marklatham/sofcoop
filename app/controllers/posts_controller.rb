@@ -35,12 +35,6 @@ class PostsController < ApplicationController
     @previous_version_path = the_post_path(@post)+"/history/"+previous_version.id.to_s if previous_version
     @this_version_path     = the_post_path(@post)+"/history/"+params[:version_id].to_s
     @next_version_path     = the_post_path(@post)+"/history/"+next_version.id.to_s if next_version
-    if @version.event == "update-mod"
-      latest_update_mod = PaperTrail::Version.where("item_type = ? AND item_id = ? AND event = ?", "Post", @version.item_id, "update-mod").order("created_at").last
-      if @version == latest_update_mod
-        @edit_version_path = @this_version_path + "/edit"
-      end
-    end
   end
   
   def version_markdown  # TO DO: DRY
@@ -91,7 +85,7 @@ class PostsController < ApplicationController
         AdminMailer.post_process(admin_email, @post, the_post_url(@post), body_before, @post.body, 'created').deliver
       end
       if params[:commit] == 'Save & edit more'
-        redirect_to edit_post_path(@post.author.username, @post.slug) and return
+        redirect_to the_edit_post_path(@post) and return
       else # Should be the only other case: params[:commit] == 'Save & see post'
         redirect_to the_post_path(@post) and return
       end
@@ -152,7 +146,7 @@ class PostsController < ApplicationController
       version.save!
       flash[:notice] = "Post update saved; pending moderation."
       if params[:commit] == 'Save & edit more'
-        redirect_to edit_post_path(@post.author.username, @post.slug) and return
+        redirect_to the_edit_post_path(@post) and return
       else # Should be the only other cases: params[:commit] == 'Save & see post/profile'
         redirect_to the_post_path(@post)+"/history/"+version.id.to_s and return
       end
@@ -177,7 +171,7 @@ class PostsController < ApplicationController
         end
       end
       if params[:commit] == 'Save & edit more'
-        redirect_to edit_post_path(@post.author.username, @post.slug) and return
+        redirect_to the_edit_post_path(@post) and return
       else # Should be the only other cases: params[:commit] == 'Save & see post/profile'
         redirect_to the_post_path(@post) and return
       end
@@ -210,14 +204,14 @@ class PostsController < ApplicationController
     elsif params[:username]
       user = User.friendly.find(params[:username])
       @post = Post.where(author_id: user.id).friendly.find(params[:post_slug])
-    elsif params[:id]
-      @post = Post.find(params[:id])
     elsif params[:vanity_slug]
       if post_id = vanity_slugs.key(params[:vanity_slug])
         @post = Post.find(post_id)
-      else
-        @post = Post.find(27)  # "Page Not Found"
       end
+    elsif params[:id]
+      @post = Post.find(params[:id])
+    else
+      @post = Post.find(27)  # "Page Not Found"
     end
   end
 

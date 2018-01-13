@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   helper_method :is_author_or_admin?
   helper_method :the_post_path
   helper_method :the_post_url
+  helper_method :the_edit_post_path
   helper_method :nav_channels
   
   require 'httparty'
@@ -28,11 +29,11 @@ class ApplicationController < ActionController::Base
   end
   
   def the_post_path(post)
-    channel_slug = nil
-    channel_slug = post.channel.slug if post.channel
     if vanity_slug = vanity_slugs[post.id]
       vanity_path(vanity_slug)
     else
+      channel_slug = nil
+      channel_slug = post.channel.slug if post.channel
       case post.category
         when "post" then post_path(channel_slug, post.author.username, post.slug)
         when "channel_dropdown" then channel_path(channel_slug) # Not very relevant but no better idea.
@@ -44,11 +45,11 @@ class ApplicationController < ActionController::Base
   end
   
   def the_post_url(post)
-    channel_slug = nil
-    channel_slug = post.channel.slug if post.channel
     if vanity_slug = vanity_slugs[post.id]
       vanity_url(vanity_slug)
     else
+      channel_slug = nil
+      channel_slug = post.channel.slug if post.channel
       case post.category
         when "post" then post_url(channel_slug, post.author.username, post.slug)
         when "channel_dropdown" then channel_url(channel_slug) # Not very relevant but no better idea.
@@ -57,6 +58,31 @@ class ApplicationController < ActionController::Base
         else post_url(channel_slug, post.author.username, post.slug)
       end
     end
+  end
+  
+  def the_edit_post_path(post)
+    message = nil
+    version_id = nil
+    latest_version_post = nil
+    channel_slug = nil
+    channel_slug = post.channel.slug if post.channel
+    latest_post = post
+    current_post = Post.find(post.id)
+    if current_post.updated_at > latest_post.updated_at
+      # message = "Redirecting to current post because it was updated later."
+      latest_post = current_post
+    end
+    if latest_version = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", post.id).
+                                                                             order("created_at").last
+      latest_version_post = latest_version.reify
+    end
+    if latest_version_post && latest_version_post.updated_at > latest_post.updated_at
+      # message = "Redirecting to latest saved version of this post, because it was updated later."
+      version_id = latest_version.id
+      latest_post = latest_version_post
+    end
+    # flash[:notice] = message if message  # Might not be needed?
+    edit_post_path(channel_slug, latest_post.author.username, latest_post.slug, version_id)
   end
   
   def nav_channels

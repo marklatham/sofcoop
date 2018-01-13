@@ -65,7 +65,7 @@ table.data.posts
           - else
             = time_ago_in_words(post.updated_at) + ' ago'
         - if manage
-          td = link_to 'Edit', edit_post_path(post.author.username, post.slug)
+          td = link_to 'Edit', the_edit_post_path(post)
           td = link_to 'Delete', delete_post_path(post.author.username, post.slug),
                method: :delete, data: {confirm: "You sure?"}
 

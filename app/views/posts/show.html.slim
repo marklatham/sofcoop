@@ -12,7 +12,7 @@
     .body = Loofah.scrub_fragment(@post.body.markdown2html, :prune).to_s.html_safe
   
   - if  policy(@post).edit?
-    = link_to fa_icon('pencil-square-o', class: 'edit'), edit_post_path(@post.author.username, @post.slug)
+    = link_to fa_icon('pencil-square-o', class: 'edit'), the_edit_post_path(@post)
     
   hr style='height: 2px; margin-bottom: 1rem'
   
@@ -49,7 +49,7 @@
       = link_to "Approve Post", the_post_path(@post)+"/approve"
       |  | 
     - if policy(@post).edit?
-      = link_to 'Edit Post', edit_post_path(@post.author.username, @post.slug)
+      = link_to 'Edit Post', the_edit_post_path(@post)
       - if  policy(@post).destroy?
         |  | 
         = link_to 'Delete Post', delete_post_path(@post.author.username, @post.slug),
