@@ -12,8 +12,9 @@
       = link_to "NEXT >>", @next_version_path
     - else
       = link_to "CURRENT >>", the_post_path(@post)
-    |  &nbsp; 
-    = link_to "HISTORY", the_post_path(@post)+"/history"
+    - if policy(@post).history?
+      |  &nbsp; 
+      = link_to "HISTORY", the_post_path(@post)+"/history"
 
   h1 style=channel_style = @post.title
 
@@ -47,8 +48,9 @@
           | .
           <br>
           = link_to "Markdown", @this_version_path+"/markdown"
-          |  | 
-          = link_to "History of versions", the_post_path(@post)+"/history"
+          - if policy(@post).history?
+            |  | 
+            = link_to "History of versions", the_post_path(@post)+"/history"
   
   p.controls
     - if policy(@post).approve?

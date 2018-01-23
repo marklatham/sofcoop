@@ -79,7 +79,7 @@ class PostListingsController < ApplicationController
         @posts << [post, version]  # Later unpack post in view.
       end
     end
-    @title = "HISTORY: #{@post.title}"
+    @title = 'History of edits for post "' + @post.title + '":'
     puts "POSTS:"
     p @posts
     @posts = Kaminari.paginate_array(@posts).page(params[:page])

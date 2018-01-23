@@ -35,7 +35,7 @@ class PostPolicy < ApplicationPolicy
   end
   
   def history?
-    list?
+    list? && user.is_member?
   end
   
   def show?

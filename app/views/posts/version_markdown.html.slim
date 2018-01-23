@@ -11,8 +11,9 @@
       = link_to "NEXT >>", @next_version_path
     - else
       = link_to "CURRENT >>", the_post_path(@post)+"/markdown"
-    |  &nbsp; 
-    = link_to "HISTORY", the_post_path(@post)+"/history"
+    - if policy(@post).history?
+      |  &nbsp; 
+      = link_to "HISTORY", the_post_path(@post)+"/history"
 
 h1 Markdown coding for version of post:
 

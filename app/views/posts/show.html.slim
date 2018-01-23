@@ -41,8 +41,9 @@
           | .
           <br>
           = link_to "Markdown", the_post_path(@post)+"/markdown"
-          |  | 
-          = link_to "History of versions", the_post_path(@post)+"/history"
+          - if policy(@post).history?
+            |  | 
+            = link_to "History of versions", the_post_path(@post)+"/history"
   
   p.controls
     - if policy(@post).approve?
