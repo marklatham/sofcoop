@@ -70,21 +70,18 @@ class PostListingsController < ApplicationController
     authorize @post
     @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?",
                                           "Post", @post.id).order("created_at DESC")
-    @posts = [[@post, nil]]
+    @arrays = [[@post, nil, nil]]
     for version in @versions
-      # Could have used version.paper_trail_originator except for the current post:
-      @posts[-1][0].author = User.find(version.whodunnit)
+      @arrays[-1][2] = User.find(version.whodunnit)
       unless version.event == "create"
         post = version.reify
-        @posts << [post, version]  # Later unpack post in view.
+        @arrays << [post, version, nil]  # Later unpack post in view.
       end
     end
+    @arrays[-1][2] = @arrays[-1][0].author
+    @arrays = @arrays.sort_by{|post| post[0].updated_at}.reverse!
     @title = 'History of edits for post "' + @post.title + '":'
-    puts "POSTS:"
-    p @posts
-    @posts = Kaminari.paginate_array(@posts).page(params[:page])
-    puts "PAGINATED:"
-    p @posts
+    @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
   end
 
   private
