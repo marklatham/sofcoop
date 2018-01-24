@@ -1,8 +1,6 @@
-- provide :title, @title
+- provide :title, 'History: "' + @post.title + '"'
 
-h2 = @title
-
-p style="text-align: center" List starts with current version, then goes back in time. To see a version, click its title.
+h2 = 'History of versions for post "' + @post.title + '":'
 
 table.data.posts
   thead
@@ -22,13 +20,16 @@ table.data.posts
       - the_post_path = the_post_path(post)
       - if version = array[1]
         - the_post_path = the_post_path+"/history/"+version.id.to_s
+        - font_weight = "normal"
+      - else
+        - font_weight = "bold"
       - updater = array[2]
-      tr
+      tr style="font-weight:#{font_weight}"
         td
           - if version
             = "v" + version.item_version_id.to_s
           - else
-            | Live
+            | LIVE
         td
           - if post.main_image
             = link_to image_tag(post.main_image, width: 150), the_post_path

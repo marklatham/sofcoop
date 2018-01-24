@@ -80,7 +80,6 @@ class PostListingsController < ApplicationController
     end
     @arrays[-1][2] = @arrays[-1][0].author
     @arrays = @arrays.sort_by{|post| post[0].updated_at}.reverse!
-    @title = 'History of edits for post "' + @post.title + '":'
     @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
   end
 
