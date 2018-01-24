@@ -3,5 +3,50 @@
 h2 = @title
 
 p style="text-align: center" List starts with current version, then goes back in time. To see a version, click its title.
-      
-= render 'table', history: true
+
+table.data.posts
+  thead
+    tr
+      th #
+      th style='min-width: 6rem' Image
+      th.left style='width: 20rem' Title
+      th Channel
+      th Updater
+      th Words
+      th style='width: 7rem' Visible To
+      th style='width: 6rem' Updated
+
+  tbody
+    - for post in @posts
+      / Unpacking from posts_controller#history :
+      - the_post_path = the_post_path(post[0])
+      - if version = post[1]
+        - the_post_path = the_post_path+"/history/"+version.id.to_s
+      - post = post[0]
+      tr
+        td
+          - if version
+            = "v" + version.item_version_id.to_s
+          - else
+            | Live
+        td
+          - if post.main_image
+            = link_to image_tag(post.main_image, width: 150), the_post_path
+        td.left.title
+          - if post.title.present?
+            = link_to post.title, the_post_path
+          - elsif post.body.present?
+            = link_to post.body.markdown2html.strip_tags.truncate(50, separator: ' '), the_post_path
+        td.channel
+          - if post.channel.present?
+            .avatar = link_to avatar_for_channel(post.channel), channel_path(post.channel.slug)
+            .username = link_to post.channel.name, channel_path(post.channel.slug)
+        td.author
+          .avatar = link_to avatar_for_user(post.author), user_path(post.author.username)
+          .username = link_to '@'+post.author.username, user_path(post.author.username)
+        td = post.body.split.size
+        td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
+        td title=conditional_strftime(post.updated_at, 3)
+          = time_ago_in_words(post.updated_at) + ' ago'
+
+= paginate @posts
