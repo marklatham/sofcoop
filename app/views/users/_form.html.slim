@@ -8,7 +8,7 @@
 
   .field
     = f.label 'Moderated'
-    = f.text_field :mod
+    = f.select :mod, [['moderate', 'moderate'], ['(none)', nil]]
   
   - if current_user.is_admin?
     .field

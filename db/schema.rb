@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171229221806) do
+ActiveRecord::Schema.define(version: 20180123202106) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -224,6 +224,7 @@ ActiveRecord::Schema.define(version: 20171229221806) do
     t.text "object_changes", limit: 4294967295
     t.integer "records_merged"
     t.datetime "first_created_at"
+    t.integer "item_version_id"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

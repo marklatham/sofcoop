@@ -69,7 +69,7 @@ class PostsController < ApplicationController
     @post.body, admin_email = process_channel_links(post_body, body_array)
     @post.main_image = first_image(@post.body)
     @post.category = "post_mod" if current_user.mod == "moderate"
-    if @post.save
+    if @post.save!
       if @post.category == "post_mod"
         flash[:notice] = "Thank you for posting. 
         Your post is now pending moderation -- we'll email you when that's done."
@@ -83,6 +83,11 @@ class PostsController < ApplicationController
       end
       if admin_email.present?
         AdminMailer.post_process(admin_email, @post, the_post_url(@post), body_before, @post.body, 'created').deliver
+      end
+      if version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND event = ?",
+                                                     "Post",       @post.id,     "create").last
+        version.item_version_id = 0
+        version.save!
       end
       if params[:commit] == 'Save & edit more'
         redirect_to the_edit_post_path(@post) and return
@@ -143,6 +148,11 @@ class PostsController < ApplicationController
       version.object = serialize(@post)
       version.event = "update-mod"
       version.whodunnit = current_user.id
+      if previous_version = PaperTrail::Version.
+         where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
+                       "Post",       @post.id).order("item_version_id").last
+        version.item_version_id = previous_version.item_version_id + 1
+      end
       version.save!
       flash[:notice] = "Post update saved; pending moderation."
       if params[:commit] == 'Save & edit more'
@@ -167,6 +177,17 @@ class PostsController < ApplicationController
         if old_channel
           unless old_channel.manager == current_user && @post.author == current_user
             AdminMailer.post_unassigned(@post, old_channel, current_user).deliver
+          end
+        end
+      end
+      if version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND event = ?",
+                                       "Post", @post.id, "update").order("item_version_id").last
+        unless version.item_version_id
+          if previous_version = PaperTrail::Version.
+             where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
+                           "Post",       @post.id).order("item_version_id").last
+            version.item_version_id = previous_version.item_version_id + 1
+            version.save!
           end
         end
       end

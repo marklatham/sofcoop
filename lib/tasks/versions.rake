@@ -116,5 +116,27 @@ namespace :versions do
       else string
     end
   end
+
+  desc "Populate newly created field version.item_version_id."
+  task populate_item_version_id: :environment do
+    versions = PaperTrail::Version.all.order(:item_type, :item_id, :created_at)
+    previous = nil
+    for version in versions
+      if version.item_version_id
+        # do nothing
+      elsif version.event == "create"  
+        version.item_version_id = 0
+      else
+        previous_id = 0
+        previous_id = previous.item_version_id if previous && previous.item_version_id
+        previous_id = 0 if previous &&
+          ( version.item_type != previous.item_type || version.item_id != previous.item_id )
+        records_merged = version.records_merged || 0
+        version.item_version_id = previous_id + records_merged + 1
+      end
+      version.save!
+      previous = version
+    end
+  end
   
 end
