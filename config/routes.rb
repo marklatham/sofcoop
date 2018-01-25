@@ -43,9 +43,9 @@ Rails.application.routes.draw do
   delete '/@:username/:post_slug/delete',                          to: 'posts#destroy',         as: :delete_post
   get    '(/@@:channel_slug)/@:username/:post_slug/approve',       to: 'posts#approve',         as: :approve_post
   get    '(/@@:channel_slug)/@:username/:post_slug/markdown',      to: 'posts#markdown'
-  get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id',          to: 'posts#version'
-  get    '(/@@:channel_slug)/@:username/:post_slug(/history/:version_id)/edit',   to: 'posts#edit', as: :edit_post
-  get    '(/@@:channel_slug)/@:username/:post_slug/history/:version_id/markdown', to: 'posts#version_markdown'
+  get    '(/@@:channel_slug)/@:username/:post_slug/history/:item_version_id',          to: 'posts#version'
+  get    '(/@@:channel_slug)/@:username/:post_slug(/history/:item_version_id)/edit',   to: 'posts#edit', as: :edit_post
+  get    '(/@@:channel_slug)/@:username/:post_slug/history/:item_version_id/markdown', to: 'posts#version_markdown'
 
   resources :posts,    except: [:index, :show, :edit, :destroy]
   resources :comments, only:   [:create, :update, :destroy]
@@ -75,10 +75,10 @@ Rails.application.routes.draw do
   
   ### VANITY SLUGS: ##################
   
-  get    '/:vanity_slug',                              to: 'posts#show',             as: :vanity
-  get    '/:vanity_slug/markdown',                     to: 'posts#markdown'
-  get    '/:vanity_slug/history',                      to: 'post_listings#history'
-  get    '/:vanity_slug/history/:version_id',          to: 'posts#version'
-  get    '/:vanity_slug/history/:version_id/markdown', to: 'posts#version_markdown'
+  get    '/:vanity_slug',                                   to: 'posts#show',             as: :vanity
+  get    '/:vanity_slug/markdown',                          to: 'posts#markdown'
+  get    '/:vanity_slug/history',                           to: 'post_listings#history'
+  get    '/:vanity_slug/history/:item_version_id',          to: 'posts#version'
+  get    '/:vanity_slug/history/:item_version_id/markdown', to: 'posts#version_markdown'
   
 end

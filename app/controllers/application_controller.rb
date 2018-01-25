@@ -78,11 +78,11 @@ class ApplicationController < ActionController::Base
     end
     if latest_version_post && latest_version_post.updated_at > latest_post.updated_at
       # message = "Redirecting to latest saved version of this post, because it was updated later."
-      version_id = latest_version.id
+      item_version_id = latest_version.item_version_id
       latest_post = latest_version_post
     end
     # flash[:notice] = message if message  # Might not be needed?
-    edit_post_path(channel_slug, latest_post.author.username, latest_post.slug, version_id)
+    edit_post_path(channel_slug, latest_post.author.username, latest_post.slug, item_version_id)
   end
   
   def nav_channels

@@ -19,7 +19,7 @@ table.data.posts
       - post = array[0]
       - the_post_path = the_post_path(post)
       - if version = array[1]
-        - the_post_path = the_post_path+"/history/"+version.id.to_s
+        - the_post_path = the_post_path+"/history/"+version.item_version_id.to_s
         - font_weight = "normal"
       - else
         - font_weight = "bold"

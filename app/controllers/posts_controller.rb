@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :markdown, :approve, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :markdown, :version, :version_markdown, :approve, :edit, :update, :destroy]
 
   def show
     if params[:username] && request.path != the_post_path(@post)
@@ -21,33 +21,31 @@ class PostsController < ApplicationController
   end
   
   def version
-    @version = PaperTrail::Version.find(params[:version_id])
-    @post = @version.reify
     authorize @post
     @comments = Comment.where("post_id = ? and created_at < ?", @version.item_id, @post.updated_at).order("created_at")
     taggings = ActsAsTaggableOn::Tagging.where("taggable_type = ? and taggable_id = ? and created_at < ?",
                                                "Post", @version.item_id, @post.updated_at).order("created_at")
     @tags = taggings.map(&:tag)
-    previous_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id < ? AND object IS NOT NULL",
-                                            "Post", @version.item_id, params[:version_id]).order("created_at").last
-    next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id > ?",
-                                            "Post", @version.item_id, params[:version_id]).order("created_at").first
-    @previous_version_path = the_post_path(@post)+"/history/"+previous_version.id.to_s if previous_version
-    @this_version_path     = the_post_path(@post)+"/history/"+params[:version_id].to_s
-    @next_version_path     = the_post_path(@post)+"/history/"+next_version.id.to_s if next_version
+    previous_version = PaperTrail::Version.
+      where("item_type = ? AND item_id = ? AND item_version_id < ? AND object IS NOT NULL",
+                                            "Post", @version.item_id, params[:item_version_id]).order("created_at").last
+    next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND item_version_id > ?",
+                   "Post", @version.item_id, params[:item_version_id]).order("created_at").first
+    @previous_version_path = the_post_path(@post)+"/history/"+previous_version.item_version_id.to_s if previous_version
+    @this_version_path     = the_post_path(@post)+"/history/"+params[:item_version_id].to_s
+    @next_version_path     = the_post_path(@post)+"/history/"+next_version.item_version_id.to_s if next_version
   end
   
   def version_markdown  # TO DO: DRY
-    @version = PaperTrail::Version.find(params[:version_id])
-    @post = @version.reify
     authorize @post
-    previous_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id < ? AND object IS NOT NULL",
-                                            "Post", @version.item_id, params[:version_id]).order("created_at").last
-    next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id > ?",
-                   "Post", @version.item_id, params[:version_id]).order("created_at").first
-    @previous_version_path = the_post_path(@post)+"/history/"+previous_version.id.to_s+"/markdown" if previous_version
-    @next_version_path     = the_post_path(@post)+"/history/"+next_version.id.to_s+"/markdown" if next_version
-    @this_version_path     = the_post_path(@post)+"/history/"+params[:version_id].to_s    # Non-markdown.
+    previous_version = PaperTrail::Version.
+      where("item_type = ? AND item_id = ? AND item_version_id < ? AND object IS NOT NULL",
+                                            "Post", @version.item_id, params[:item_version_id]).order("created_at").last
+    next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND item_version_id > ?",
+                   "Post", @version.item_id, params[:item_version_id]).order("created_at").first
+    @previous_version_path = the_post_path(@post)+"/history/"+previous_version.item_version_id.to_s+"/markdown" if previous_version
+    @next_version_path     = the_post_path(@post)+"/history/"+next_version.item_version_id.to_s+"/markdown" if next_version
+    @this_version_path     = the_post_path(@post)+"/history/"+params[:item_version_id].to_s    # Non-markdown.
   end
   
   def new
@@ -158,7 +156,7 @@ class PostsController < ApplicationController
       if params[:commit] == 'Save & edit more'
         redirect_to the_edit_post_path(@post) and return
       else # Should be the only other cases: params[:commit] == 'Save & see post/profile'
-        redirect_to the_post_path(@post)+"/history/"+version.id.to_s and return
+        redirect_to the_post_path(@post)+"/history/"+version.item_version_id.to_s and return
       end
     
     elsif @post.update(post_params)
@@ -219,10 +217,7 @@ class PostsController < ApplicationController
   private
 
   def set_post
-    if params[:version_id]
-      @version = PaperTrail::Version.find(params[:version_id])
-      @post = @version.reify
-    elsif params[:username]
+    if params[:username]
       user = User.friendly.find(params[:username])
       @post = Post.where(author_id: user.id).friendly.find(params[:post_slug])
     elsif params[:vanity_slug]
@@ -233,6 +228,12 @@ class PostsController < ApplicationController
       @post = Post.find(params[:id])
     else
       @post = Post.find(27)  # "Page Not Found"
+    end
+    if params[:item_version_id]
+      @version = PaperTrail::Version.
+      where("item_type = ? AND item_id = ? AND item_version_id = ?",
+                    "Post",       @post.id, params[:item_version_id]).last
+      @post = @version.reify
     end
   end
 

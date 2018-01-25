@@ -44,7 +44,7 @@ namespace :versions do
 #    puts "PROCESSING #{versions.size.to_s} POSTS"
     updates = []
     for version in versions
-#      puts "VERSION #{version.id.to_s}"
+#      puts "VERSION #{version.item_version_id.to_s}"
       if updates.empty?
         if version.event == "update" && version.changeset.keys == ["body", "updated_at"]
           updates << version
@@ -59,7 +59,7 @@ namespace :versions do
           version.item_id == this_item_id &&
           version.whodunnit == this_whodunnit
         updates << version
-#        puts "INCLUDE #{version.id.to_s}"
+#        puts "INCLUDE #{version.item_version_id.to_s}"
       else
         compress(updates) if updates.size > 1
         updates = []

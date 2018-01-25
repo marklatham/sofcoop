@@ -8,7 +8,7 @@ class Post < ApplicationRecord
   has_paper_trail
   friendly_id :slug_candidates, use: [:slugged, :scoped, :history], scope: :author
   
-  attr_accessor :version_id  # When using posts controller to edit versions.
+  attr_accessor :item_version_id  # When using posts controller to edit versions.
   
   def slug_candidates
     if self.title.present?
