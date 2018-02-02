@@ -28,6 +28,8 @@ table.data.posts
         td
           - if version
             = "v" + version.item_version_id.to_s
+          - elsif post.category == "post_mod"
+            | MOD
           - else
             | LIVE
         td

@@ -76,7 +76,7 @@ class ApplicationController < ActionController::Base
                                                                              order("created_at").last
       latest_version_post = latest_version.reify
     end
-    if latest_version_post && latest_version_post.updated_at > latest_post.updated_at
+    if latest_version_post && latest_version_post.updated_at >= latest_post.updated_at
       # message = "Redirecting to latest saved version of this post, because it was updated later."
       item_version_id = latest_version.item_version_id
       latest_post = latest_version_post

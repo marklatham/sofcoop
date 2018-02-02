@@ -150,8 +150,15 @@ class PostsController < ApplicationController
          where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
                        "Post",       @post.id).order("item_version_id").last
         version.item_version_id = previous_version.item_version_id + 1
+      else
+        version.item_version_id = 1
       end
       version.save!
+      unless @post.updated_at == version.created_at
+        @post.updated_at = version.created_at
+        version.object = serialize(@post)
+        version.save!
+      end
       flash[:notice] = "Post update saved; pending moderation."
       if params[:commit] == 'Save & edit more'
         redirect_to the_edit_post_path(@post) and return
@@ -185,8 +192,10 @@ class PostsController < ApplicationController
              where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
                            "Post",       @post.id).order("item_version_id").last
             version.item_version_id = previous_version.item_version_id + 1
-            version.save!
+          else
+            version.item_version_id = 1
           end
+          version.save!
         end
       end
       if params[:commit] == 'Save & edit more'
@@ -204,8 +213,21 @@ class PostsController < ApplicationController
     tags_before = @post.tag_list
     visible_before = ( @post.visible > 1 )
     adjust_taggings_visible(tags_before, [], visible_before, false)
+    post_id = @post.id
     @post.destroy
     flash[:notice] = 'Post was successfully destroyed.'
+    if version = PaperTrail::Version.
+                 where("item_type = ? AND item_id = ? AND event = ? AND item_version_id IS NULL",
+                               "Post",        post_id,    "destroy").last
+      if previous_version = PaperTrail::Version.
+                           where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
+                                         "Post",        post_id).order("item_version_id").last
+        version.item_version_id = previous_version.item_version_id + 1
+      else
+        version.item_version_id = 99999  # Should never happen but just in case.
+      end
+      version.save!
+    end
     from_path = Rails.application.routes.recognize_path(request.referrer)
     if from_path[:controller] == 'posts' && from_path[:action] == 'show'
       redirect_to posts_path(nil, from_path[:username])
