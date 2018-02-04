@@ -31,7 +31,8 @@ div.form
 
 hr style='margin-bottom: 1rem'
 
-p = link_to 'Edit profile', the_edit_post_path(resource)
+- if post = resource.profile
+  p = link_to 'Edit profile', the_edit_post_path(post)
 
 - if resource.avatar_url.present?
   p = link_to 'Delete avatar', delete_avatar_path

@@ -12,7 +12,10 @@ div.user-profile
       - if  policy(post).edit?
         = link_to fa_icon('pencil-square-o', class: 'edit'), the_edit_post_path(post)
 
-  = link_to 'Edit user', edit_user_path(@user.id) if policy(@user).edit?
+  - if policy(@user).edit?
+    - link_text = 'Moderate user'
+    - link_text = 'Manage user' if current_user.is_admin?
+    = link_to link_text, edit_user_path(@user.id) if policy(@user).edit?
   - if @posts.any?
     p style='margin-top: 1rem'
       b = link_to @posts.size.to_s + ' posts by @' + @user.username, posts_path(nil, @user)

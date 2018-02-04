@@ -17,8 +17,9 @@ class UserPolicy < ApplicationPolicy
     user && user.is_admin?
   end
   
-  def update?
-    user && ( user.is_admin? || user.is_moderator? )
+  def update?  # Mainly for moderation.
+    user && ( user.is_admin? || 
+    ( user.is_moderator? && record.is_moderator? == false && record.is_admin? == false ) )
   end
 
   def destroy?
@@ -38,10 +39,12 @@ class UserPolicy < ApplicationPolicy
                      :remote_avatar_url, :profile_id]
     if user.is_admin?
       common_params + [:mod, :is_member]
-    elsif user.is_moderator?
-      common_params + [:mod]
-    else
+    elsif user == record
       common_params
+    elsif edit?   # Same as update? above.
+      [:mod]
+    else
+      []
     end
   end
   

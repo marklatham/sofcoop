@@ -10,7 +10,7 @@
     - if @next_version_path
       = link_to "NEXT >>", @next_version_path
     - else
-      = link_to "CURRENT >>", the_post_path(@post)+"/markdown"
+      = link_to "LIVE POST >>", the_post_path(@post)+"/markdown"
     - if policy(@post).history?
       |  &nbsp; 
       = link_to "HISTORY", the_post_path(@post)+"/history"

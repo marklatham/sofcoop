@@ -1,4 +1,8 @@
-h1 Editing user
+- verb = 'Moderat'
+- verb = 'Manag' if current_user.is_admin?
+- provide :title, verb + 'e @'+@user.username
+
+h1 #{verb}ing user @#{@user.username}
 
 == render 'form'
 
