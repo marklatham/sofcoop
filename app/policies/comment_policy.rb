@@ -37,7 +37,6 @@ class CommentPolicy < ApplicationPolicy
 
   private
 
-  # A more general version is in application_controller, but this version is handy here:
   def user_is_author_or_admin?
     if user
       user == record.author || user.is_admin?

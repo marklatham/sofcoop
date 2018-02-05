@@ -28,9 +28,9 @@ class PostsController < ApplicationController
     @tags = taggings.map(&:tag)
     previous_version = PaperTrail::Version.
       where("item_type = ? AND item_id = ? AND item_version_id < ? AND object IS NOT NULL",
-                                            "Post", @version.item_id, params[:item_version_id]).order("created_at").last
+                                            "Post", @version.item_id, params[:item_version_id]).order("item_version_id").last
     next_version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND item_version_id > ?",
-                   "Post", @version.item_id, params[:item_version_id]).order("created_at").first
+                   "Post", @version.item_id, params[:item_version_id]).order("item_version_id").first
     @previous_version_path = the_post_path(@post)+"/history/"+previous_version.item_version_id.to_s if previous_version
     @this_version_path     = the_post_path(@post)+"/history/"+params[:item_version_id].to_s
     @next_version_path     = the_post_path(@post)+"/history/"+next_version.item_version_id.to_s if next_version
@@ -60,8 +60,6 @@ class PostsController < ApplicationController
     body_before = ''
     body_before << @post.body
     body_array = @post.body.split("\n")
-    puts "BODY_ARRAY:"
-    puts body_array
     post_body = process_images(@post.body, body_array)
     body_array = post_body.split("\n")
     @post.body, admin_email = process_channel_links(post_body, body_array)
@@ -100,8 +98,34 @@ class PostsController < ApplicationController
   def approve
     authorize @post
     @post.category = "post"
-    @post.save
-    flash[:notice] = "Post approved."
+    @post.save!
+    if @version
+      flash[:notice] = "Latest version approved."
+    else
+      flash[:notice] = "Post approved."
+    end
+    # Renumber item_version_id to ensure chronological by post.updated_at:
+    if first_mod = PaperTrail::Version.where("item_type = ? AND item_id = ? AND event = ?",
+                                       "Post", @post.id, "update-mod").order("id").first
+      versions = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id >= ?",
+                                                   "Post",       @post.id, first_mod.id)
+      if versions.any?
+        pairs = []
+        for version in versions
+          pairs << [version, version.reify]
+        end
+        pairs = pairs.sort_by{|pair| pair[1].updated_at}
+        next_iv_id = first_mod.item_version_id
+        for pair in pairs
+          version = pair[0]
+          next_iv_id += version.records_merged if version.records_merged
+          version.item_version_id = next_iv_id
+          version.event = "update-modded" if version.event = "update-mod"
+          version.save!
+          next_iv_id += 1
+        end
+      end
+    end
     redirect_to the_post_path(@post)
   end
   
@@ -139,7 +163,7 @@ class PostsController < ApplicationController
     
     if current_user.mod == "moderate" || @post.category == "post_mod"
       @post.assign_attributes(post_params)
-      @post.category == "post_mod"
+      @post.category = "post_mod"
       @post.updated_at = Time.now
       version = PaperTrail::Version.new
       version.item = @post
@@ -185,8 +209,11 @@ class PostsController < ApplicationController
           end
         end
       end
-      if version = PaperTrail::Version.where("item_type = ? AND item_id = ? AND event = ?",
-                                       "Post", @post.id, "update").order("item_version_id").last
+      puts "DEBUG:"
+      p @post
+      if version = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", @post.id).
+                                       order("id").last
+        p version
         unless version.item_version_id
           if previous_version = PaperTrail::Version.
              where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
@@ -351,15 +378,12 @@ class PostsController < ApplicationController
     if test_path
       substrings = test_path.partition('/')
       if substrings[2].present?
-        puts 'substrings[0]: ' + substrings[0]
         if user = User.friendly.find(substrings[0]) rescue nil
           substrings = substrings[2].split('.')
           slug = substrings[0]
-          puts 'slug: ' + slug
           version = nil
           if substrings[2].present?
             version = substrings[1]
-            puts 'version: ' + version
           end
           if image = Image.where(user_id: user.id).friendly.find(slug) rescue nil
             new_image_path = image_path(image.user.username, image.slug, version, image.format)
@@ -404,7 +428,6 @@ class PostsController < ApplicationController
                            ' locally but failed, so linking to it remotely.'
       end
     end
-    puts 'Could not find image: ' + old_image_string
     return old_image_string
   end
 

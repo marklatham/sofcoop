@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   helper_method :the_post_path
   helper_method :the_post_url
   helper_method :the_edit_post_path
+  helper_method :the_approve_post_path
   helper_method :nav_channels
   
   require 'httparty'
@@ -83,6 +84,10 @@ class ApplicationController < ActionController::Base
     end
     # flash[:notice] = message if message  # Might not be needed?
     edit_post_path(channel_slug, latest_post.author.username, latest_post.slug, item_version_id)
+  end
+  
+  def the_approve_post_path(post)
+    the_edit_post_path(post).chomp("edit") + "approve"
   end
   
   def nav_channels

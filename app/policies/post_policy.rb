@@ -69,12 +69,6 @@ class PostPolicy < ApplicationPolicy
     user
   end
   
-  def approve?
-    if record.category == "post_mod"
-      user.is_admin? || user.is_moderator?
-    end
-  end
-  
   def update?
     case record.category
     when "channel_dropdown" then user_is_author_or_admin_or_manager?
@@ -92,30 +86,28 @@ class PostPolicy < ApplicationPolicy
     else user_is_author_or_admin?  # user_profile, home_page, any forgotten
     end
   end
-
+  
+  def approve?
+    update? && record.category == "post_mod" &&
+    ( user.is_admin? || ( user.is_moderator? && user != record.author ) )
+  end
+  
   def destroy?
     user_is_author_or_admin?
   end
 
   private
 
-  # A more general version is in application_controller, but this version is handy here:
   def user_is_author_or_admin?
-    if user
-      user == record.author || user.is_admin?
-    end
+    user && ( user == record.author || user.is_admin? )
   end
   
   def user_is_author_or_admin_or_manager?
-    if user
-      user == record.author || user.is_admin? || record.channel && user == record.channel.manager
-    end
+    user && ( user == record.author || user.is_admin? || ( record.channel && user == record.channel.manager ) )
   end
   
   def user_is_author_or_admin_or_moderator?
-    if user
-      user == record.author || user.is_admin? || user.is_moderator?
-    end
+    user && ( user == record.author || user.is_admin? || user.is_moderator? )
   end
   
 end
