@@ -69,17 +69,33 @@ class PostListingsController < ApplicationController
     set_post
     authorize @post
     @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?",
-                                          "Post", @post.id).order("created_at DESC")
-    @arrays = [[@post, nil, nil]]
+                                          "Post", @post.id).order("created_at")
+    @arrays = []
+    whodunnit = nil
+    whodunnit = User.find(@versions[0].whodunnit)
+    puts "DEBUG:"
     for version in @versions
-      @arrays[-1][2] = User.find(version.whodunnit)
-      unless version.event == "create"
+      if version.event == "create"
+        next
+      elsif version.event == ( "update-mod" || "update-modded" )
         post = version.reify
-        @arrays << [post, version, nil]  # Later unpack post in view.
+        @arrays << [post, version, nil]
+        updater = nil
+        if updater = User.find(version.whodunnit)
+          @arrays[-1][2] = updater
+        end
+      else
+        post = version.reify
+        @arrays << [post, version, whodunnit]
+        whodunnit = nil
+        whodunnit = User.find(version.whodunnit)
       end
+      p @arrays[-1]
     end
-    @arrays[-1][2] = @arrays[-1][0].author
-    @arrays = @arrays.sort_by{|post| post[0].updated_at}.reverse!
+    whodunnit = @post.author unless whodunnit
+    @arrays << [@post, nil, whodunnit]
+    # Above 2 lines set updater of live post = moderator if it got approved.
+    @arrays = @arrays.sort_by{|array| array[0].updated_at}.reverse!
     @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
   end
 
