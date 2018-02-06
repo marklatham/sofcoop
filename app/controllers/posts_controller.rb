@@ -67,6 +67,7 @@ class PostsController < ApplicationController
     @post.category = "post_mod" if current_user.mod == "moderate"
     if @post.save!
       if @post.category == "post_mod"
+        AdminMailer.moderate_new_post(@post, the_post_url(@post), current_user).deliver
         flash[:notice] = "Thank you for posting. 
         Your post is now pending moderation -- we'll email you when that's done."
       end

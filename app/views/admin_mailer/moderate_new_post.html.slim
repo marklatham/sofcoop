@@ -1,0 +1,22 @@
+div TO: Sofcoop Moderators
+
+p
+  = link_to '@'+@current_user.username, user_url(@current_user.username)
+  |  has just created this post and it needs to be moderated:
+
+blockquote
+  b = link_to @post.title, @post_url
+
+p If/when you have time, please moderate it. Thanks!
+
+p Sincerely, Sofcoop Website
+
+hr
+
+h3
+  | Markdown text of 
+  = link_to @post.title, @post_url
+
+p = @post.body
+
+hr

@@ -71,30 +71,30 @@ class PostListingsController < ApplicationController
     @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?",
                                           "Post", @post.id).order("created_at")
     @arrays = []
-    whodunnit = nil
+    whodunnit = @post.author  # Default in case not found below.
     whodunnit = User.find(@versions[0].whodunnit)
     puts "DEBUG:"
     for version in @versions
       if version.event == "create"
+        # No version.object.
         next
       elsif version.event == ( "update-mod" || "update-modded" )
+        # whodunnit field is updater who created THIS version.object:
         post = version.reify
-        @arrays << [post, version, nil]
-        updater = nil
-        if updater = User.find(version.whodunnit)
-          @arrays[-1][2] = updater
-        end
+        updater = post.author  # Default in case not found below.
+        updater = User.find(version.whodunnit)
+        @arrays << [post, version, updater]
       else
+        # whodunnit field is updater who created version.object NEXT TIME in this fork:
         post = version.reify
         @arrays << [post, version, whodunnit]
-        whodunnit = nil
+        whodunnit = post.author  # Default in case not found below.
         whodunnit = User.find(version.whodunnit)
       end
       p @arrays[-1]
     end
-    whodunnit = @post.author unless whodunnit
+    # Updater of live post. BTW = moderator if post was just approved:
     @arrays << [@post, nil, whodunnit]
-    # Above 2 lines set updater of live post = moderator if it got approved.
     @arrays = @arrays.sort_by{|array| array[0].updated_at}.reverse!
     @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
   end
