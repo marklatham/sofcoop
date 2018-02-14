@@ -85,11 +85,13 @@ class PostsController < ApplicationController
                                                      "Post",       @post.id,     "create").last
         version.item_version_id = 0
         version.save!
-        # Defends against MySQL bug that will be gone in cluster version 8.0.0:
+        # Handles MySQL bug that will be gone in cluster version 8.0.0:
         # See https://stackoverflow.com/a/46628734/7356045
-        old_versions = PaperTrail::Version.where("item_type = ? AND item_id = ? AND created_at < ?", version.item_type, version.item_id, version.created_at)
-        for old_version in old_versions
-          old_version.item_version_id = -1
+        old_versions = PaperTrail::Version.where("item_type = ? AND item_id = ? AND created_at < ?",
+                                             version.item_type, version.item_id, version.created_at).
+                                             order("created_at DESC")
+        old_versions.each_with_index do |old_version, index|
+          old_version.item_version_id = -(index+1)
           old_version.save!
         end
       end
