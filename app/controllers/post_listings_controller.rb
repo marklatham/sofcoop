@@ -68,8 +68,8 @@ class PostListingsController < ApplicationController
   def history
     set_post
     authorize @post
-    @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?",
-                                          "Post", @post.id).order("created_at")
+    @versions = PaperTrail::Version.where("item_type = ? AND item_id = ? AND item_version_id >= 0",
+                                                  "Post",       @post.id).order("created_at")
     @arrays = []
     whodunnit = @post.author  # Default in case not found below.
     whodunnit = User.find(@versions[0].whodunnit)

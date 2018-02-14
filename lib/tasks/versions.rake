@@ -1,6 +1,7 @@
 namespace :versions do
 
   desc "Hide versions with duplicated item_id."
+  # Probably not needed any more, because superseded by code inserted into posts#create.
   # Defends against MySQL bug that will be gone in cluster version 8.0.0.
   # See https://stackoverflow.com/a/46628734/7356045
   task hide_dupes: :environment do

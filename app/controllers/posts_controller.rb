@@ -85,6 +85,13 @@ class PostsController < ApplicationController
                                                      "Post",       @post.id,     "create").last
         version.item_version_id = 0
         version.save!
+        # Defends against MySQL bug that will be gone in cluster version 8.0.0:
+        # See https://stackoverflow.com/a/46628734/7356045
+        old_versions = PaperTrail::Version.where("item_type = ? AND item_id = ? AND created_at < ?", version.item_type, version.item_id, version.created_at)
+        for old_version in old_versions
+          old_version.item_version_id = -1
+          old_version.save!
+        end
       end
       if params[:commit] == 'Save & edit more'
         redirect_to the_edit_post_path(@post) and return
