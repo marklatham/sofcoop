@@ -57,7 +57,11 @@ class PostListingsController < ApplicationController
     @posts = @posts.sort_by{|post| post.updated_at}.reverse!
     @title = @posts.size.to_s + @title
     @title.sub!("posts", "post") if @posts.size == 1
-    @posts = Kaminari.paginate_array(@posts).page(params[:page])
+    @arrays = []
+    for post in @posts
+      @arrays << [post, nil]
+    end
+    @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
   end
 
   def search
@@ -95,6 +99,32 @@ class PostListingsController < ApplicationController
     @arrays << [@post, nil, updater]
     @arrays = @arrays.sort_by{|array| array[0].updated_at}.reverse!
     @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
+  end
+  
+  def moderate
+    authorize Post
+    versions = PaperTrail::Version.where("item_type = ? AND event = ?", "Post", "update-mod")
+    posts = Post.where("category = ?", "post_mod")
+    arrays = []
+    for version in versions
+      arrays << [nil, version, version.item_id, version.created_at]
+    end
+    for post in posts
+      arrays << [post, nil, post.id, post.updated_at]
+    end
+    groups = arrays.group_by{|array| array[2]}
+    arrays = []
+    for id, group in groups
+      arrays << group.max_by(&:last)
+    end
+    arrays = arrays.sort_by(&:last).reverse!
+    @arrays = []
+    for post, version, id, date in arrays
+      post = version.reify if version
+      @arrays << [post, version]
+    end
+    @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
+    @title = "Posts Pending Moderation"
   end
 
   private

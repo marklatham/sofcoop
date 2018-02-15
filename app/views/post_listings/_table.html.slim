@@ -1,18 +1,20 @@
 - manage = false
-- if local_assigns[:author] && current_user
-  - if current_user == author || current_user.is_admin?
+- if @author && current_user
+  - if current_user == @author || current_user.is_admin?
     - manage = true
 
 table.data.posts
   thead
     tr
-      th style='min-width: 6rem' Image
+      - unless action_name == "moderate"
+        th style='min-width: 6rem' Image
       th.left style='width: 20rem' Title
       th Channel
-      - unless local_assigns[:author]
+      - unless @author
         th Author
       th Words
-      th Comments
+      - unless action_name == "moderate"
+        th Comments
       th style='width: 7rem' Visible To
       th style='width: 6rem' Created
       th style='width: 6rem' Updated
@@ -21,12 +23,15 @@ table.data.posts
         th Delete
 
   tbody
-    - for post in @posts
+    - for post, version in @arrays
       - the_post_path = the_post_path(post)
+      - if version
+        - the_post_path = the_post_path+"/history/"+version.item_version_id.to_s
       tr
-        td
-          - if post.main_image
-            = link_to image_tag(post.main_image, width: 150), the_post_path
+        - unless action_name == "moderate"
+          td
+            - if post.main_image
+              = link_to image_tag(post.main_image, width: 150), the_post_path
         td.left.title
           - if post.title.present?
             = link_to post.title, the_post_path
@@ -37,12 +42,13 @@ table.data.posts
           - if post.channel.present?
             .avatar = link_to avatar_for_channel(post.channel), channel_path(post.channel.slug)
             .username = link_to post.channel.name, channel_path(post.channel.slug)
-        - unless local_assigns[:author]
+        - unless @author
           td.author
             .avatar = link_to avatar_for_user(post.author), user_path(post.author.username)
             .username = link_to '@'+post.author.username, user_path(post.author.username)
         td = post.body.split.size
-        td = post.comments.size
+        - unless action_name == "moderate"
+          td = post.comments.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
         td title=conditional_strftime(post.created_at, 3)
           = time_ago_in_words(post.created_at) + ' ago'
@@ -56,4 +62,4 @@ table.data.posts
           td = link_to 'Delete', delete_post_path(post.author.username, post.slug),
                method: :delete, data: {confirm: "You sure?"}
 
-= paginate @posts
+= paginate @arrays

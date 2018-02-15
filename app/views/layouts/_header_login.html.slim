@@ -19,8 +19,8 @@ div.dropdown
       li = link_to 'Log out', destroy_user_session_path, method: :delete
       - if current_user.is_admin?
         li.heading Admin:
-      - elsif current_user.is_moderator?
-        - # li.heading Moderator:
+      - if current_user.is_moderator?
+        li = link_to 'Moderate Posts', moderate_posts_path
       - if policy(Channel).create?
         li = link_to 'Create Channel', new_channel_path
       - if current_user.is_admin? || current_user.is_moderator?

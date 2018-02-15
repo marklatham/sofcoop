@@ -32,10 +32,11 @@ Rails.application.routes.draw do
   
   ### POST LISTINGS: ###############
 
-  get    '(/@@:channel_slug)(/@:username)(/tags/:tag_slug)/posts', to: 'post_listings#index',   as: :posts
+  get    '(/@@:channel_slug)(/@:username)(/tags/:tag_slug)/posts', to: 'post_listings#index',    as: :posts
   match  '(/@@:channel_slug)(/@:username)(/tags/:tag_slug)/posts/search' => 'post_listings#search',
-                                                                  via: [:get, :post],           as: :search_posts
+                                                                  via: [:get, :post],            as: :search_posts
   get    '(/@@:channel_slug)/@:username/:post_slug/history',       to: 'post_listings#history'
+  get    '/posts/moderate',                                        to: 'post_listings#moderate', as: :moderate_posts
   
   ### POSTS: #######################
 
@@ -73,7 +74,7 @@ Rails.application.routes.draw do
     get '/delete_avatar',             to: 'users/registrations#delete_avatar',       as: :delete_avatar
   end
   
-  ### VANITY SLUGS: ##################
+  ### POST VANITY SLUGS: ##################
   
   get    '/:vanity_slug',                                   to: 'posts#show',             as: :vanity
   get    '/:vanity_slug/markdown',                          to: 'posts#markdown'

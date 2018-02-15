@@ -34,7 +34,7 @@ class AdminMailer < ApplicationMailer
     moderators = User.with_role :moderator
     moderator_emails = []
     for moderator in moderators
-      moderator_emails << moderator.email
+      moderator_emails << moderator.email unless moderator == post.author
     end
     mail   to: moderator_emails,
            cc: Sofcoop::Application.secrets.admin_email,
