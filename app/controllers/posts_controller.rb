@@ -124,10 +124,9 @@ class PostsController < ApplicationController
         for version in versions
           pairs << [version, version.reify]
         end
-        pairs = pairs.sort_by{|pair| pair[1].updated_at}
+        pairs = pairs.sort_by{|version,post| post.updated_at}
         next_iv_id = first_mod.item_version_id
-        for pair in pairs
-          version = pair[0]
+        for version,post in pairs
           next_iv_id += version.records_merged if version.records_merged
           version.item_version_id = next_iv_id
           version.event = "update-modded" if version.event = "update-mod"
@@ -149,20 +148,16 @@ class PostsController < ApplicationController
     tags_before = @post.tag_list
     visible_before = ( @post.visible > 1 )
     body_before = ''
-    body_before << post_params[:body]   # Don't know why, but body_before = post_params[:body] fails.
+    body_before << post_params[:body] # Don't know why, but body_before = post_params[:body] fails.
     new_lines = []
     for line in Diffy::Diff.new(@post.body, post_params[:body])
       new_lines << line.from(1) if /^\+/.match(line)
     end
-    # puts "NL FOR IMAGES:"
-    # puts new_lines
     post_body = process_images(post_params[:body], new_lines)
     new_lines = []
     for line in Diffy::Diff.new(@post.body, post_body)
       new_lines << line.from(1) if /^\+/.match(line)
     end
-    # puts "NL FOR CHLINKS:"
-    # puts new_lines
     body_after, admin_email = process_channel_links(post_body, new_lines)
     if admin_email.present?
       AdminMailer.post_process(admin_email, @post, the_post_url(@post), body_before, body_after, 'edited').deliver

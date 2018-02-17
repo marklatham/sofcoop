@@ -50,13 +50,13 @@ table.data.posts
         - unless action_name == "moderate"
           td = post.comments.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
-        td title=conditional_strftime(post.created_at, 3)
-          = time_ago_in_words(post.created_at) + ' ago'
-        td title=conditional_strftime(post.updated_at, 3)
+        td title=conditional_strftime("weekday_date_time", post.created_at, 3)
+          = conditional_strftime("month_day", post.updated_at, 6)
+        td title=conditional_strftime("weekday_date_time", post.updated_at, 3)
           - unless post.updated_at > post.created_at
             | －
           - else
-            = time_ago_in_words(post.updated_at) + ' ago'
+            = conditional_strftime("month_day", post.updated_at, 6)
         - if manage
           td = link_to 'Edit', the_edit_post_path(post)
           td = link_to 'Delete', delete_post_path(post.author.username, post.slug),

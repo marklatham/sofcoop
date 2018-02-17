@@ -49,7 +49,7 @@ table.data.posts
           .username = link_to '@'+updater.username, user_path(updater.username)
         td = post.body.split.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
-        td title=conditional_strftime(post.updated_at, 3)
-          = time_ago_in_words(post.updated_at) + ' ago'
+        td title=conditional_strftime("weekday_date_time", post.updated_at, 3)
+          = conditional_strftime("month_day", post.updated_at, 6)
 
 = paginate @arrays

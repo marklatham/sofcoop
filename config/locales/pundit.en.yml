@@ -7,6 +7,7 @@ en:
      new?: You can't create posts.
      show?: You can't view that post.
      update?: You can't edit that post.
+     approve?: Sorry, approval not accepted. That's probably caused by another user's action while you were reading this post -- either approved by another moderator, or supserseded by an updated version. Try checking the most recent version in this post's history.
    user_policy:
      index?: You can't view the user list.
      show?: You can't view that user's profile.
