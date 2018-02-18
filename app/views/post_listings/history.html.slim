@@ -27,11 +27,12 @@ table.data.posts
       tr style="font-weight:#{font_weight}"
         td
           - if version
-            = "v" + version.item_version_id.to_s
+            - text = "v" + version.item_version_id.to_s
           - elsif post.category == "post_mod"
-            | MOD
+            - text = "MOD"
           - else
-            | LIVE
+            - text = "LIVE"
+          = link_to text, the_post_path
         td
           - if post.main_image
             = link_to image_tag(post.main_image, width: 150), the_post_path
@@ -50,6 +51,8 @@ table.data.posts
         td = post.body.split.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
         td title=conditional_strftime("weekday_date_time", post.updated_at, 3)
-          = conditional_strftime("month_day", post.updated_at, 6)
+          = post.updated_at.strftime("%b %e")
+          - if (Time.now.year*12 + Time.now.month) - (post.updated_at.year*12 + post.updated_at.month) > 5
+            br = post.updated_at.strftime("%Y")
 
 = paginate @arrays
