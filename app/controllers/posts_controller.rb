@@ -135,6 +135,20 @@ class PostsController < ApplicationController
         end
       end
     end
+    # In scenario "create then update", last item_version_id missing, so set it:
+    if version = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", @post.id).
+                                     order("id").last
+      unless version.item_version_id
+        if previous_version = PaperTrail::Version.
+           where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
+                         "Post",       @post.id).order("item_version_id").last
+          version.item_version_id = previous_version.item_version_id + 1
+        else
+          version.item_version_id = 1
+        end
+        version.save!
+      end
+    end
     redirect_to the_post_path(@post)
   end
   
@@ -166,7 +180,7 @@ class PostsController < ApplicationController
     params[:post][:main_image] = first_image(params[:post][:body])
     old_channel = @post.channel if @post.channel
     
-    if current_user.mod == "moderate" || @post.category == "post_mod"
+    if current_user.mod == "moderate" && @post.category != "post_mod"
       @post.assign_attributes(post_params)
       @post.category = "post_mod"
       @post.updated_at = Time.now
@@ -214,20 +228,21 @@ class PostsController < ApplicationController
           end
         end
       end
-      puts "DEBUG:"
-      p @post
       if version = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", @post.id).
                                        order("id").last
+        puts "DEBUG:"
         p version
         unless version.item_version_id
           if previous_version = PaperTrail::Version.
              where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
                            "Post",       @post.id).order("item_version_id").last
             version.item_version_id = previous_version.item_version_id + 1
+            p previous_version
           else
             version.item_version_id = 1
           end
           version.save!
+          p version
         end
       end
       if params[:commit] == 'Save & edit more'
