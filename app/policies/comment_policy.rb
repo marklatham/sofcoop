@@ -28,11 +28,11 @@ class CommentPolicy < ApplicationPolicy
   end
   
   def update?
-    user_is_author_or_admin?
+    user_is_author_or_admin_or_moderator?
   end
 
   def destroy?
-    user_is_author_or_admin?
+    user_is_author_or_admin_or_moderator?
   end
 
   private
@@ -41,6 +41,10 @@ class CommentPolicy < ApplicationPolicy
     if user
       user == record.author || user.is_admin?
     end
+  end
+  
+  def user_is_author_or_admin_or_moderator?
+    user && ( user == record.author || user.is_admin? || user.is_moderator? )
   end
   
 end

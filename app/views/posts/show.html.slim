@@ -61,10 +61,8 @@
   - unless @post.visible == 3 && !current_user
     .comments
 
-      h2 Comments:
+      h3 Your Comment:
   
-      == render @post.comments.sort_by{|comment| comment.updated_at}
-
       - if current_user
         == render 'comment_form', post: @post
       - else
@@ -74,3 +72,12 @@
           | . ( 
           = link_to 'Create a free login', new_user_registration_path
           |  if you don't have one yet.)
+
+      h3 Comments (latest first):
+  
+      == render @comments
+
+      - if @comments.total_pages > 1
+        div
+          b Page: 
+          = paginate @comments

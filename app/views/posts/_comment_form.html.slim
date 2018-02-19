@@ -8,7 +8,6 @@
 
   .field
     = hidden_field_tag 'comment[post_id]', post.id
-    = f.label 'Make a comment:'
     = f.text_area :body, rows: '4'
   .actions
     = f.submit 'Submit comment'

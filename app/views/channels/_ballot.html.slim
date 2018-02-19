@@ -40,6 +40,7 @@ table.ballot
     td[colspan='5']
       table.last-table
         tr
-          td Page: #{paginate @standings}
+          - if @standings.total_pages > 1
+            td Page: #{paginate @standings}
           td.faq = link_to 'FAQ', '/@@admin/@mark/faq-voting', target: '_blank'
           td = link_to 'Past Shares', past_shares_path

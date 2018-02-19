@@ -14,6 +14,8 @@ class PostsController < ApplicationController
     end
     authorize @post
     @comment = Comment.new(post: @post)
+    @comments = @post.comments.order("updated_at DESC")
+    @comments = Kaminari.paginate_array(@comments).page(params[:page])
   end
   
   def markdown
