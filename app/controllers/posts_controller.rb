@@ -14,7 +14,7 @@ class PostsController < ApplicationController
     end
     authorize @post
     @comment = Comment.new(post: @post)
-    @comments = @post.comments.order("updated_at DESC")
+    @comments = @post.comments.order("created_at DESC") # Intentionally not by updated_at.
     @comments = Kaminari.paginate_array(@comments).page(params[:page])
   end
   

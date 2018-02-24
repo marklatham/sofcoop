@@ -11,9 +11,20 @@
         the_post_path(comment.post)+'#comment-'+comment.id.to_s
     span.timestamp
       span title=comment.created_at.strftime("%F %T") Commented #{time_ago_in_words(comment.created_at)} ago.
-      - if  policy(comment).destroy?
+      - if comment.updated_at > comment.created_at
+        span title=comment.updated_at.strftime("%F %T")  Updated #{time_ago_in_words(comment.updated_at)} ago.
+      - if policy(comment).destroy?
         span.controls
           |  | 
-          = link_to 'Delete your comment.', comment, method: :delete, data: {confirm: "You sure?"}
+          = link_to 'Delete.', comment, method: :delete, data: {confirm: "You sure?"}
+      - if policy(comment).edit?
+        span.controls
+          |  | 
+          - if current_user == comment.author
+            | You can 
+            = link_to 'edit this comment', the_post_path(@post) + "/comment-#{comment.id}/edit"
+            |  until 60 minutes after creating it OR another comment is posted here, whichever happens first.
+          - else
+            = link_to 'Edit.', the_post_path(@post) + "/comment-#{comment.id}/edit"
   
   hr style='margin-bottom: 1rem; background: #aaa'

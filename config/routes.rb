@@ -49,6 +49,11 @@ Rails.application.routes.draw do
   get    '(/@@:channel_slug)/@:username/:post_slug/history/:item_version_id/markdown',  to: 'posts#version_markdown'
 
   resources :posts,    except: [:index, :show, :edit, :destroy]
+  
+  ### COMMENTS: ####################
+
+  get    '(/@@:channel_slug)/@:username/:post_slug/comment-:comment_id/edit',           to: 'comments#edit'
+  get    '/:vanity_slug/comment-:comment_id/edit',                                      to: 'comments#edit'
   resources :comments, only:   [:create, :update, :destroy]
   
   ### USERS: #######################

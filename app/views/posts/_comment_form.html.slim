@@ -1,4 +1,4 @@
-= form_for @comment do |f|
+= form_for @comment, url: '/comments/'+@comment.id.to_s do |f|
   - if @comment.errors.any?
     #error_explanation
       h2 = "#{pluralize(@comment.errors.count, "error")} prohibited this comment from being saved:"
@@ -6,6 +6,12 @@
         - @comment.errors.full_messages.each do |message|
           li = message
 
+  - if @editing_comment && current_user == @comment.author
+    p.timestamp
+      | BEWARE: Cutoff for submitting edit is 65 minutes since creating it. 
+      | AND only accepted if no other comment is created yet (which can happen any time without warning). 
+      | After that you can just create a new comment.
+  
   .field
     = hidden_field_tag 'comment[post_id]', post.id
     = f.text_area :body, rows: '4'

@@ -27,8 +27,58 @@ class CommentPolicy < ApplicationPolicy
     user
   end
   
+  def edit?  # Same as update except 60.minutes instead of 65.minutes. DRY??
+    if user == nil  # There is no user logged in.
+      false
+    elsif user.is_admin?
+      true
+    elsif user.is_moderator? && user != record.author
+      if record.author.is_moderator?
+        false
+      else
+        true
+      end
+    elsif user == record.author
+      if Time.now > 60.minutes.since(record.created_at)
+        false
+      else
+        latest_comment = Comment.where("post_id = ?", record.post.id).order("created_at").last
+        if record == latest_comment
+          true
+        else
+          false
+        end
+      end
+    else # user != record.author
+      false
+    end
+  end
+  
   def update?
-    user_is_author_or_admin_or_moderator?
+    if user == nil  # There is no user logged in.
+      false
+    elsif user.is_admin?
+      true
+    elsif user.is_moderator? && user != record.author
+      if record.author.is_moderator?
+        false
+      else
+        true
+      end
+    elsif user == record.author
+      if Time.now > 65.minutes.since(record.created_at)
+        false
+      else
+        latest_comment = Comment.where("post_id = ?", record.post.id).order("created_at").last
+        if record == latest_comment
+          true
+        else
+          false
+        end
+      end
+    else # user != record.author
+      false
+    end
   end
 
   def destroy?
