@@ -95,6 +95,12 @@ class PostListingsController < ApplicationController
         updater = User.find(version.whodunnit)
       end
     end
+    # Only list versions that user can view:
+    temp = []
+    for array in @arrays
+      temp << array if display?(array[0])  # Tried policy(array[0]).version? but couldn't make it work.
+    end
+    @arrays = temp
     # Updater of live post. BTW = moderator if post was just approved:
     @arrays << [@post, nil, updater]
     @arrays = @arrays.sort_by{|array| array[0].updated_at}.reverse!
@@ -179,7 +185,22 @@ class PostListingsController < ApplicationController
     
     return [tally, posts.size]
   end
-
+  
+  def display?(post)
+    if post.category == "post"
+      case post.visible
+        when 4 then true
+        when 3 then current_user
+        when 2 then current_user && ( current_user.is_member? || current_user == post.author )
+        when 0 then current_user && ( current_user == post.author || current_user.is_admin? || ( post.channel.present? && current_user == post.channel.manager ) )
+      end
+    elsif post.category == "post_mod"
+      current_user && ( current_user == post.author || current_user.is_admin? || current_user.is_moderator? )
+    else
+      current_user && current_user.is_admin?
+    end
+  end
+  
   def set_post  # Copied from posts_controller. TO DO: DRY.
     if params[:username]
       user = User.friendly.find(params[:username])

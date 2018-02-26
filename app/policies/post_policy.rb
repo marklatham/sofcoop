@@ -35,7 +35,7 @@ class PostPolicy < ApplicationPolicy
   end
   
   def history?
-    list?
+    show?
   end
   
   def show?
@@ -107,7 +107,7 @@ class PostPolicy < ApplicationPolicy
   end
   
   def user_is_author_or_admin_or_manager?
-    user && ( user == record.author || user.is_admin? || ( record.channel && user == record.channel.manager ) )
+    user && ( user == record.author || user.is_admin? || ( record.channel.present? && user == record.channel.manager ) )
   end
   
   def user_is_author_or_admin_or_moderator?
