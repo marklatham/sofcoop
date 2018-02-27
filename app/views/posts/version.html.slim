@@ -57,7 +57,7 @@
   
   p.controls
     - if policy(@post).approve?
-      = link_to "Approve Post", the_approve_post_path(@post)
+      = link_to "Approve Post", the_approve_post_path(@post), method: :patch
       |  | 
     - if policy(@post).edit?
       = link_to 'Edit Post', the_edit_post_path(@post)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180203234606) do
+ActiveRecord::Schema.define(version: 20180225014513) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20180203234606) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "mod", default: false, null: false
     t.index ["author_id"], name: "index_comments_on_author_id"
     t.index ["post_id"], name: "index_comments_on_post_id"
   end

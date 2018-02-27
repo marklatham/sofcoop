@@ -4,7 +4,12 @@
   = link_to '@'+comment.author.username, user_path(comment.author.username)
 
   blockquote
-    .comment-body = Loofah.scrub_fragment(comment.body.markdown2html, :prune).to_s.html_safe
+    - if comment.mod
+      .timestamp style='margin-bottom:1em'
+        | THIS COMMENT IS WAITING FOR MODERATOR APPROVAL, SO MOST USERS CAN ONLY SEE THE AUTHOR AND TIMESTAMP, 
+        | NOT THE CONTENT.
+    - if policy(comment).show_mod?
+      .comment-body = Loofah.scrub_fragment(comment.body.markdown2html, :prune).to_s.html_safe
 
     span.comment-link
       = link_to fa_icon('link', title: 'Link to this comment'),
@@ -13,18 +18,22 @@
       span title=comment.created_at.strftime("%F %T") Commented #{time_ago_in_words(comment.created_at)} ago.
       - if comment.updated_at > comment.created_at
         span title=comment.updated_at.strftime("%F %T")  Updated #{time_ago_in_words(comment.updated_at)} ago.
+      - if policy(comment).approve?
+        span.controls
+          |  | 
+          = link_to "Approve Comment", the_post_path(comment.post) + "/comment-#{comment.id.to_s}/approve", method: :patch
       - if policy(comment).destroy?
         span.controls
           |  | 
-          = link_to 'Delete.', comment, method: :delete, data: {confirm: "You sure?"}
+          = link_to 'Delete', comment, method: :delete, data: {confirm: "You sure?"}
       - if policy(comment).edit?
         span.controls
           |  | 
           - if current_user == comment.author
             | You can 
-            = link_to 'edit this comment', the_post_path(@post) + "/comment-#{comment.id}/edit"
+            = link_to 'edit this comment', the_post_path(comment.post) + "/comment-#{comment.id.to_s}/edit"
             |  until 60 minutes after creating it OR another comment is posted here, whichever happens first.
           - else
-            = link_to 'Edit.', the_post_path(@post) + "/comment-#{comment.id}/edit"
+            = link_to 'Edit', the_post_path(comment.post) + "/comment-#{comment.id.to_s}/edit"
   
   hr style='margin-bottom: 1rem; background: #aaa'

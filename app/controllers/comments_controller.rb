@@ -2,8 +2,12 @@ class CommentsController < ApplicationController
 
   def create
     @comment = current_user.comments.build(comment_params)
+    if @comment.author.mod == "moderate"
+      @comment.mod = true
+    end
     if @comment.save
       flash[:notice] = 'Comment was successfully created.'
+      flash[:notice] = 'Comment is pending moderation.' if @comment.mod = true
       redirect_to the_post_path(@comment.post)
     else
       flash[:notice] = "Error creating comment: #{@comment.errors}"
@@ -37,7 +41,16 @@ class CommentsController < ApplicationController
     flash[:notice] = 'Comment updated.'
     redirect_to the_post_path(@post)
   end
-
+  
+  def approve
+    @comment = Comment.find(params[:comment_id])
+    authorize @comment
+    @comment.mod = false
+    @comment.save!
+    flash[:notice] = "Comment approved."
+    redirect_to the_post_path(@comment.post)
+  end
+  
   def destroy
     @comment = Comment.find(params[:id])
     @comment.destroy

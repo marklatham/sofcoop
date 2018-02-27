@@ -45,7 +45,7 @@ Rails.application.routes.draw do
   get    '(/@@:channel_slug)/@:username/:post_slug/markdown',      to: 'posts#markdown'
   get    '(/@@:channel_slug)/@:username/:post_slug/history/:item_version_id',           to: 'posts#version'
   get    '(/@@:channel_slug)/@:username/:post_slug(/history/:item_version_id)/edit',    to: 'posts#edit',    as: :edit_post
-  get    '(/@@:channel_slug)/@:username/:post_slug(/history/:item_version_id)/approve', to: 'posts#approve', as: :approve_post
+  patch  '(/@@:channel_slug)/@:username/:post_slug(/history/:item_version_id)/approve', to: 'posts#approve'
   get    '(/@@:channel_slug)/@:username/:post_slug/history/:item_version_id/markdown',  to: 'posts#version_markdown'
 
   resources :posts,    except: [:index, :show, :edit, :destroy]
@@ -54,6 +54,8 @@ Rails.application.routes.draw do
 
   get    '(/@@:channel_slug)/@:username/:post_slug/comment-:comment_id/edit',           to: 'comments#edit'
   get    '/:vanity_slug/comment-:comment_id/edit',                                      to: 'comments#edit'
+  patch  '(/@@:channel_slug)/@:username/:post_slug/comment-:comment_id/approve',        to: 'comments#approve'
+  patch  '/:vanity_slug/comment-:comment_id/approve',                                   to: 'comments#approve'
   resources :comments, only:   [:create, :update, :destroy]
   
   ### USERS: #######################

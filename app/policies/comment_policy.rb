@@ -23,6 +23,10 @@ class CommentPolicy < ApplicationPolicy
     policy(record.post).show?
   end
   
+  def show_mod?
+    user_is_author_or_admin_or_moderator?
+  end
+  
   def create?
     user
   end
@@ -62,6 +66,11 @@ class CommentPolicy < ApplicationPolicy
     else # user != record.author
       false
     end
+  end
+
+  def approve?
+    record.mod &&
+    ( user.is_admin? || ( user.is_moderator? && user != record.author ) )
   end
   
   def destroy?
