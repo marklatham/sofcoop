@@ -16,6 +16,9 @@
       |  &nbsp; 
       = link_to "HISTORY", the_post_path(@post)+"/history"
 
+  - if @version.event == "update-mod"
+    p.versions-nav THIS VERSION IS PENDING MODERATION, SO ONLY VISIBLE TO AUTHOR & MODERATORS.
+
   h1 style=channel_style = @post.title
 
   - if @post.body.present?

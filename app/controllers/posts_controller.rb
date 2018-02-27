@@ -145,6 +145,7 @@ class PostsController < ApplicationController
            where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
                          "Post",       @post.id).order("item_version_id").last
           version.item_version_id = previous_version.item_version_id + 1
+          version.item_version_id += version.records_merged if version.records_merged
         else
           version.item_version_id = 1
         end
@@ -232,19 +233,15 @@ class PostsController < ApplicationController
       end
       if version = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", @post.id).
                                        order("id").last
-        puts "DEBUG:"
-        p version
         unless version.item_version_id
           if previous_version = PaperTrail::Version.
              where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
                            "Post",       @post.id).order("item_version_id").last
             version.item_version_id = previous_version.item_version_id + 1
-            p previous_version
           else
             version.item_version_id = 1
           end
           version.save!
-          p version
         end
       end
       if params[:commit] == 'Save & edit more'
@@ -286,27 +283,6 @@ class PostsController < ApplicationController
   end
 
   private
-
-  def set_post
-    if params[:username]
-      user = User.friendly.find(params[:username])
-      @post = Post.where(author_id: user.id).friendly.find(params[:post_slug])
-    elsif params[:vanity_slug]
-      if post_id = vanity_slugs.key(params[:vanity_slug])
-        @post = Post.find(post_id)
-      end
-    elsif params[:id]
-      @post = Post.find(params[:id])
-    else
-      @post = Post.find(27)  # "Page Not Found"
-    end
-    if params[:item_version_id]
-      @version = PaperTrail::Version.
-      where("item_type = ? AND item_id = ? AND item_version_id = ?",
-                    "Post",       @post.id, params[:item_version_id]).last
-      @post = @version.reify
-    end
-  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def post_params
@@ -606,6 +582,27 @@ class PostsController < ApplicationController
     end
     Time::DATE_FORMATS[:default] = existing_format
     return object
+  end
+  
+  def set_post
+    if params[:username]
+      user = User.friendly.find(params[:username])
+      @post = Post.where(author_id: user.id).friendly.find(params[:post_slug])
+    elsif params[:vanity_slug]
+      if post_id = vanity_slugs.key(params[:vanity_slug])
+        @post = Post.find(post_id)
+      end
+    elsif params[:id]
+      @post = Post.find(params[:id])
+    else
+      @post = Post.find(27)  # "Page Not Found"
+    end
+    if params[:item_version_id]
+      @version = PaperTrail::Version.
+      where("item_type = ? AND item_id = ? AND item_version_id = ?",
+                    "Post",       @post.id, params[:item_version_id]).last
+      @post = @version.reify
+    end
   end
   
 end

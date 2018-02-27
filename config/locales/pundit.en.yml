@@ -1,15 +1,17 @@
 en:
- pundit:
-   default: You can't perform that action.
-   post_policy:
-     create?: You can't create posts.
-     edit?: You can't edit that post.
-     new?: You can't create posts.
-     show?: You can't view that post.
-     version?: You can't view that post or version.
-     update?: You can't edit that post.
-     approve?: Sorry, approval not accepted. That's probably caused by another user's action while you were reading this post -- either approved by another moderator, or supserseded by an updated version. Try checking the most recent version in this post's history.
-   user_policy:
-     index?: You can't view the user list.
-     show?: You can't view that user's profile.
-     
+  pundit:
+    default: You can't perform that action.
+    post_policy:
+      create?: You can't create posts.
+      edit?: You can't edit that post.
+      new?: You can't create posts.
+      show?: You can't view that post.
+      version?: You can't view that post or version.
+      update?: You can't edit that post.
+      approve?: Sorry, approval not accepted. That's probably caused by another user's action while you were reading this post -- either approved by another moderator, or supserseded by an updated version. Try checking the most recent version in this post's history.
+    user_policy:
+      index?: You can't view the user list.
+      show?: You can't view that user's profile.
+    comment_policy:
+      edit?: Sorry, you can't edit that comment. Maybe because there's a more recent comment on that post; or your comment was more than 60 minutes ago?
+      update?: Sorry, you can't update that comment. Maybe because there's a more recent comment on that post; or your comment was more than 65 minutes ago?
