@@ -14,7 +14,7 @@ class PostsController < ApplicationController
     end
     authorize @post
     @comment = Comment.new(post: @post)
-    @comments = @post.comments.order("created_at DESC") # Intentionally not by updated_at.
+    @comments = @post.comments.order("created_at DESC") # created_at, not updated_at!
     @comments = Kaminari.paginate_array(@comments).page(params[:page])
   end
   
@@ -116,6 +116,7 @@ class PostsController < ApplicationController
     else
       flash[:notice] = "Post approved."
     end
+    AdminMailer.approved_post(@post, the_post_url(@post), current_user).deliver
     # Renumber item_version_id to ensure chronological by post.updated_at:
     if first_mod = PaperTrail::Version.where("item_type = ? AND item_id = ? AND event = ?",
                                        "Post", @post.id, "update-mod").order("id").first

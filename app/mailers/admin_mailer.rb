@@ -6,7 +6,37 @@ class AdminMailer < ApplicationMailer
     mail   to: Sofcoop::Application.secrets.admin_email,
       subject: "Account cancelled"
   end
-
+  
+  def approved_comment(comment, comment_url, current_user)
+    @comment = comment
+    @comment_url = comment_url
+    @current_user = current_user
+    moderators = User.with_role :moderator
+    moderator_emails = []
+    for moderator in moderators
+      moderator_emails << moderator.email unless moderator == @comment.author
+    end
+    mail   to: @comment.author.email,
+          bcc: moderator_emails,
+           cc: Sofcoop::Application.secrets.admin_email,
+      subject: "Approved comment on: " + @comment.post.title
+  end
+  
+  def approved_post(post, post_url, current_user)
+    @post = post
+    @post_url = post_url
+    @current_user = current_user
+    moderators = User.with_role :moderator
+    moderator_emails = []
+    for moderator in moderators
+      moderator_emails << moderator.email unless moderator == post.author
+    end
+    mail   to: @post.author.email,
+          bcc: moderator_emails,
+           cc: Sofcoop::Application.secrets.admin_email,
+      subject: "Approved post: " + @post.title
+  end
+  
   def cancel_account_manually(user, posts_count)
     @user = user
     @posts_count = posts_count

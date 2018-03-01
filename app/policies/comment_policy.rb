@@ -20,7 +20,7 @@ class CommentPolicy < ApplicationPolicy
   end
   
   def show?
-    policy(record.post).show?
+    PostPolicy.new(user, record.post).show?
   end
   
   def show_mod?

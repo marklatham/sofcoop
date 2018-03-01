@@ -1,0 +1,25 @@
+div
+  | TO: 
+  = '@' + @post.author.username
+
+p
+  | Moderator 
+  = link_to '@'+@current_user.username, user_url(@current_user.username)
+  |  has just approved your post:
+
+blockquote
+  b = link_to @post.title, @post_url
+
+p Thanks for posting it!
+
+p Sincerely, Sofcoop Website
+
+hr
+
+h3
+  | Markdown text of 
+  = link_to @post.title, @post_url
+
+p = @post.body
+
+hr

@@ -1,0 +1,23 @@
+div
+  | TO: 
+  = '@' + @comment.author.username
+
+p
+  | Moderator 
+  = link_to '@'+@current_user.username, user_url(@current_user.username)
+  |  has just approved your 
+
+blockquote
+  b = link_to "comment on: " + @comment.post.title, @comment_url
+
+p Thanks for commenting!
+
+p Sincerely, Sofcoop Website
+
+hr
+
+h3 Markdown text of your comment:
+
+p = @comment.body
+
+hr

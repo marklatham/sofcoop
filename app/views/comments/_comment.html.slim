@@ -12,8 +12,8 @@
       .comment-body = Loofah.scrub_fragment(comment.body.markdown2html, :prune).to_s.html_safe
 
     span.comment-link
-      = link_to fa_icon('link', title: 'Link to this comment'),
-        the_post_path(comment.post)+'#comment-'+comment.id.to_s
+      = link_to fa_icon('link', title: 'Permalink for this comment'),
+        the_post_path(comment.post)+'/comment-'+comment.id.to_s
     span.timestamp
       span title=comment.created_at.strftime("%F %T") Commented #{time_ago_in_words(comment.created_at)} ago.
       - if comment.updated_at > comment.created_at

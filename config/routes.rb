@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   
   ### COMMENTS: ####################
 
+  get    '(/@@:channel_slug)(/@:username/:post_slug)/comment-:comment_id',              to: 'comments#show', as: :comment
   get    '(/@@:channel_slug)/@:username/:post_slug/comment-:comment_id/edit',           to: 'comments#edit'
   get    '/:vanity_slug/comment-:comment_id/edit',                                      to: 'comments#edit'
   patch  '(/@@:channel_slug)/@:username/:post_slug/comment-:comment_id/approve',        to: 'comments#approve'
@@ -84,6 +85,7 @@ Rails.application.routes.draw do
   ### POST VANITY SLUGS: ##################
   
   get    '/:vanity_slug',                                   to: 'posts#show',             as: :vanity
+  get    '/:vanity_slug/comment-:comment_id',               to: 'comments#show',          as: :vanity_comment
   get    '/:vanity_slug/markdown',                          to: 'posts#markdown'
   get    '/:vanity_slug/history',                           to: 'post_listings#history'
   get    '/:vanity_slug/history/:item_version_id',          to: 'posts#version'
