@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
   helper_method :the_post_url
   helper_method :the_edit_post_path
   helper_method :the_approve_post_path
+  helper_method :the_comment_path
+  helper_method :the_comment_url
   helper_method :nav_channels
   
   require 'httparty'
@@ -101,6 +103,14 @@ class ApplicationController < ActionController::Base
       response << standing.channel
     end
     return response
+  end
+  
+  def the_comment_path(comment)
+    the_post_path(comment.post)+'/comment-'+comment.id.to_s
+  end
+  
+  def the_comment_url(comment)
+    the_post_url(comment.post)+'/comment-'+comment.id.to_s
   end
   
   protected

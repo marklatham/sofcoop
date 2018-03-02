@@ -7,8 +7,11 @@ class CommentsController < ApplicationController
     end
     if @comment.save
       flash[:notice] = 'Comment was successfully created.'
-      flash[:notice] = "Comment is pending moderation. Most users can't see it until it's approved, but they can see you've submitted a comment." if @comment.mod = true
-      redirect_to the_post_path(@comment.post)
+      if @comment.mod == true
+        AdminMailer.moderate_new_comment(@comment, the_comment_url(@comment), current_user).deliver
+        flash[:notice] = "Comment is pending moderation. Most users can't see it until it's approved, but they can see you've submitted a comment."
+      end
+      redirect_to the_comment_path(@comment)
     else
       flash[:notice] = "Error creating comment: #{@comment.errors}"
       redirect_to the_post_path(@comment.post)

@@ -57,6 +57,20 @@ class AdminMailer < ApplicationMailer
       subject: "Hid Dupe Versions"
   end
   
+  def moderate_new_comment(comment, comment_url, current_user)
+    @comment = comment
+    @comment_url = comment_url
+    @current_user = current_user
+    moderators = User.with_role :moderator
+    moderator_emails = []
+    for moderator in moderators
+      moderator_emails << moderator.email unless moderator == comment.author
+    end
+    mail   to: moderator_emails,
+           cc: Sofcoop::Application.secrets.admin_email,
+      subject: "Please moderate comment # " + @comment.id.to_s
+  end
+  
   def moderate_new_post(post, post_url, current_user)
     @post = post
     @post_url = post_url
