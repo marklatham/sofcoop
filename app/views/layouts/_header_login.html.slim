@@ -21,10 +21,9 @@ div.dropdown
         li.heading Admin:
       - if current_user.is_moderator?
         li = link_to 'Moderate Posts', moderate_posts_path
+        li = link_to 'Moderate Comments', moderate_comments_path
       - if policy(Channel).create?
         li = link_to 'Create Channel', new_channel_path
-      - if current_user.is_admin? || current_user.is_moderator?
-        - # Could link to a moderation page?
         
   - else  # User not signed in:
     .textlink = link_to 'Log in', new_user_session_path

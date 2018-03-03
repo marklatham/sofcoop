@@ -23,12 +23,12 @@ class CommentsController < ApplicationController
     authorize @comment
     @post = @comment.post
     @comments = @post.comments.order("created_at DESC")
-    count = -1
+    count = 0
     for comment in @comments
       count += 1
       break if comment.id == @comment.id
     end
-    page = count/Comment.default_per_page + 1
+    page = (count-1)/Comment.default_per_page + 1
     page_string = ''
     page_string = '?page='+page.to_s if page > 1
     redirect_to the_post_path(@post)+page_string+'#comment-'+@comment.id.to_s
@@ -59,6 +59,13 @@ class CommentsController < ApplicationController
     @comment.update(comment_params)
     flash[:notice] = 'Comment updated.'
     redirect_to the_post_path(@post)
+  end
+  
+  def moderate
+    authorize Comment
+    @comments = Comment.where("`mod` = true").order("created_at DESC")
+    @comments = Kaminari.paginate_array(@comments).page(params[:page])
+    @title = "Comments Pending Moderation"
   end
   
   def approve

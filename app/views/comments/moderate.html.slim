@@ -1,0 +1,48 @@
+- provide :title, @title
+
+table.title
+  tr
+    td
+      h2 = @title
+
+table.data.posts
+  thead
+    tr
+      th.left style='width: 16rem' Post
+      th.left style='width: 16rem' Comment
+      th Author
+      th Words
+      th style='width: 7rem' Visible To
+      th style='width: 6rem' Created
+      th style='width: 6rem' Updated
+
+  tbody
+    - for comment in @comments
+      - post = comment.post
+      - the_post_path = the_post_path(post)
+      - the_comment_path = the_comment_path(comment)
+      tr
+        td.left.title
+          - if post.title.present?
+            = post.title
+          - elsif post.body.present?
+            = post.body.markdown2html.strip_tags.truncate(50, separator: ' ')
+        td.left.title
+          - if comment.body.present?
+            = link_to comment.body.markdown2html.strip_tags.truncate(40, separator: ' '), the_comment_path
+          - else
+            = link_to '[No text yet]', the_comment_path
+        td.author
+          .avatar = link_to avatar_for_user(comment.author), user_path(comment.author.username)
+          .username = link_to '@'+comment.author.username, user_path(comment.author.username)
+        td = comment.body.split.size
+        td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
+        td title=conditional_strftime("weekday_date_time", comment.created_at, 3)
+          = time_ago_in_words(comment.created_at) + ' ago'
+        td title=conditional_strftime("weekday_date_time", comment.updated_at, 3)
+          - unless comment.updated_at > comment.created_at
+            | ––
+          - else
+            = ( ((comment.updated_at-comment.created_at)/60) + 0.5 ).to_i.to_s + ' minutes later'
+
+= paginate @comments

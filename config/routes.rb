@@ -55,6 +55,7 @@ Rails.application.routes.draw do
   get    '(/@@:channel_slug)(/@:username/:post_slug)/comment-:comment_id',              to: 'comments#show', as: :comment
   get    '(/@@:channel_slug)/@:username/:post_slug/comment-:comment_id/edit',           to: 'comments#edit'
   get    '/:vanity_slug/comment-:comment_id/edit',                                      to: 'comments#edit'
+  get    '/comments/moderate',                                 to: 'comments#moderate', as: :moderate_comments
   patch  '(/@@:channel_slug)/@:username/:post_slug/comment-:comment_id/approve',        to: 'comments#approve'
   patch  '/:vanity_slug/comment-:comment_id/approve',                                   to: 'comments#approve'
   resources :comments, only:   [:create, :update, :destroy]

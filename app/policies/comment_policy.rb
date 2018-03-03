@@ -67,6 +67,10 @@ class CommentPolicy < ApplicationPolicy
       false
     end
   end
+  
+  def moderate?
+    user && user.is_moderator?
+  end
 
   def approve?
     record.mod &&
