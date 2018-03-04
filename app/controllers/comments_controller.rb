@@ -2,12 +2,12 @@ class CommentsController < ApplicationController
 
   def create
     @comment = current_user.comments.build(comment_params)
-    if @comment.author.mod == "moderate"
-      @comment.mod = true
+    if @comment.author.mod_status == "moderate"
+      @comment.mod_status = true
     end
     if @comment.save
       flash[:notice] = 'Comment was successfully created.'
-      if @comment.mod == true
+      if @comment.mod_status == true
         AdminMailer.moderate_new_comment(@comment, the_comment_url(@comment), current_user).deliver
         flash[:notice] = "Comment is pending moderation. Most users can't see it until it's approved, but they can see you've submitted a comment."
       end
@@ -63,7 +63,7 @@ class CommentsController < ApplicationController
   
   def moderate
     authorize Comment
-    @comments = Comment.where("`mod` = true").order("created_at DESC")
+    @comments = Comment.where("mod_status = true").order("created_at DESC")
     @comments = Kaminari.paginate_array(@comments).page(params[:page])
     @title = "Comments Pending Moderation"
   end
@@ -71,7 +71,7 @@ class CommentsController < ApplicationController
   def approve
     @comment = Comment.find(params[:comment_id])
     authorize @comment
-    @comment.mod = false
+    @comment.mod_status = false
     @comment.save!
     flash[:notice] = "Comment approved."
     AdminMailer.approved_comment(@comment, the_post_url(@comment.post)+"#comment-#{@comment.id.to_s}", current_user).deliver

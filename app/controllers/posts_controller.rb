@@ -66,7 +66,7 @@ class PostsController < ApplicationController
     body_array = post_body.split("\n")
     @post.body, admin_email = process_channel_links(post_body, body_array)
     @post.main_image = first_image(@post.body)
-    @post.category = "post_mod" if current_user.mod == "moderate"
+    @post.category = "post_mod" if current_user.mod_status == "moderate"
     if @post.save!
       if @post.category == "post_mod"
         AdminMailer.moderate_new_post(@post, the_post_url(@post), current_user).deliver
@@ -184,7 +184,7 @@ class PostsController < ApplicationController
     params[:post][:main_image] = first_image(params[:post][:body])
     old_channel = @post.channel if @post.channel
     
-    if current_user.mod == "moderate" && @post.category != "post_mod"
+    if current_user.mod_status == "moderate" && @post.category != "post_mod"
       @post.assign_attributes(post_params)
       @post.category = "post_mod"
       @post.updated_at = Time.now

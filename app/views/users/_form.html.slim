@@ -9,7 +9,7 @@
   - if policy(@user).edit?
     .field
       = f.label 'Moderated'
-      = f.select :mod, options_for_select([['moderate', 'moderate'], ['(none)', '']], selected: f.object.mod)
+      = f.select :mod_status, options_for_select([['moderate', 'moderate'], ['(none)', '']], selected: f.object.mod_status)
   
   - if current_user.is_admin?
     .field

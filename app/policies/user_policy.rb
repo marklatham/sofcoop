@@ -38,11 +38,11 @@ class UserPolicy < ApplicationPolicy
     common_params = [:username, :avatar, :avatar_cache, :remove_avatar,
                      :remote_avatar_url, :profile_id]
     if user.is_admin?
-      common_params + [:mod, :is_member]
+      common_params + [:mod_status, :is_member]
     elsif user == record
       common_params
     elsif edit?   # Same as update? above.
-      [:mod]
+      [:mod_status]
     else
       []
     end

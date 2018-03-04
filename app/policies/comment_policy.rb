@@ -44,7 +44,7 @@ class CommentPolicy < ApplicationPolicy
       false
     elsif user.is_admin?
       true
-    elsif user.mod == "moderate"
+    elsif user.mod_status == "moderate"
       false
     elsif user.is_moderator? && user != record.author
       if record.author.is_moderator?
@@ -73,7 +73,7 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def approve?
-    record.mod &&
+    record.mod_status &&
     ( user.is_admin? || ( user.is_moderator? && user != record.author ) )
   end
   
