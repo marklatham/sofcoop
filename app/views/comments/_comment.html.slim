@@ -4,7 +4,7 @@
   = link_to '@'+comment.author.username, user_path(comment.author.username)
 
   blockquote
-    - if comment.mod_status
+    - if comment.mod_status == true
       .timestamp style='margin-bottom:1em'
         | THIS COMMENT IS WAITING FOR MODERATOR APPROVAL, SO MOST USERS CAN ONLY SEE THE AUTHOR AND TIMESTAMP, 
         | NOT THE CONTENT.

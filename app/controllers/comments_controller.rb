@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
 
   def create
     @comment = current_user.comments.build(comment_params)
-    if @comment.author.mod_status == "moderate"
+    if @comment.author.mod_status == true
       @comment.mod_status = true
     end
     if @comment.save
