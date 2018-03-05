@@ -37,7 +37,7 @@
   .actions
     = f.submit 'Save & edit more'
     |  &nbsp; &nbsp; 
-    - if @post.category == "post" || @post.category == "post_mod"
+    - if @post.category == "post"
       = f.submit 'Save & see post'
     - else
       = f.submit 'Save & see profile'

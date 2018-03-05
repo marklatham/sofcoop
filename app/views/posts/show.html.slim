@@ -7,7 +7,7 @@
 
 .post
 
-  - if @post.category == "post_mod"
+  - if @post.mod_status == true
     p.versions-nav THIS POST IS PENDING MODERATION, SO ONLY VISIBLE TO AUTHOR & MODERATORS.
 
   h1 style=channel_style = @post.title

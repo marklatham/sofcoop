@@ -110,7 +110,7 @@ class PostListingsController < ApplicationController
   def moderate
     authorize Post
     versions = PaperTrail::Version.where("item_type = ? AND event = ?", "Post", "update-mod")
-    posts = Post.where("category = ?", "post_mod")
+    posts = Post.where("mod_status = true")
     arrays = []
     for version in versions
       arrays << [nil, version, version.item_id, version.created_at]
@@ -194,7 +194,7 @@ class PostListingsController < ApplicationController
         when 2 then current_user && ( current_user.is_member? || current_user == post.author )
         when 0 then current_user && ( current_user == post.author || current_user.is_admin? || ( post.channel.present? && current_user == post.channel.manager ) )
       end
-    elsif post.category == "post_mod"
+    elsif post.mod_status == true
       current_user && ( current_user == post.author || current_user.is_admin? || current_user.is_moderator? )
     else
       current_user && current_user.is_admin?

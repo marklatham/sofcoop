@@ -66,9 +66,9 @@ class PostsController < ApplicationController
     body_array = post_body.split("\n")
     @post.body, admin_email = process_channel_links(post_body, body_array)
     @post.main_image = first_image(@post.body)
-    @post.category = "post_mod" if current_user.mod_status == true
+    @post.mod_status = true if current_user.mod_status == true
     if @post.save!
-      if @post.category == "post_mod"
+      if @post.mod_status == true
         AdminMailer.moderate_new_post(@post, the_post_url(@post), current_user).deliver
         flash[:notice] = "Thank you for posting. 
         Your post is now pending moderation -- we'll email you when that's done."
@@ -109,7 +109,7 @@ class PostsController < ApplicationController
   
   def approve
     authorize @post
-    @post.category = "post"
+    @post.mod_status = false
     @post.save!
     if @version
       flash[:notice] = "Latest version approved."
@@ -184,9 +184,9 @@ class PostsController < ApplicationController
     params[:post][:main_image] = first_image(params[:post][:body])
     old_channel = @post.channel if @post.channel
     
-    if current_user.mod_status == true && @post.category != "post_mod"
+    if current_user.mod_status == true && @post.mod_status == false
       @post.assign_attributes(post_params)
-      @post.category = "post_mod"
+      @post.mod_status = true
       @post.updated_at = Time.now
       version = PaperTrail::Version.new
       version.item = @post

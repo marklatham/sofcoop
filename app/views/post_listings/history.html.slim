@@ -28,7 +28,7 @@ table.data.posts
         td
           - if version
             - text = "v" + version.item_version_id.to_s
-          - elsif post.category == "post_mod"
+          - elsif post.mod_status == true
             - text = "MOD"
           - else
             - text = "LIVE"
