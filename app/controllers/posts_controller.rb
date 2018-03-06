@@ -118,8 +118,8 @@ class PostsController < ApplicationController
     end
     AdminMailer.approved_post(@post, the_post_url(@post), current_user).deliver
     # Renumber item_version_id to ensure chronological by post.updated_at:
-    if first_mod = PaperTrail::Version.where("item_type = ? AND item_id = ? AND event = ?",
-                                       "Post", @post.id, "update-mod").order("id").first
+    if first_mod = PaperTrail::Version.where("item_type = ? AND item_id = ? AND mod_status = true",
+                                       "Post", @post.id).order("id").first
       versions = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id >= ?",
                                                    "Post",       @post.id, first_mod.id)
       if versions.any?
@@ -132,7 +132,7 @@ class PostsController < ApplicationController
         for version,post in pairs
           next_iv_id += version.records_merged if version.records_merged
           version.item_version_id = next_iv_id
-          version.event = "update-modded" if version.event = "update-mod"
+          version.mod_status == true
           version.save!
           next_iv_id += 1
         end
@@ -190,9 +190,11 @@ class PostsController < ApplicationController
       @post.updated_at = Time.now
       version = PaperTrail::Version.new
       version.item = @post
-      version.object = serialize(@post)
-      version.event = "update-mod"
+      version.event = "update"
       version.whodunnit = current_user.id
+      version.object = @post.serialize
+      version.mod_status = true
+      version.current = true
       if previous_version = PaperTrail::Version.
          where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
                        "Post",       @post.id).order("item_version_id").last
@@ -203,7 +205,7 @@ class PostsController < ApplicationController
       version.save!
       unless @post.updated_at == version.created_at
         @post.updated_at = version.created_at
-        version.object = serialize(@post)
+        version.object = @post.serialize
         version.save!
       end
       flash[:notice] = "Post update saved; pending moderation."
@@ -566,23 +568,6 @@ class PostsController < ApplicationController
         tag.save
       end
     end
-  end
-  
-  def serialize(post)
-    existing_format = Time::DATE_FORMATS[:default]
-    Time::DATE_FORMATS[:default] = "%Y-%m-%d %H:%M:%S.000000000 Z"
-    object = "---\n"
-    post.attributes.each do |attr_name, attr_value|
-      object << attr_name + ": "
-      if post.column_for_attribute(attr_name).type == :text
-        object << attr_value.inspect
-      else
-        object << attr_value.to_s
-      end
-      object << "\n"
-    end
-    Time::DATE_FORMATS[:default] = existing_format
-    return object
   end
   
   def set_post

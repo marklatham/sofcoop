@@ -34,4 +34,21 @@ class Post < ApplicationRecord
     errors.add :title, *errors.delete(:friendly_id) if errors[:friendly_id].present?
   end
   
+  def serialize
+    existing_format = Time::DATE_FORMATS[:default]
+    Time::DATE_FORMATS[:default] = "%Y-%m-%d %H:%M:%S.000000000 Z"
+    object = "---\n"
+    self.attributes.each do |attr_name, attr_value|
+      object << attr_name + ": "
+      if self.column_for_attribute(attr_name).type == :text
+        object << attr_value.inspect
+      else
+        object << attr_value.to_s
+      end
+      object << "\n"
+    end
+    Time::DATE_FORMATS[:default] = existing_format
+    return object
+  end
+  
 end

@@ -81,7 +81,7 @@ class PostListingsController < ApplicationController
       if version.event == "create"
         # No version.object.
         next
-      elsif version.event == ( "update-mod" || "update-modded" )
+      elsif version.current == true
         # whodunnit field is updater who created THIS version.object:
         post = version.reify
         updater = post.author  # Default in case not found below.
@@ -109,7 +109,7 @@ class PostListingsController < ApplicationController
   
   def moderate
     authorize Post
-    versions = PaperTrail::Version.where("item_type = ? AND event = ?", "Post", "update-mod")
+    versions = PaperTrail::Version.where("item_type = ? AND mod_status = true", "Post")
     posts = Post.where("mod_status = true")
     arrays = []
     for version in versions
