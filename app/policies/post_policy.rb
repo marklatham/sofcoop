@@ -39,7 +39,7 @@ class PostPolicy < ApplicationPolicy
   end
   
   def show?
-    if record.category == "post"
+    if record.category == "post" && record.mod_status == false
       case record.visible
         when 4 then true
         when 3 then user
