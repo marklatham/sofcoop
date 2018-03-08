@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  post: one
+  user: one
+  visible: 1
+  title: MyString
+  slug: MyString
+  body: MyText
+  main_image: MyString
+  channel: one
+  category: MyString
+  mod_status: false
+
+two:
+  post: two
+  user: two
+  visible: 1
+  title: MyString
+  slug: MyString
+  body: MyText
+  main_image: MyString
+  channel: two
+  category: MyString
+  mod_status: false

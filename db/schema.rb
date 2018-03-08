@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305212132) do
+ActiveRecord::Schema.define(version: 20180308161300) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -94,6 +94,24 @@ ActiveRecord::Schema.define(version: 20180305212132) do
     t.datetime "updated_at", null: false
     t.index ["channel_id"], name: "index_past_standings_on_channel_id"
     t.index ["standing_id"], name: "index_past_standings_on_standing_id"
+  end
+
+  create_table "post_mods", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "post_id"
+    t.bigint "author_id"
+    t.integer "visible", default: 0
+    t.string "title"
+    t.string "slug", default: "", null: false
+    t.text "body"
+    t.string "main_image"
+    t.bigint "channel_id"
+    t.string "category", default: "post", null: false
+    t.boolean "mod_status", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_post_mods_on_author_id"
+    t.index ["channel_id"], name: "index_post_mods_on_channel_id"
+    t.index ["post_id"], name: "index_post_mods_on_post_id"
   end
 
   create_table "posts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -253,6 +271,9 @@ ActiveRecord::Schema.define(version: 20180305212132) do
   add_foreign_key "images", "users"
   add_foreign_key "past_standings", "channels"
   add_foreign_key "past_standings", "standings"
+  add_foreign_key "post_mods", "channels"
+  add_foreign_key "post_mods", "posts"
+  add_foreign_key "post_mods", "users", column: "author_id"
   add_foreign_key "posts", "channels"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "standings", "channels"
