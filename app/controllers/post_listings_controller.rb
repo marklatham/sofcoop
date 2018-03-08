@@ -76,7 +76,9 @@ class PostListingsController < ApplicationController
                                                   "Post",       @post.id).order("created_at")
     @arrays = []
     updater = @post.author  # Default in case not found below.
-    updater = User.find(@versions[0].whodunnit)
+    if whodunnit = User.find(@versions[0].whodunnit) rescue nil
+      updater = whodunnit
+    end
     for version in @versions
       if version.event == "create"
         # No version.object.

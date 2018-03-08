@@ -132,7 +132,11 @@ class PostsController < ApplicationController
         for version,post in pairs
           next_iv_id += version.records_merged if version.records_merged
           version.item_version_id = next_iv_id
-          version.mod_status == true
+          version.mod_status = false
+          if post.mod_status == true
+            post.mod_status = false
+            version.object = post.serialize
+          end
           version.save!
           next_iv_id += 1
         end

@@ -140,16 +140,20 @@ namespace :versions do
     end
   end
 
-  desc "Edit posts' past version.object to reflect new mod flag system."
+  desc "Edit posts' past version.object to ensure version.reify.mod_status = version.mod_status"
   task edit_post_objects: :environment do
     versions = PaperTrail::Version.where("item_type = ? AND object IS NOT NULL", "Post")
+    puts "DEBUG:"
+    p versions.size
     for version in versions
       post = version.reify
-      if post.category == "post-mod" || ( post.category == "post_mod" )
-        post.category = "post"
-        post.mod_status = true
+      if post.mod_status != version.mod_status
+        p post
+        p version
+        post.mod_status = version.mod_status
         version.object = post.serialize
         version.save!
+        p version
       end
     end
   end

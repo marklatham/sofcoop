@@ -44,9 +44,10 @@
 
       td.timestamp
         |  Posted by #{link_to '@'+@post.author.username, user_path(@post.author.username)}
-        |  #{time_ago_in_words(@post.created_at)} ago.
+        span title=@post.created_at.strftime("%F %T")  #{time_ago_in_words(@post.created_at)} ago.
         - if @post.updated_at > @post.created_at
-          |  Updated #{time_ago_in_words(@post.updated_at)} ago.
+          |  Updated 
+          span title=@post.updated_at.strftime("%F %T") #{time_ago_in_words(@post.updated_at)} ago.
         br
           | Content visible to: 
           = visible_options.detect{ |who, code| code == @post.visible.to_s }.first
