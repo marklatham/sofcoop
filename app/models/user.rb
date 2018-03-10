@@ -3,6 +3,7 @@ class User < ApplicationRecord
   belongs_to :profile, class_name: 'Post', optional: true
   has_many :posts, foreign_key: 'author_id'
   has_many :post_mods, foreign_key: 'author_id'
+  has_many :post_mods, foreign_key: 'updater_id'
   has_many :comments, foreign_key: 'author_id'
   has_many :images
   has_many :votes

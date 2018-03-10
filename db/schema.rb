@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180308161300) do
+ActiveRecord::Schema.define(version: 20180310154919) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -109,9 +109,11 @@ ActiveRecord::Schema.define(version: 20180308161300) do
     t.boolean "mod_status", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "updater_id"
     t.index ["author_id"], name: "index_post_mods_on_author_id"
     t.index ["channel_id"], name: "index_post_mods_on_channel_id"
     t.index ["post_id"], name: "index_post_mods_on_post_id"
+    t.index ["updater_id"], name: "index_post_mods_on_updater_id"
   end
 
   create_table "posts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -274,6 +276,7 @@ ActiveRecord::Schema.define(version: 20180308161300) do
   add_foreign_key "post_mods", "channels"
   add_foreign_key "post_mods", "posts"
   add_foreign_key "post_mods", "users", column: "author_id"
+  add_foreign_key "post_mods", "users", column: "updater_id"
   add_foreign_key "posts", "channels"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "standings", "channels"

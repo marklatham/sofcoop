@@ -158,4 +158,33 @@ namespace :versions do
     end
   end
 
+  desc "Copy post versions with current=true to new post_mods table."
+  task copy_post_mods: :environment do
+    versions = PaperTrail::Version.where("item_type = ? AND current = true", "Post").order(:created_at)
+    puts "DEBUG:"
+    p versions.size
+    for version in versions
+      puts "VERSION:"
+      p version
+      post                = version.reify
+      p post
+      post_mod            = PostMod.new
+      post_mod.post       = post
+      post_mod.author     = post.author
+      post_mod.updater    = User.find(version.whodunnit)
+      post_mod.visible    = post.visible
+      post_mod.title      = post.title
+      post_mod.slug       = post.slug
+      post_mod.body       = post.body
+      post_mod.main_image = post.main_image
+      post_mod.channel    = post.channel
+      post_mod.category   = post.category
+      post_mod.mod_status = post.mod_status
+      post_mod.created_at = post.created_at
+      post_mod.updated_at = post.updated_at
+      p post_mod
+      post_mod.save!
+    end
+  end
+
 end
