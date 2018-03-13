@@ -34,6 +34,8 @@
       
   - if @version
     = hidden_field_tag :item_version_id, @version.item_version_id
+  - if @post_mod
+    = hidden_field_tag :post_mod_id, @post_mod.id
   .actions
     = f.submit 'Save & edit more'
     |  &nbsp; &nbsp; 

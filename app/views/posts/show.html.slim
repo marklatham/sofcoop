@@ -49,6 +49,15 @@
           - if policy(@post).history?
             |  | 
             = link_to "History of versions", the_post_path(@post)+"/history"
+          - if policy(@post).moderating?
+            - post_mods = PostMod.where("post_id = ? AND mod_status = true", @post.id)
+            - case
+            - when post_mods.size == 1
+              |  | 
+              = link_to "Moderating version", the_post_path(@post)+"/mod/"+post_mods[0].id.to_s
+            - when post_mods.size > 1
+              |  | 
+              = link_to "Moderating versions", the_post_path(@post)+"/moderating"
   
   p.controls
     - if policy(@post).approve?

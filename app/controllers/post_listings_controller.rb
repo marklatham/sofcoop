@@ -109,7 +109,15 @@ class PostListingsController < ApplicationController
     @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
   end
   
-  def moderate
+  def moderating  # 1 post -- listing of one or more versions pending moderation. Author & moderators see this.
+    set_post
+    authorize @post
+    # @post_mods = PostMod.where("post_id = ?", @post.id).order("updated_at DESC")
+    @post_mods = PostMod.where("post_id = ? AND mod_status = true", @post.id).order("updated_at DESC")
+    # LATER: if only one, redirect to its view?
+  end
+  
+  def moderate  # All posts pending moderation. Only moderators see this.
     authorize Post
     versions = PaperTrail::Version.where("item_type = ? AND mod_status = true", "Post")
     posts = Post.where("mod_status = true")

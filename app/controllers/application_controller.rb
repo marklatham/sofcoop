@@ -70,6 +70,8 @@ class ApplicationController < ActionController::Base
     channel_slug = nil
     channel_slug = post.channel.slug if post.channel
     latest_post = post
+    item_version_id = nil
+    post_mod_id = nil
     current_post = Post.find(post.id)
     if current_post.updated_at > latest_post.updated_at
       # message = "Redirecting to current post because it was updated later."
@@ -84,8 +86,12 @@ class ApplicationController < ActionController::Base
       item_version_id = latest_version.item_version_id
       latest_post = latest_version_post
     end
+    if latest_post_mod = PostMod.where("post_id = ? AND mod_status = true", post.id).order("updated_at").last
+      post_mod_id = latest_post_mod.id
+      latest_post = latest_post_mod # Different object class, but same fields author & slug!
+    end
     # flash[:notice] = message if message  # Might not be needed?
-    edit_post_path(channel_slug, latest_post.author.username, latest_post.slug, item_version_id)
+    edit_post_path(channel_slug, latest_post.author.username, latest_post.slug, item_version_id, post_mod_id)
   end
   
   def the_approve_post_path(post)

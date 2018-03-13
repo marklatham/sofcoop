@@ -1,0 +1,39 @@
+- provide :title, 'MODERATING: "' + @post.title + '"'
+
+h2 = 'History of versions for post "' + @post.title + '":'
+
+table.data.posts
+  thead
+    tr
+      th style='width: 6rem' Updated
+      th style='min-width: 6rem' Image
+      th.left style='width: 20rem' Title
+      th Channel
+      th Updater
+      th Words
+      th style='width: 7rem' Visible To
+
+  tbody
+    - for post_mod in @post_mods
+      tr
+        td title=conditional_strftime("weekday_date_time", post_mod.updated_at, 3)
+          = link_to the_post_path(@post)+"/mod/"+post_mod.id.to_s do
+            = post_mod.updated_at.strftime("%b %e")
+            br = post_mod.updated_at.strftime("%l:%M %P")
+        td
+          - if post_mod.main_image
+            = image_tag(post_mod.main_image, width: 150)
+        td.left.title
+          - if post_mod.title.present?
+            = post_mod.title
+          - elsif post_mod.body.present?
+            = post_mod.body.markdown2html.strip_tags.truncate(50, separator: ' ')
+        td.channel
+          - if post_mod.channel.present?
+            .avatar = link_to avatar_for_channel(post_mod.channel), channel_path(post_mod.channel.slug)
+            .username = link_to post_mod.channel.name, channel_path(post_mod.channel.slug)
+        td.author
+          .avatar = link_to avatar_for_user(post_mod.updater), user_path(post_mod.updater.username)
+          .username = link_to '@'+post_mod.updater.username, user_path(post_mod.updater.username)
+        td = post_mod.body.split.size
+        td = visible_options.detect{ |who, code| code == post_mod.visible.to_s }.first

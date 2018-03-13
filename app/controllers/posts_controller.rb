@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :markdown, :version, :version_markdown, :approve, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :markdown, :version, :version_markdown, :post_mod, :approve, :edit, :update, :destroy]
 
   def show
     if params[:username] && request.path != the_post_path(@post)
@@ -48,6 +48,15 @@ class PostsController < ApplicationController
     @previous_version_path = the_post_path(@post)+"/history/"+previous_version.item_version_id.to_s+"/markdown" if previous_version
     @next_version_path     = the_post_path(@post)+"/history/"+next_version.item_version_id.to_s+"/markdown" if next_version
     @this_version_path     = the_post_path(@post)+"/history/"+params[:item_version_id].to_s    # Non-markdown.
+  end
+  
+  def post_mod
+    authorize @post
+    previous_version = PostMod.where("post_id = ? AND id < ?", @post.id, @post_mod.id).order("id").last
+    next_version     = PostMod.where("post_id = ? AND id > ?", @post.id, @post_mod.id).order("id").last
+    @previous_version_path = the_post_path(@post)+"/mod/"+previous_version.id.to_s if previous_version
+    @this_version_path     = the_post_path(@post)+"/mod/"+params[:post_mod_id].to_s
+    @next_version_path     = the_post_path(@post)+"/mod/"+next_version.id.to_s if next_version
   end
   
   def new
@@ -212,6 +221,22 @@ class PostsController < ApplicationController
         version.object = @post.serialize
         version.save!
       end
+      post_mod            = PostMod.new
+      post_mod.post       = @post
+      post_mod.author     = @post.author
+      post_mod.updater    = current_user
+      post_mod.visible    = @post.visible
+      post_mod.title      = @post.title
+      post_mod.slug       = @post.slug
+      post_mod.body       = @post.body
+      post_mod.main_image = @post.main_image
+      post_mod.channel    = @post.channel
+      post_mod.category   = @post.category
+      post_mod.mod_status = @post.mod_status
+      post_mod.created_at = @post.created_at
+      post_mod.updated_at = @post.updated_at
+      p post_mod
+      post_mod.save!
       flash[:notice] = "Post update saved; pending moderation."
       if params[:commit] == 'Save & edit more'
         redirect_to the_edit_post_path(@post) and return
@@ -592,6 +617,10 @@ class PostsController < ApplicationController
       where("item_type = ? AND item_id = ? AND item_version_id = ?",
                     "Post",       @post.id, params[:item_version_id]).last
       @post = @version.reify
+    end
+    if params[:post_mod_id]
+      @post_mod = PostMod.find(params[:post_mod_id])
+      @post = @post_mod.to_post
     end
   end
   

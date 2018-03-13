@@ -1,0 +1,53 @@
+- provide :title, 'MODERATING: "' + @post.title + '"'
+- channel_style = "color: #{@post_mod.channel.color}" if @post_mod.channel
+
+.post
+  p.versions-nav
+    | MODERATING VERSION DATED: 
+    = @post_mod.updated_at.strftime("%Y-%m-%d %H:%M:%S") + " UTC. "
+    - if @previous_version_path
+      = link_to "<< PREVIOUS", @previous_version_path
+    |  &nbsp; 
+    - if @next_version_path
+      = link_to "NEXT >>", @next_version_path
+  p.versions-nav
+    = link_to "LIVE POST", the_post_path(@post)
+    |  &nbsp; 
+    = link_to "MODERATING VERSIONS", the_post_path(@post)+"/moderating"
+
+  p.versions-nav THIS VERSION IS PENDING MODERATION, SO ONLY VISIBLE TO AUTHOR & MODERATORS.
+
+  h1 style=channel_style = @post_mod.title
+
+  - if @post_mod.body.present?
+    .body = Loofah.scrub_fragment(@post_mod.body.markdown2html, :prune).to_s.html_safe
+    
+  hr style='height: 2px; margin-bottom: 1rem'
+  
+  table
+    tr
+      - if @post_mod.channel
+        td.avatar = avatar_for_channel(@post_mod.channel)
+        td.channel style=channel_style #{@post_mod.channel.name}
+        td &nbsp; &nbsp;
+
+      td.avatar = link_to avatar_for_user(@post.author), user_path(@post.author.username)
+
+      td.timestamp
+        |  Updated by #{link_to '@'+@post_mod.updater.username, user_path(@post_mod.updater.username)}
+        span title=@post_mod.updated_at.strftime("%F %T")  #{time_ago_in_words(@post_mod.updated_at)} ago.
+        br
+          | Content visible to: 
+          = visible_options.detect{ |who, code| code == @post_mod.visible.to_s }.first
+          | .
+          <br>
+          - if policy(@post).history?
+            |  | 
+            = link_to "Moderating versions", the_post_path(@post)+"/moderating"
+  
+  p.controls
+    - if policy(@post).approve?
+      = link_to "Approve Post", the_approve_post_path(@post), method: :patch
+      |  | 
+    - if policy(@post).edit?
+      = link_to 'Edit Post', the_edit_post_path(@post)
