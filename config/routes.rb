@@ -45,8 +45,8 @@ Rails.application.routes.draw do
   delete '/@:username/:post_slug/delete',                          to: 'posts#destroy',         as: :delete_post
   get    '(/@@:channel_slug)/@:username/:post_slug/markdown',      to: 'posts#markdown'
   get    '(/@@:channel_slug)/@:username/:post_slug/history/:item_version_id',           to: 'posts#version'
-  get    '(/@@:channel_slug)/@:username/:post_slug(/history/:item_version_id)(/mod/:post_mod_id)/edit', to: 'posts#edit', as: :edit_post
-  patch  '(/@@:channel_slug)/@:username/:post_slug(/history/:item_version_id)/approve', to: 'posts#approve'
+  get    '(/@@:channel_slug)/@:username/:post_slug(/mod/:post_mod_id)/edit',            to: 'posts#edit', as: :edit_post
+  patch  '(/@@:channel_slug)/@:username/:post_slug(/mod/:post_mod_id)/approve',         to: 'posts#approve'
   get    '(/@@:channel_slug)/@:username/:post_slug/history/:item_version_id/markdown',  to: 'posts#version_markdown'
   get    '(/@@:channel_slug)/@:username/:post_slug/mod/:post_mod_id',                   to: 'posts#post_mod'
 

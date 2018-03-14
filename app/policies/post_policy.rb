@@ -79,12 +79,8 @@ class PostPolicy < ApplicationPolicy
   
   def update?
     # The case user.mod_status == true is handled in the controller.
-    if PostMod.where("post_id = ? AND updated_at > ?", record.id, record.updated_at).present?  # If there's a more recent post_mod, then only admin can update.
-      if user && user.is_admin?
-        return true
-      else
-        return false
-      end
+    if PostMod.where("post_id = ? AND updated_at > ?", record.id, record.updated_at).present?
+      return false
     else
       case record.category
       when "channel_dropdown" then user_is_author_or_admin_or_manager?

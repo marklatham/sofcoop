@@ -64,34 +64,19 @@ class ApplicationController < ActionController::Base
   end
   
   def the_edit_post_path(post)
-    message = nil
-    version_id = nil
-    latest_version_post = nil
     channel_slug = nil
     channel_slug = post.channel.slug if post.channel
     latest_post = post
-    item_version_id = nil
     post_mod_id = nil
     current_post = Post.find(post.id)
     if current_post.updated_at > latest_post.updated_at
-      # message = "Redirecting to current post because it was updated later."
       latest_post = current_post
-    end
-    if latest_version = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", post.id).
-                                                                             order("created_at").last
-      latest_version_post = latest_version.reify
-    end
-    if latest_version_post && latest_version_post.updated_at >= latest_post.updated_at
-      # message = "Redirecting to latest saved version of this post, because it was updated later."
-      item_version_id = latest_version.item_version_id
-      latest_post = latest_version_post
     end
     if latest_post_mod = PostMod.where("post_id = ? AND mod_status = true", post.id).order("updated_at").last
       post_mod_id = latest_post_mod.id
       latest_post = latest_post_mod # Different object class, but same fields author & slug!
     end
-    # flash[:notice] = message if message  # Might not be needed?
-    edit_post_path(channel_slug, latest_post.author.username, latest_post.slug, item_version_id, post_mod_id)
+    edit_post_path(channel_slug, latest_post.author.username, latest_post.slug, post_mod_id)
   end
   
   def the_approve_post_path(post)

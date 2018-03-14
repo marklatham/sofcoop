@@ -120,52 +120,14 @@ class PostsController < ApplicationController
     authorize @post
     @post.mod_status = false
     @post.save!
-    if @version
+    if @post_mod
       flash[:notice] = "Latest version approved."
+      @post_mod.mod_status = false
+      @post_mod.save!
     else
       flash[:notice] = "Post approved."
     end
     AdminMailer.approved_post(@post, the_post_url(@post), current_user).deliver
-    # Renumber item_version_id to ensure chronological by post.updated_at:
-    if first_mod = PaperTrail::Version.where("item_type = ? AND item_id = ? AND mod_status = true",
-                                       "Post", @post.id).order("id").first
-      versions = PaperTrail::Version.where("item_type = ? AND item_id = ? AND id >= ?",
-                                                   "Post",       @post.id, first_mod.id)
-      if versions.any?
-        pairs = []
-        for version in versions
-          pairs << [version, version.reify]
-        end
-        pairs = pairs.sort_by{|version,post| post.updated_at}
-        next_iv_id = first_mod.item_version_id
-        for version,post in pairs
-          next_iv_id += version.records_merged if version.records_merged
-          version.item_version_id = next_iv_id
-          version.mod_status = false
-          if post.mod_status == true
-            post.mod_status = false
-            version.object = post.serialize
-          end
-          version.save!
-          next_iv_id += 1
-        end
-      end
-    end
-    # In scenario "create then update", last item_version_id missing, so set it:
-    if version = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", @post.id).
-                                     order("id").last
-      unless version.item_version_id
-        if previous_version = PaperTrail::Version.
-           where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
-                         "Post",       @post.id).order("item_version_id").last
-          version.item_version_id = previous_version.item_version_id + 1
-          version.item_version_id += version.records_merged if version.records_merged
-        else
-          version.item_version_id = 1
-        end
-        version.save!
-      end
-    end
     redirect_to the_post_path(@post)
   end
   
@@ -612,15 +574,19 @@ class PostsController < ApplicationController
     else
       @post = Post.find(27)  # "Page Not Found"
     end
+    # @table = "Post"  # Probably don't need these (& below). Not using them yet anyway.
     if params[:item_version_id]
       @version = PaperTrail::Version.
       where("item_type = ? AND item_id = ? AND item_version_id = ?",
                     "Post",       @post.id, params[:item_version_id]).last
       @post = @version.reify
+      # @table = "Version"
     end
     if params[:post_mod_id]
       @post_mod = PostMod.find(params[:post_mod_id])
+      # @flag = true if @post_mod.updated_at < @post.updated_at
       @post = @post_mod.to_post
+      # @table = "PostMod"
     end
   end
   
