@@ -54,20 +54,20 @@ class Post < ApplicationRecord
   end
   
   def to_post_mod
-    post_mod            = PostMod.new
-    post_mod.post       = self
-    post_mod.author     = self.author
-    post_mod.updater    = current_user
-    post_mod.visible    = self.visible
-    post_mod.title      = self.title
-    post_mod.slug       = self.slug
-    post_mod.body       = self.body
-    post_mod.main_image = self.main_image
-    post_mod.channel    = self.channel
-    post_mod.category   = self.category
-    post_mod.mod_status = self.mod_status
-    post_mod.created_at = self.created_at
-    post_mod.updated_at = self.updated_at
+    post_mod                    = PostMod.new
+    post_mod.post               = self
+    post_mod.author             = self.author
+    post_mod.updater            = current_user
+    post_mod.visible            = self.visible
+    post_mod.title              = self.title
+    post_mod.slug               = self.slug
+    post_mod.body               = self.body
+    post_mod.main_image         = self.main_image
+    post_mod.channel            = self.channel
+    post_mod.category           = self.category
+    post_mod.mod_status         = self.mod_status
+    post_mod.created_at         = self.created_at
+    post_mod.version_updated_at = self.updated_at
     return post_mod
   end
   

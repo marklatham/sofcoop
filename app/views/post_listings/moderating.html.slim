@@ -16,10 +16,10 @@ table.data.posts
   tbody
     - for post_mod in @post_mods
       tr
-        td title=conditional_strftime("weekday_date_time", post_mod.updated_at, 3)
+        td title=conditional_strftime("weekday_date_time", post_mod.version_updated_at, 3)
           = link_to the_post_path(@post)+"/mod/"+post_mod.id.to_s do
-            = post_mod.updated_at.strftime("%b %e")
-            br = post_mod.updated_at.strftime("%l:%M %P")
+            = post_mod.version_updated_at.strftime("%b %e")
+            br = post_mod.version_updated_at.strftime("%l:%M %P")
         td
           - if post_mod.main_image
             = image_tag(post_mod.main_image, width: 150)

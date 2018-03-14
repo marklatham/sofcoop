@@ -4,7 +4,7 @@
 .post
   p.versions-nav
     | MODERATING VERSION DATED: 
-    = @post_mod.updated_at.strftime("%Y-%m-%d %H:%M:%S") + " UTC. "
+    = @post_mod.version_updated_at.strftime("%Y-%m-%d %H:%M:%S") + " UTC. "
     - if @previous_version_path
       = link_to "<< PREVIOUS", @previous_version_path
     |  &nbsp; 
@@ -35,7 +35,7 @@
 
       td.timestamp
         |  Updated by #{link_to '@'+@post_mod.updater.username, user_path(@post_mod.updater.username)}
-        span title=@post_mod.updated_at.strftime("%F %T")  #{time_ago_in_words(@post_mod.updated_at)} ago.
+        span title=@post_mod.version_updated_at.strftime("%F %T")  #{time_ago_in_words(@post_mod.version_updated_at)} ago.
         br
           | Content visible to: 
           = visible_options.detect{ |who, code| code == @post_mod.visible.to_s }.first

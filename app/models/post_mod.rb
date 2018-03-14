@@ -16,7 +16,7 @@ class PostMod < ApplicationRecord
     post.category   = self.category
     post.mod_status = self.mod_status # Reset here or in other code?
     post.created_at = self.created_at # Should be same anyway.
-    post.updated_at = self.updated_at # Need this for approve process.
+    post.updated_at = self.version_updated_at # Need this for approve process.
     return post
   end
   

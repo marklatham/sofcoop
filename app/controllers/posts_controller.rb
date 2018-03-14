@@ -123,7 +123,13 @@ class PostsController < ApplicationController
     if @post_mod
       flash[:notice] = "Latest version approved."
       @post_mod.mod_status = false
+      @post_mod.version_updated_at = @post.updated_at
       @post_mod.save!
+      pendings = PostMod.where("post_id = ? AND mod_status = true", @post_mod.post_id)
+      for pending in pendings
+        pending.mod_status = false
+        pending.save!
+      end
     else
       flash[:notice] = "Post approved."
     end
@@ -196,7 +202,7 @@ class PostsController < ApplicationController
       post_mod.category   = @post.category
       post_mod.mod_status = @post.mod_status
       post_mod.created_at = @post.created_at
-      post_mod.updated_at = @post.updated_at
+      post_mod.version_updated_at = @post.updated_at
       p post_mod
       post_mod.save!
       flash[:notice] = "Post update saved; pending moderation."
@@ -584,7 +590,7 @@ class PostsController < ApplicationController
     end
     if params[:post_mod_id]
       @post_mod = PostMod.find(params[:post_mod_id])
-      # @flag = true if @post_mod.updated_at < @post.updated_at
+      # @flag = true if @post_mod.version_updated_at < @post.updated_at
       @post = @post_mod.to_post
       # @table = "PostMod"
     end

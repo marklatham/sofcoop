@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180310154919) do
+ActiveRecord::Schema.define(version: 20180314171428) do
 
   create_table "channels", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "manager_id"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 20180310154919) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "updater_id"
+    t.datetime "version_updated_at"
     t.index ["author_id"], name: "index_post_mods_on_author_id"
     t.index ["channel_id"], name: "index_post_mods_on_channel_id"
     t.index ["post_id"], name: "index_post_mods_on_post_id"

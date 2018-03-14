@@ -182,7 +182,19 @@ namespace :versions do
       post_mod.mod_status = post.mod_status
       post_mod.created_at = post.created_at
       post_mod.updated_at = post.updated_at
+      post_mod.version_updated_at = post.updated_at
       p post_mod
+      post_mod.save!
+    end
+  end
+
+  desc "Copy post_mod.updated_at to post_mod.version_updated_at"
+  task copy_updated_ats: :environment do
+    post_mods = PostMod.all
+    for post_mod in post_mods
+      post_mod.version_updated_at = post_mod.updated_at unless post_mod.version_updated_at
+      post_mod.save!
+      post_mod.updated_at = post_mod.version_updated_at
       post_mod.save!
     end
   end
