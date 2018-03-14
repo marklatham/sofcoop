@@ -119,6 +119,7 @@ class PostsController < ApplicationController
   def approve
     authorize @post
     @post.mod_status = false
+    @post.updated_at = Time.now # Mainly because PaperTrail::Version.new.created_at gets set to this.
     @post.save!
     if @post_mod
       flash[:notice] = "Latest version approved."

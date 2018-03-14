@@ -83,14 +83,8 @@ class PostListingsController < ApplicationController
       if version.event == "create"
         # No version.object.
         next
-      elsif version.current == true
-        # whodunnit field is updater who created THIS version.object:
-        post = version.reify
-        updater = post.author  # Default in case not found below.
-        updater = User.find(version.whodunnit)
-        @arrays << [post, version, updater]
       else
-        # whodunnit field is updater who created version.object NEXT TIME in this fork:
+        # whodunnit field is updater who created version.object NEXT TIME:
         post = version.reify
         @arrays << [post, version, updater]
         updater = post.author  # Default in case not found below.
@@ -119,11 +113,11 @@ class PostListingsController < ApplicationController
   
   def moderate  # All posts pending moderation. Only moderators see this.
     authorize Post
-    versions = PaperTrail::Version.where("item_type = ? AND mod_status = true", "Post")
+    post_mods = PostMod.where("mod_status = true")
     posts = Post.where("mod_status = true")
     arrays = []
-    for version in versions
-      arrays << [nil, version, version.item_id, version.created_at]
+    for post_mod in post_mods
+      arrays << [nil, post_mod, post_mod.post.id, post_mod.version_updated_at]
     end
     for post in posts
       arrays << [post, nil, post.id, post.updated_at]
@@ -135,9 +129,9 @@ class PostListingsController < ApplicationController
     end
     arrays = arrays.sort_by(&:last).reverse!
     @arrays = []
-    for post, version, id, date in arrays
-      post = version.reify if version
-      @arrays << [post, version]
+    for post, post_mod, id, date in arrays
+      post = post_mod.to_post if post_mod
+      @arrays << [post, post_mod]
     end
     @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
     @title = "Posts Pending Moderation"

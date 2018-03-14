@@ -23,10 +23,10 @@ table.data.posts
         th Delete
 
   tbody
-    - for post, version in @arrays
+    - for post, post_mod in @arrays
       - the_post_path = the_post_path(post)
-      - if version
-        - the_post_path = the_post_path+"/history/"+version.item_version_id.to_s
+      - if post_mod
+        - the_post_path = the_post_path+"/mod/"+post_mod.id.to_s
       tr
         - unless action_name == "moderate"
           td
