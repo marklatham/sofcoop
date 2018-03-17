@@ -99,6 +99,14 @@ class PostPolicy < ApplicationPolicy
     end
   end
   
+  def edit_tags?
+    if user && user == record.author && user.mod_status == true && record.mod_status == false
+      false
+    else
+      true  # Other conditions giving false are imposed in post_policy update and in _form view.
+    end
+  end
+  
   def moderate?
     user && user.is_moderator?
   end
@@ -124,6 +132,11 @@ class PostPolicy < ApplicationPolicy
   
   def user_is_author_or_admin_or_moderator?
     user && ( user == record.author || user.is_admin? || user.is_moderator? )
+  end
+  
+  def user_is_author_admin_mgr_or_mod?
+    user && ( user == record.author || user.is_admin? || user.is_moderator? ||
+               ( record.channel.present? && user == record.channel.manager )  )
   end
   
 end

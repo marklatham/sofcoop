@@ -27,10 +27,11 @@
   .field
     = f.label 'Body:'
     = f.text_area :body, rows: '15'
-  - if @post.category == "post"
-    .field
-      = f.label 'Tags (comma-separated, lower case):'
-      = f.text_field :tag_list, value: f.object.tag_list.to_s
+  - if @post.category == "post" && policy(@post).edit_tags?
+    - unless @post_mod
+      .field
+        = f.label 'Tags (comma-separated, lower case):'
+        = f.text_field :tag_list, value: f.object.tag_list.to_s
       
   - if @version
     = hidden_field_tag :item_version_id, @version.item_version_id

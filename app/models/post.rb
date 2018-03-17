@@ -53,11 +53,11 @@ class Post < ApplicationRecord
     return object
   end
   
-  def to_post_mod
+  def to_post_mod(user)
     post_mod                    = PostMod.new
     post_mod.post               = self
     post_mod.author             = self.author
-    post_mod.updater            = current_user
+    post_mod.updater            = user
     post_mod.visible            = self.visible
     post_mod.title              = self.title
     post_mod.slug               = self.slug

@@ -51,9 +51,10 @@ class PostsController < ApplicationController
   end
   
   def post_mod
+    @post = @post_mod.to_post
     authorize @post
     previous_version = PostMod.where("post_id = ? AND id < ?", @post.id, @post_mod.id).order("id").last
-    next_version     = PostMod.where("post_id = ? AND id > ?", @post.id, @post_mod.id).order("id").last
+    next_version     = PostMod.where("post_id = ? AND id > ?", @post.id, @post_mod.id).order("id").first
     @previous_version_path = the_post_path(@post)+"/mod/"+previous_version.id.to_s if previous_version
     @this_version_path     = the_post_path(@post)+"/mod/"+params[:post_mod_id].to_s
     @next_version_path     = the_post_path(@post)+"/mod/"+next_version.id.to_s if next_version
@@ -117,6 +118,7 @@ class PostsController < ApplicationController
   end
   
   def approve
+    @post = @post_mod.to_post if @post_mod
     authorize @post
     @post.mod_status = false
     @post.updated_at = Time.now # Mainly because PaperTrail::Version.new.created_at gets set to this.
@@ -139,14 +141,17 @@ class PostsController < ApplicationController
   end
   
   def edit
+    @post = @post_mod.to_post if @post_mod
     authorize @post
     @body_class = 'grayback'
   end
 
   def update
-    authorize @post
-    tags_before = @post.tag_list
-    visible_before = ( @post.visible > 1 )
+    if @post_mod
+      authorize @post_mod.to_post
+    else
+      authorize @post
+    end
     body_before = ''
     body_before << post_params[:body] # Don't know why, but body_before = post_params[:body] fails.
     new_lines = []
@@ -166,92 +171,63 @@ class PostsController < ApplicationController
     params[:post][:main_image] = first_image(params[:post][:body])
     old_channel = @post.channel if @post.channel
     
-    if current_user.mod_status == true && @post.mod_status == false
+    if ( current_user == @post.author && current_user.mod_status == true && @post.mod_status == false ) ||
+       ( current_user.is_moderator? && @post_mod )
       @post.assign_attributes(post_params)
       @post.mod_status = true
       @post.updated_at = Time.now
-      version = PaperTrail::Version.new
-      version.item = @post
-      version.event = "update"
-      version.whodunnit = current_user.id
-      version.object = @post.serialize
-      version.mod_status = true
-      version.current = true
-      if previous_version = PaperTrail::Version.
-         where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
-                       "Post",       @post.id).order("item_version_id").last
-        version.item_version_id = previous_version.item_version_id + 1
-      else
-        version.item_version_id = 1
-      end
-      version.save!
-      unless @post.updated_at == version.created_at
-        @post.updated_at = version.created_at
-        version.object = @post.serialize
-        version.save!
-      end
-      post_mod            = PostMod.new
-      post_mod.post       = @post
-      post_mod.author     = @post.author
-      post_mod.updater    = current_user
-      post_mod.visible    = @post.visible
-      post_mod.title      = @post.title
-      post_mod.slug       = @post.slug
-      post_mod.body       = @post.body
-      post_mod.main_image = @post.main_image
-      post_mod.channel    = @post.channel
-      post_mod.category   = @post.category
-      post_mod.mod_status = @post.mod_status
-      post_mod.created_at = @post.created_at
-      post_mod.version_updated_at = @post.updated_at
-      p post_mod
+      post_mod = @post.to_post_mod(current_user)
       post_mod.save!
       flash[:notice] = "Post update saved; pending moderation."
       if params[:commit] == 'Save & edit more'
         redirect_to the_edit_post_path(@post) and return
       else # Should be the only other cases: params[:commit] == 'Save & see post/profile'
-        redirect_to the_post_path(@post)+"/history/"+version.item_version_id.to_s and return
+        redirect_to the_post_path(@post)+"/mod/"+post_mod.id.to_s and return
       end
     
-    elsif @post.update(post_params)
-      flash[:notice] = 'Post saved.'
-      tags_after = @post.tag_list
-      visible_after = ( @post.visible > 1 )
-      adjust_taggings_visible(tags_before, tags_after, visible_before, visible_after)
-      unless old_channel && @post.channel == old_channel
-        if @post.channel
-          unless @post.channel.manager == current_user && @post.author == current_user
-            AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
-          end
-        end
-      end
-      unless @post.channel && @post.channel == old_channel
-        if old_channel
-          unless old_channel.manager == current_user && @post.author == current_user
-            AdminMailer.post_unassigned(@post, old_channel, current_user).deliver
-          end
-        end
-      end
-      if version = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", @post.id).
-                                       order("id").last
-        unless version.item_version_id
-          if previous_version = PaperTrail::Version.
-             where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
-                           "Post",       @post.id).order("item_version_id").last
-            version.item_version_id = previous_version.item_version_id + 1
-          else
-            version.item_version_id = 1
-          end
-          version.save!
-        end
-      end
-      if params[:commit] == 'Save & edit more'
-        redirect_to the_edit_post_path(@post) and return
-      else # Should be the only other cases: params[:commit] == 'Save & see post/profile'
-        redirect_to the_post_path(@post) and return
-      end
     else
-      render :edit 
+      tags_before = @post.tag_list
+      visible_before = ( @post.visible > 1 )
+      if @post.update(post_params)
+        flash[:notice] = 'Post saved.'
+        tags_after = @post.tag_list
+        visible_after = ( @post.visible > 1 )
+        adjust_taggings_visible(tags_before, tags_after, visible_before, visible_after)
+        unless old_channel && @post.channel == old_channel
+          if @post.channel
+            unless @post.channel.manager == current_user && @post.author == current_user
+              AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
+            end
+          end
+        end
+        unless @post.channel && @post.channel == old_channel
+          if old_channel
+            unless old_channel.manager == current_user && @post.author == current_user
+              AdminMailer.post_unassigned(@post, old_channel, current_user).deliver
+            end
+          end
+        end
+        if version = PaperTrail::Version.where("item_type = ? AND item_id = ?", "Post", @post.id).
+                                         order("id").last
+          unless version.item_version_id
+            if previous_version = PaperTrail::Version.
+               where("item_type = ? AND item_id = ? AND item_version_id IS NOT NULL",
+                             "Post",       @post.id).order("item_version_id").last
+              version.item_version_id = previous_version.item_version_id + 1
+            else
+              version.item_version_id = 1
+            end
+            version.save!
+          end
+        end
+        if params[:commit] == 'Save & edit more'
+          redirect_to the_edit_post_path(@post) and return
+        else # Should be the only other cases: params[:commit] == 'Save & see post/profile'
+          redirect_to the_post_path(@post) and return
+        end
+      else
+        render :edit 
+      end
     end
   end
 
@@ -592,7 +568,7 @@ class PostsController < ApplicationController
     if params[:post_mod_id]
       @post_mod = PostMod.find(params[:post_mod_id])
       # @flag = true if @post_mod.version_updated_at < @post.updated_at
-      @post = @post_mod.to_post
+      # @post = @post_mod.to_post
       # @table = "PostMod"
     end
   end
