@@ -34,7 +34,7 @@
         = f.text_field :tag_list, value: f.object.tag_list.to_s
       
   - if @version
-    = hidden_field_tag :item_version_id, @version.item_version_id
+    = hidden_field_tag :version_id, @version.id
   - if @post_mod
     = hidden_field_tag :post_mod_id, @post_mod.id
   .actions

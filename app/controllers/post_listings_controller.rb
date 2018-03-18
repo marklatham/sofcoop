@@ -72,15 +72,19 @@ class PostListingsController < ApplicationController
   def history
     set_post
     authorize @post
-    @versions = PaperTrail::Version.where("item_type = ? AND item_id = ? AND item_version_id >= 0",
-                                                  "Post",       @post.id).order("created_at")
+    @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?",
+                                                  "Post",       @post.id).order("created_at DESC")
     @arrays = []
     updater = @post.author  # Default in case not found below.
     if whodunnit = User.find(@versions[0].whodunnit) rescue nil
       updater = whodunnit
     end
     for version in @versions
-      if version.event == "create"
+      if version.event == "destroy"
+        break
+        # Handles MySQL bug that will be gone in cluster version 8.0.0:
+        # See stackoverflow.com/a/46628734/7356045
+      elsif version.event == "create"
         # No version.object.
         next
       else
@@ -194,14 +198,21 @@ class PostListingsController < ApplicationController
     if params[:username]
       user = User.friendly.find(params[:username])
       @post = Post.where(author_id: user.id).friendly.find(params[:post_slug])
-    elsif params[:id]
-      @post = Post.find(params[:id])
     elsif params[:vanity_slug]
       if post_id = vanity_slugs.key(params[:vanity_slug])
         @post = Post.find(post_id)
-      else
-        @post = Post.find(27)  # "Page Not Found"
       end
+    elsif params[:id]
+      @post = Post.find(params[:id])
+    else
+      @post = Post.find(27)  # "Page Not Found"
+    end
+    if params[:version_id]
+      @version = PaperTrail::Version.find(params[:version_id])
+      @post = @version.reify
+    end
+    if params[:post_mod_id]
+      @post_mod = PostMod.find(params[:post_mod_id])
     end
   end
   

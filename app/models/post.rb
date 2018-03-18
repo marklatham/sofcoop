@@ -9,7 +9,7 @@ class Post < ApplicationRecord
   has_paper_trail
   friendly_id :slug_candidates, use: [:slugged, :scoped, :history], scope: :author
   
-  attr_accessor :item_version_id  # When using posts controller to edit versions.
+  attr_accessor :version_id  # When using posts controller to edit versions.
   attr_accessor :post_mod_id      # When using posts controller to edit post_mods.
   
   def slug_candidates

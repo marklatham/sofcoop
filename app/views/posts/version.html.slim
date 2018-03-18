@@ -1,11 +1,9 @@
-- version = "VERSION"
-- version = "VERSION #{@version.item_version_id.to_s}" if @version.item_version_id.present?
-- provide :title, version + ": " + @post.title
+- provide :title, "VERSION: " + @post.title
 - channel_style = "color: #{@post.channel.color}" if @post.channel
 
 .post
   p.versions-nav
-    = version + ": "
+    | VERSION DATED:
     = @post.updated_at.strftime("%Y-%m-%d %H:%M:%S") + " UTC. "
     - if @previous_version_path
       = link_to "<< PREVIOUS", @previous_version_path
