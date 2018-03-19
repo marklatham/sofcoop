@@ -14,15 +14,13 @@ table.data.posts
       th style='width: 7rem' Visible To
 
   tbody
-    - for array in @arrays
-      - post = array[0]
+    - for post, version, updater in @rows
       - the_post_path = the_post_path(post)
-      - if version = array[1]
+      - if version
         - the_post_path = the_post_path+"/history/"+version.id.to_s
         - font_weight = "normal"
       - else
         - font_weight = "bold"
-      - updater = array[2]
       tr style="font-weight:#{font_weight}"
         td title=conditional_strftime("weekday_date_time", post.updated_at, 3)
           = link_to the_post_path do
@@ -47,4 +45,4 @@ table.data.posts
         td = post.body.split.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
 
-= paginate @arrays
+= paginate @rows

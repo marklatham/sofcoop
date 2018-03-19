@@ -57,11 +57,11 @@ class PostListingsController < ApplicationController
     @posts = @posts.sort_by{|post| post.updated_at}.reverse!
     @title = @posts.size.to_s + @title
     @title.sub!("posts", "post") if @posts.size == 1
-    @arrays = []
+    @rows = []
     for post in @posts
-      @arrays << [post, nil]
+      @rows << [post, nil]
     end
-    @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
+    @rows = Kaminari.paginate_array(@rows).page(params[:page])
   end
 
   def search
@@ -74,7 +74,7 @@ class PostListingsController < ApplicationController
     authorize @post
     @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?",
                                                   "Post",       @post.id).order("created_at DESC")
-    @arrays = []
+    @rows = []
     updater = @post.author  # Default in case not found below.
     if whodunnit = User.find(@versions[0].whodunnit) rescue nil
       updater = whodunnit
@@ -90,27 +90,26 @@ class PostListingsController < ApplicationController
       else
         # whodunnit field is updater who created version.object NEXT TIME:
         post = version.reify
-        @arrays << [post, version, updater]
+        @rows << [post, version, updater]
         updater = post.author  # Default in case not found below.
         updater = User.find(version.whodunnit)
       end
     end
     # Only list versions that user can view:
     temp = []
-    for array in @arrays
-      temp << array if PostPolicy.new(current_user,array[0]).version?
+    for post, version, updater in @rows
+      temp << [post, version, updater] if PostPolicy.new(current_user,post).version?
     end
-    @arrays = temp
-    # Updater of live post. BTW = moderator if post was just approved:
-    @arrays << [@post, nil, updater]
-    @arrays = @arrays.sort_by{|array| array[0].updated_at}.reverse!
-    @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
+    @rows = temp
+    # Updater of live post; = moderator if post was just approved:
+    @rows << [@post, nil, updater]
+    @rows = @rows.sort_by{|post, version, updater| post.updated_at}.reverse!
+    @rows = Kaminari.paginate_array(@rows).page(params[:page])
   end
   
   def moderating  # 1 post -- listing of one or more versions pending moderation. Author & moderators see this.
     set_post
     authorize @post
-    # @post_mods = PostMod.where("post_id = ?", @post.id).order("updated_at DESC")
     @post_mods = PostMod.where("post_id = ? AND mod_status = true", @post.id).order("updated_at DESC")
     # LATER: if only one, redirect to its view?
   end
@@ -119,25 +118,25 @@ class PostListingsController < ApplicationController
     authorize Post
     post_mods = PostMod.where("mod_status = true")
     posts = Post.where("mod_status = true")
-    arrays = []
+    rows = []
     for post_mod in post_mods
-      arrays << [nil, post_mod, post_mod.post.id, post_mod.version_updated_at]
+      rows << [nil, post_mod, post_mod.post.id, post_mod.version_updated_at]
     end
     for post in posts
-      arrays << [post, nil, post.id, post.updated_at]
+      rows << [post, nil, post.id, post.updated_at]
     end
-    groups = arrays.group_by{|array| array[2]}
-    arrays = []
+    groups = rows.group_by{|row| row[2]}
+    rows = []
     for id, group in groups
-      arrays << group.max_by(&:last)
+      rows << group.max_by(&:last)
     end
-    arrays = arrays.sort_by(&:last).reverse!
-    @arrays = []
-    for post, post_mod, id, date in arrays
+    rows = rows.sort_by(&:last).reverse!
+    @rows = []
+    for post, post_mod, id, date in rows
       post = post_mod.to_post if post_mod
-      @arrays << [post, post_mod]
+      @rows << [post, post_mod]
     end
-    @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
+    @rows = Kaminari.paginate_array(@rows).page(params[:page])
     @title = "Posts Pending Moderation"
   end
 

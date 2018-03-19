@@ -23,7 +23,7 @@ table.data.posts
         th Delete
 
   tbody
-    - for post, post_mod in @arrays
+    - for post, post_mod in @rows
       - the_post_path = the_post_path(post)
       - if post_mod
         - the_post_path = the_post_path+"/mod/"+post_mod.id.to_s
@@ -71,4 +71,4 @@ table.data.posts
           td = link_to 'Delete', delete_post_path(post.author.username, post.slug),
                method: :delete, data: {confirm: "You sure?"}
 
-= paginate @arrays
+= paginate @rows

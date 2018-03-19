@@ -110,11 +110,11 @@ class Users::RegistrationsController < DeviseController
   def cancel_account
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     @posts = Post.where(author_id: resource.id).order('updated_at DESC').page(params[:page])
-    @arrays = []
+    @rows = []
     for post in @posts
-      @arrays << [post, nil]
+      @rows << [post, nil]
     end
-    @arrays = Kaminari.paginate_array(@arrays).page(params[:page])
+    @rows = Kaminari.paginate_array(@rows).page(params[:page])
     @body_class = 'grayback'
     @author = resource
   end
