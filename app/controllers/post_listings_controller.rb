@@ -72,8 +72,8 @@ class PostListingsController < ApplicationController
   def history
     set_post
     authorize @post
-    @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?",
-                                                  "Post",       @post.id).order("created_at DESC")
+    @versions = PaperTrail::Version.where("item_type = ? AND item_id = ?","Post",@post.id).order("created_at")
+    # Sorted chronologically for loop logic below. Reverse chron after that.
     @rows = []
     updater = @post.author  # Default in case not found below.
     if whodunnit = User.find(@versions[0].whodunnit) rescue nil
@@ -95,14 +95,14 @@ class PostListingsController < ApplicationController
         updater = User.find(version.whodunnit)
       end
     end
+    # Updater of live post; = moderator if post was just approved:
+    @rows << [@post, nil, updater]
     # Only list versions that user can view:
     temp = []
     for post, version, updater in @rows
       temp << [post, version, updater] if PostPolicy.new(current_user,post).version?
     end
     @rows = temp
-    # Updater of live post; = moderator if post was just approved:
-    @rows << [@post, nil, updater]
     @rows = @rows.sort_by{|post, version, updater| post.updated_at}.reverse!
     year_now = Time.now.year
     @rows.each_with_index do |row, i|

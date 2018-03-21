@@ -78,7 +78,7 @@ class PostsController < ApplicationController
     @post.mod_status = true if current_user.mod_status == true
     if @post.save!
       if @post.mod_status == true
-        AdminMailer.moderate_new_post(@post, the_post_url(@post), current_user).deliver
+        AdminMailer.moderate_post(@post, the_post_url(@post), current_user, "new").deliver
         flash[:notice] = "Thank you for posting. 
         Your post is now pending moderation -- we'll email you when that's done."
       end
@@ -162,6 +162,7 @@ class PostsController < ApplicationController
       @post.updated_at = Time.now
       post_mod = @post.to_post_mod(current_user)
       post_mod.save!
+      AdminMailer.moderate_post(@post, the_post_url(@post)+"/mod/"+post_mod.id.to_s, current_user, "updated").deliver
       flash[:notice] = "Post update saved; pending moderation."
       if params[:commit] == 'Save & edit more'
         redirect_to the_edit_post_path(@post) and return
@@ -172,11 +173,16 @@ class PostsController < ApplicationController
     else
       tags_before = @post.tag_list
       visible_before = ( @post.visible > 1 )
-      if @post.update(post_params)
+      @post.assign_attributes(post_params)
+      @post.mod_status = true if current_user.mod_status == true
+      if @post.save!
         flash[:notice] = 'Post saved.'
         tags_after = @post.tag_list
         visible_after = ( @post.visible > 1 )
         adjust_taggings_visible(tags_before, tags_after, visible_before, visible_after)
+        if @post.mod_status == true
+          AdminMailer.moderate_post(@post, the_post_url(@post), current_user, "updated").deliver
+        end
         unless old_channel && @post.channel == old_channel
           if @post.channel
             unless @post.channel.manager == current_user && @post.author == current_user

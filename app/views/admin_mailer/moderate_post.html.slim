@@ -2,7 +2,9 @@ div TO: Sofcoop Moderators
 
 p
   = link_to '@'+@current_user.username, user_url(@current_user.username)
-  |  has just created this post and it needs to be moderated:
+  |  has just 
+  = @created_or_updated
+  |  this post and it needs to be moderated:
 
 blockquote
   b = link_to @post.title, @post_url

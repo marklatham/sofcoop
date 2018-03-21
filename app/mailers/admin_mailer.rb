@@ -71,10 +71,12 @@ class AdminMailer < ApplicationMailer
       subject: "Please moderate comment # " + @comment.id.to_s
   end
   
-  def moderate_new_post(post, post_url, current_user)
+  def moderate_post(post, post_url, current_user, new_or_updated)
     @post = post
     @post_url = post_url
     @current_user = current_user
+    @created_or_updated = new_or_updated
+    @created_or_updated = "created" if new_or_updated == "new"
     moderators = User.with_role :moderator
     moderator_emails = []
     for moderator in moderators
@@ -82,7 +84,7 @@ class AdminMailer < ApplicationMailer
     end
     mail   to: moderator_emails,
            cc: Sofcoop::Application.secrets.admin_email,
-      subject: "Please moderate: " + @post.title
+      subject: "Please moderate #{new_or_updated} post: " + @post.title
   end
   
   def new_post(post, post_url)
