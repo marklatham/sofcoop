@@ -14,7 +14,7 @@ table.data.posts
       th style='width: 7rem' Visible To
 
   tbody
-    - for post, version, updater in @rows
+    - for post, version, updater, year_or_time in @rows
       - the_post_path = the_post_path(post)
       - if version
         - the_post_path = the_post_path+"/history/"+version.id.to_s
@@ -25,6 +25,7 @@ table.data.posts
         td title=conditional_strftime("weekday_date_time", post.updated_at, 3)
           = link_to the_post_path do
             = post.updated_at.strftime("%b %e")
+            br = year_or_time
             - if (Time.now.year*12 + Time.now.month) - (post.updated_at.year*12 + post.updated_at.month) > 5
               br = post.updated_at.strftime("%Y")
         td

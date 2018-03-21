@@ -104,6 +104,24 @@ class PostListingsController < ApplicationController
     # Updater of live post; = moderator if post was just approved:
     @rows << [@post, nil, updater]
     @rows = @rows.sort_by{|post, version, updater| post.updated_at}.reverse!
+    year_now = Time.now.year
+    @rows.each_with_index do |row, i|
+      post_updated = row[0].updated_at
+      if post_updated.year < year_now
+        year_or_time = post_updated.year.to_s
+      else
+        # Display the time if gap is 1 day or less. Sorted reverse chronologically:
+        later_updated = @rows[i-1][0].updated_at.to_date unless i == 0
+        prior_updated = @rows[i+1][0].updated_at.to_date unless i == @rows.size-1
+        if (  i != 0            && later_updated < 2.days.since(post_updated.to_date) ) ||
+            ( i != @rows.size-1 && post_updated.to_date < 2.days.since(prior_updated) )
+          year_or_time = post_updated.strftime("%l:%M %P")
+        else
+          year_or_time = ""
+        end
+      end
+      row << year_or_time
+    end
     @rows = Kaminari.paginate_array(@rows).page(params[:page])
   end
   
