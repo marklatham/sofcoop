@@ -1,0 +1,13 @@
+div
+  | TO: 
+  = '@' + @user.username
+
+p
+  - if @user.mod_status == true
+    | You have just been put on moderation. You can still submit and update posts and comments, 
+    | but each submission will not be displayed to other users until a moderator approves it.
+  - else
+    | You have just been taken off moderation. Your posts and comments will now be displayed
+    | without waiting for moderator approval. Thank you for your contributions to Sofcoop!
+
+p Sincerely, Sofcoop Website

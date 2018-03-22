@@ -135,7 +135,20 @@ class AdminMailer < ApplicationMailer
     mail   to: Sofcoop::Application.secrets.admin_email,
       subject: "Username changed"
   end
-
+  
+  def user_moderation(user, moderator)
+    @user = user
+    if @user.mod_status == true
+      @subject = "You are on moderation"
+    else
+      @subject = "You are off moderation"
+    end
+    mail   to: @user.email,
+          bcc: moderator.email,
+           cc: Sofcoop::Application.secrets.admin_email,
+      subject: @subject
+  end
+  
   def votes_tally(cutoff_time)
     @cutoff_time = cutoff_time
     mail   to: Sofcoop::Application.secrets.admin_email,

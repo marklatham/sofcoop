@@ -77,8 +77,15 @@ class UsersController < ApplicationController
         end
       end
     end
+    old_mod_status = nil
+    if params[:user][:mod_status]
+      unless params[:user][:mod_status] == @user.mod_status.to_s
+        old_mod_status = @user.mod_status
+      end
+    end
     if @user.update(permitted_attributes(@user))
       @user.save
+      AdminMailer.user_moderation(@user, current_user).deliver unless old_mod_status == nil
       redirect_to user_path(@user), notice: 'User was successfully updated.'
     else
       render :edit
