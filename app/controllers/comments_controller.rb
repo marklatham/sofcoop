@@ -78,6 +78,16 @@ class CommentsController < ApplicationController
     redirect_to the_post_path(@comment.post)
   end
   
+  def put_on_mod
+    @comment = Comment.find(params[:comment_id])
+    authorize @comment
+    @comment.mod_status = true
+    @comment.save!
+    flash[:notice] = "Comment is now pending moderation."
+    AdminMailer.comment_put_on_mod(@comment, the_post_url(@comment.post)+"#comment-#{@comment.id.to_s}", current_user).deliver
+    redirect_to the_post_path(@comment.post)
+  end
+  
   def destroy
     @comment = Comment.find(params[:id])
     @comment.destroy

@@ -76,6 +76,11 @@ class CommentPolicy < ApplicationPolicy
     record.mod_status == true &&
     ( user.is_admin? || ( user.is_moderator? && user != record.author ) )
   end
+
+  def put_on_mod?
+    record.mod_status == false &&
+    ( user.is_admin? || ( user.is_moderator? && user != record.author ) )
+  end
   
   def destroy?
     user_is_author_or_admin_or_moderator?

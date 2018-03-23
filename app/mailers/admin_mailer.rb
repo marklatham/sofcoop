@@ -44,7 +44,22 @@ class AdminMailer < ApplicationMailer
            cc: @user.email,
       subject: "Cancel account manually"
   end
-
+  
+  def comment_put_on_mod(comment, comment_url, current_user)
+    @comment = comment
+    @comment_url = comment_url
+    @current_user = current_user
+    moderators = User.with_role :moderator
+    moderator_emails = []
+    for moderator in moderators
+      moderator_emails << moderator.email unless moderator == @comment.author
+    end
+    mail   to: @comment.author.email,
+          bcc: moderator_emails,
+           cc: Sofcoop::Application.secrets.admin_email,
+      subject: "Comment put on moderation: on post: " + @comment.post.title
+  end
+  
   def filenames_update(log_report)
     @log_report = log_report
     mail   to: Sofcoop::Application.secrets.admin_email,
@@ -129,10 +144,6 @@ class AdminMailer < ApplicationMailer
     for moderator in moderators
       moderator_emails << moderator.email unless moderator == post.author
     end
-    puts "MAILER:"
-    p @post.author.email
-    p Sofcoop::Application.secrets.admin_email
-    p "Post put on moderation: " + @post.title
     mail   to: @post.author.email,
           bcc: moderator_emails,
            cc: Sofcoop::Application.secrets.admin_email,

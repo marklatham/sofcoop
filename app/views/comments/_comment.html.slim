@@ -21,6 +21,10 @@
         span.controls
           |  | 
           = link_to "Approve Comment", the_post_path(comment.post) + "/comment-#{comment.id.to_s}/approve", method: :patch
+      - if policy(comment).put_on_mod?
+        span.controls
+          |  | 
+          = link_to "Put Comment On Moderation", the_post_path(comment.post) + "/comment-#{comment.id.to_s}/put_on_mod", method: :patch
       - if policy(comment).destroy?
         span.controls
           |  | 
