@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   helper_method :the_post_url
   helper_method :the_edit_post_path
   helper_method :the_approve_post_path
+  helper_method :the_mod_post_path
   helper_method :the_comment_path
   helper_method :the_comment_url
   helper_method :nav_channels
@@ -81,6 +82,10 @@ class ApplicationController < ActionController::Base
   
   def the_approve_post_path(post)
     the_edit_post_path(post).chomp("edit") + "approve"
+  end
+  
+  def the_mod_post_path(post)
+    the_edit_post_path(post).chomp("edit") + "put_on_mod"
   end
   
   def nav_channels

@@ -115,6 +115,11 @@ class PostPolicy < ApplicationPolicy
     update? && record.mod_status == true && user &&
     ( user.is_admin? || ( user.is_moderator? && user != record.author ) )
   end
+
+  def put_on_mod?
+    update? && record.mod_status == false && user &&
+    ( user.is_admin? || ( user.is_moderator? && user != record.author ) )
+  end
   
   def destroy?
     user_is_author_or_admin?

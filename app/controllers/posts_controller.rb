@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :markdown, :version, :version_markdown, :post_mod, :approve, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :markdown, :version, :version_markdown, :post_mod, :approve, :put_on_mod, :edit, :update, :destroy]
 
   def show
     if params[:username] && request.path != the_post_path(@post)
@@ -122,6 +122,20 @@ class PostsController < ApplicationController
       flash[:notice] = "Post approved."
     end
     AdminMailer.approved_post(@post, the_post_url(@post), current_user).deliver
+    redirect_to the_post_path(@post)
+  end
+  
+  def put_on_mod
+    authorize @post
+    @post.mod_status = true
+    @post.updated_at = Time.now # Mainly because PaperTrail::Version.new.created_at gets set to this.
+    @post.save!
+    flash[:notice] = "This post is now pending moderation."
+    puts "DEBUG:"
+    p @post
+    p the_post_url(@post)
+    p current_user
+    AdminMailer.post_put_on_mod(@post, the_post_url(@post), current_user).deliver
     redirect_to the_post_path(@post)
   end
   

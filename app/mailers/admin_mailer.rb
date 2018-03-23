@@ -119,7 +119,26 @@ class AdminMailer < ApplicationMailer
     mail   to: Sofcoop::Application.secrets.admin_email,
       subject: "Post process"
   end
-
+  
+  def post_put_on_mod(post, post_url, current_user)
+    @post = post
+    @post_url = post_url
+    @current_user = current_user
+    moderators = User.with_role :moderator
+    moderator_emails = []
+    for moderator in moderators
+      moderator_emails << moderator.email unless moderator == post.author
+    end
+    puts "MAILER:"
+    p @post.author.email
+    p Sofcoop::Application.secrets.admin_email
+    p "Post put on moderation: " + @post.title
+    mail   to: @post.author.email,
+          bcc: moderator_emails,
+           cc: Sofcoop::Application.secrets.admin_email,
+      subject: "Post put on moderation: " + @post.title
+  end
+  
   def post_unassigned(post, channel, current_user)
     @post = post
     @channel = channel

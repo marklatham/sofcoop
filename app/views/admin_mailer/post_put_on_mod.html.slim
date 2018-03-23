@@ -1,0 +1,22 @@
+div
+  | TO: 
+  = '@' + @post.author.username
+
+p Your post linked below has just been put on moderation; most users will not be able to see it until/unless a moderator approves it. You can still see it and edit it though:
+
+blockquote
+  b = link_to @post.title, @post_url
+
+p Thanks for your patience...
+
+p Sincerely, Sofcoop Website
+
+hr
+
+h3
+  | Markdown text of 
+  = link_to @post.title, @post_url
+
+p = @post.body
+
+hr
