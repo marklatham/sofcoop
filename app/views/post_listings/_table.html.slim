@@ -51,20 +51,20 @@ table.data.posts
           td = post.comments.size
         td = visible_options.detect{ |who, code| code == post.visible.to_s }.first
         td title=conditional_strftime("weekday_date_time", post.created_at, 3)
-          - if Time.now < 8.days.since(post.created_at)
+          - if Time.current < 8.days.since(post.created_at)
             = time_ago_in_words(post.created_at) + ' ago'
           - else
             = post.created_at.strftime("%b %e")
-            - if (Time.now.year*12 + Time.now.month) - (post.created_at.year*12 + post.created_at.month) > 5
+            - if (Time.current.year*12 + Time.current.month) - (post.created_at.year*12 + post.created_at.month) > 5
               br = post.created_at.strftime("%Y")
         td title=conditional_strftime("weekday_date_time", post.updated_at, 3)
           - if post.updated_at == post.created_at
             | =
-          - elsif Time.now < 8.days.since(post.created_at)
+          - elsif Time.current < 8.days.since(post.created_at)
             = time_ago_in_words(post.updated_at) + ' ago'
           - else
             = post.updated_at.strftime("%b %e")
-            - if (Time.now.year*12 + Time.now.month) - (post.updated_at.year*12 + post.updated_at.month) > 5
+            - if (Time.current.year*12 + Time.current.month) - (post.updated_at.year*12 + post.updated_at.month) > 5
               br = post.updated_at.strftime("%Y")
         - if manage
           td = link_to 'Edit', the_edit_post_path(post)

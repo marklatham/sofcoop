@@ -26,7 +26,7 @@ table.data.posts
           = link_to the_post_path do
             = post.updated_at.strftime("%b %e")
             br = year_or_time
-            - if (Time.now.year*12 + Time.now.month) - (post.updated_at.year*12 + post.updated_at.month) > 5
+            - if (Time.current.year*12 + Time.current.month) - (post.updated_at.year*12 + post.updated_at.month) > 5
               br = post.updated_at.strftime("%Y")
         td
           - if post.main_image

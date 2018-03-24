@@ -106,7 +106,7 @@ class PostsController < ApplicationController
     @post = @post_mod.to_post if @post_mod
     authorize @post
     @post.mod_status = false
-    @post.updated_at = Time.now # Mainly because PaperTrail::Version.new.created_at gets set to this.
+    @post.updated_at = Time.current # Mainly because PaperTrail::Version.new.created_at gets set to this.
     @post.save!
     if @post_mod
       flash[:notice] = "Latest version approved."
@@ -128,7 +128,7 @@ class PostsController < ApplicationController
   def put_on_mod
     authorize @post
     @post.mod_status = true
-    @post.updated_at = Time.now # Mainly because PaperTrail::Version.new.created_at gets set to this.
+    @post.updated_at = Time.current # Mainly because PaperTrail::Version.new.created_at gets set to this.
     @post.save!
     flash[:notice] = "This post is now pending moderation."
     puts "DEBUG:"
@@ -173,7 +173,7 @@ class PostsController < ApplicationController
        ( current_user.is_moderator? && @post_mod )
       @post.assign_attributes(post_params)
       @post.mod_status = true
-      @post.updated_at = Time.now
+      @post.updated_at = Time.current
       post_mod = @post.to_post_mod(current_user)
       post_mod.save!
       AdminMailer.moderate_post(@post, the_post_url(@post)+"/mod/"+post_mod.id.to_s, current_user, "updated").deliver

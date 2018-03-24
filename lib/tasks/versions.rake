@@ -31,7 +31,7 @@ namespace :versions do
   desc "Reduce clutter of incremental post edits."
   task compress_posts: :environment do
     Time.zone = "UTC"
-    time_now = Time.now
+    time_now = Time.current
 #    puts "COMPRESS POSTS. TIME NOW: = " + time_now.inspect
 #    latest = PaperTrail::Version.where("item_type = ? and records_merged IS NOT NULL", "Post").
 #                                 order("created_at ASC").last

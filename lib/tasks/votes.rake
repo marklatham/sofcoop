@@ -4,8 +4,8 @@ namespace :votes do
   task catchup: :environment do
     
     Time.zone = "Pacific Time (US & Canada)"
-    time_now = Time.now
-    puts "TIME NOW: = " + time_now.inspect
+    time_current = Time.current
+    puts "CURRENT TIME: " + time_current.inspect
     
     tallied_times = 0
     while tallied_times < 100
@@ -32,11 +32,11 @@ namespace :votes do
     
     # Tally cutoff_time is the next midnight after the last tally cutoff time,
     # which should be the same in both current and archived standings tables.
-    # cutoff_time must also be before Time.now.
+    # cutoff_time must also be before Time.current.
     
     Time.zone = "Pacific Time (US & Canada)"
-    time_now = Time.now
-    puts "Time now = " + time_now.inspect
+    time_current = Time.current
+    puts "CURRENT TIME: " + time_current.inspect
     standing_tallied_at = Standing.maximum(:tallied_at) if Standing.any?
     past_standing_tallied_at = PastStanding.maximum(:tallied_at) if PastStanding.any?
     puts "standing_tallied_at = " + standing_tallied_at.to_s
@@ -70,13 +70,13 @@ namespace :votes do
       next_day = 36.hours.since(latest_tallied_at)
     else
       # If no prior tally output exists, default to next_day = now:
-      next_day = time_now
+      next_day = time_current
     end
     # Set cutoff_time = the midnight before next_day:
     cutoff_time = Time.new(next_day.year, next_day.month, next_day.day, 0, 0, 0)
     puts "Tally cutoff = " + cutoff_time.inspect
     
-    if cutoff_time > time_now
+    if cutoff_time > time_current
       puts "It's too soon to tally!"
     else
       calc_standings(cutoff_time)  # ***MAIN ROUTINE: Method defined below.

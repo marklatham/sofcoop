@@ -10,7 +10,7 @@ table.ballot
     - channel = standing.channel
     / Find latest vote (if any) in this session for this channel:
     - voted_flag = false
-    - when_voted = Time.parse("2000-01-01 01:23:45.608000")
+    - when_voted = Time.zone.parse("2000-01-01 01:23:45.608000")
     - if @ballot.session_votes
       - for session_vote in @ballot.session_votes
         - if session_vote.share && session_vote.channel_id == channel.id

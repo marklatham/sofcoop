@@ -104,7 +104,7 @@ class PostListingsController < ApplicationController
     end
     @rows = temp
     @rows = @rows.sort_by{|post, version, updater| post.updated_at}.reverse!
-    year_now = Time.now.year
+    year_now = Time.current.year
     @rows.each_with_index do |row, i|
       post_updated = row[0].updated_at
       if post_updated.year < year_now

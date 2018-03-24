@@ -2,7 +2,7 @@ namespace :filenames do
   
   desc "Update S3 filenames overnight, in case a username changed"
   task update: :environment do
-    start_time = Time.now
+    start_time = Time.current
     mismatches = 0
     log_report = []
     log_report << "Start time = " + start_time.inspect
@@ -27,7 +27,7 @@ namespace :filenames do
       end
     end
     log_report << "Number of filename mismatches = " + mismatches.to_s
-    finish_time = Time.now
+    finish_time = Time.current
     log_report << "Total time = " + (finish_time - start_time).round.to_s + " seconds"
     log_report << "so about " + ((finish_time - start_time)/mismatches).round.to_s +
                   " seconds per mismatch" if mismatches > 0

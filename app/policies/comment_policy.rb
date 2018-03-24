@@ -53,7 +53,7 @@ class CommentPolicy < ApplicationPolicy
         true
       end
     elsif user == record.author
-      if Time.now > how_many.minutes.since(record.created_at)
+      if Time.current > how_many.minutes.since(record.created_at)
         false
       else
         latest_comment = Comment.where("post_id = ?", record.post.id).order("created_at").last

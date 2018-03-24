@@ -3,7 +3,7 @@
 
 .post
   p.versions-nav
-    | VERSION DATED:
+    | VERSION DATED: 
     = @post.updated_at.strftime("%Y-%m-%d %H:%M:%S") + " UTC. "
     - if @previous_version_path
       = link_to "<< PREVIOUS", @previous_version_path
