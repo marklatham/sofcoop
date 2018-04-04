@@ -3,14 +3,13 @@ div
   = link_to @channel.name, channel_url(@channel.slug)
 div
   | AND: @#{@post.author.username}, Author of 
-  = link_to @post.title,
-            channel_post_url(@channel.slug, @post.author.username, @post.slug)
+  = link_to @post.title, @post_url
 
 p
   = link_to '@'+@current_user.username, user_url(@current_user.username)
   |  has just UNassigned this post FROM #{@channel.name}:
 
-blockquote = link_to @post.title, post_url(@post.author.username, @post.slug)
+blockquote = link_to @post.title, @post_url
 
 p It can still be edited by the author. For the record, its current markdown text is below.
 
@@ -20,7 +19,7 @@ hr
 
 h3
   | Markdown text of 
-  = link_to @post.title, post_url(@post.author.username, @post.slug)
+  = link_to @post.title, @post_url
 
 p = @post.body
 

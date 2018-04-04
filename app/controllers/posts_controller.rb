@@ -87,7 +87,7 @@ class PostsController < ApplicationController
       adjust_taggings_visible([], tags_after, false, visible_after)
       AdminMailer.new_post(@post, the_post_url(@post)).deliver  # notify admin
       if @post.channel
-        AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
+        AdminMailer.post_assigned(@post, the_post_url(@post), @post.channel, current_user).deliver
       end
       if admin_email.present?
         AdminMailer.post_process(admin_email, @post, the_post_url(@post), body_before, @post.body, 'created').deliver
@@ -167,6 +167,7 @@ class PostsController < ApplicationController
     end
     params[:post][:body] = body_after
     params[:post][:main_image] = first_image(params[:post][:body])
+    old_channel = nil
     old_channel = @post.channel if @post.channel
     
     if ( current_user == @post.author && current_user.mod_status == true && @post.mod_status == false ) ||
@@ -200,14 +201,14 @@ class PostsController < ApplicationController
         unless old_channel && @post.channel == old_channel
           if @post.channel
             unless @post.channel.manager == current_user && @post.author == current_user
-              AdminMailer.post_assigned(@post, @post.channel, current_user).deliver
+              AdminMailer.post_assigned(@post, the_post_url(@post), @post.channel, current_user).deliver
             end
           end
         end
         unless @post.channel && @post.channel == old_channel
           if old_channel
             unless old_channel.manager == current_user && @post.author == current_user
-              AdminMailer.post_unassigned(@post, old_channel, current_user).deliver
+              AdminMailer.post_unassigned(@post, the_post_url(@post), old_channel, current_user).deliver
             end
           end
         end

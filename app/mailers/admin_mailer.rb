@@ -115,8 +115,9 @@ class AdminMailer < ApplicationMailer
       subject: "New registration"
   end
   
-  def post_assigned(post, channel, current_user)
+  def post_assigned(post, post_url, channel, current_user)
     @post = post
+    @post_url = post_url
     @channel = channel
     @current_user = current_user
     mail   to: [channel.manager.email, post.author.email],
@@ -150,8 +151,9 @@ class AdminMailer < ApplicationMailer
       subject: "Post put on moderation: " + @post.title
   end
   
-  def post_unassigned(post, channel, current_user)
+  def post_unassigned(post, post_url, channel, current_user)
     @post = post
+    @post_url = post_url
     @channel = channel
     @current_user = current_user
     mail   to: [channel.manager.email, post.author.email],
